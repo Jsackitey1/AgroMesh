@@ -1,28 +1,27 @@
-# 🌱 EcoMesh: A Community-Powered Smart Environmental Monitoring Network
+# 🌾 AgroMesh: A Community-Powered Smart Agricultural Monitoring Network
 
-EcoMesh is a decentralized, solar-powered network of open-source environmental sensors designed to monitor **air quality**, **water purity**, and **soil health** in underserved communities. The data is visualized in real time and enhanced by AI to detect anomalies, generate alerts, and support environmental decision-making.
+**AgroMesh** is a decentralized, solar-powered network of open-source environmental sensors designed to help **farmers** in underserved regions optimize **crop yield**, **resource usage**, and **resilience to climate variability**. It monitors **soil conditions**, **weather patterns**, and **microclimates** in real time—and uses AI to generate smart irrigation alerts, pest risk warnings, and harvest forecasts.
 
 ---
 
 ## 🚀 Project Goals
 
-- Empower communities with real-time environmental data.
-- Build an affordable and replicable sensing platform.
-- Use AI to identify trends, forecast pollution, and issue smart alerts.
-- Enable open collaboration and citizen science around the world.
+- Empower smallholder farmers with real-time, actionable environmental data.
+- Build a low-cost, replicable precision agriculture platform.
+- Use AI to forecast irrigation needs, detect crop stress, and improve yield.
+- Encourage open collaboration between engineers, farmers, and educators.
 
 ---
 
 ## 🛠️ Features
 
-- 🌬️ Air Quality (CO₂, PM2.5)
-- 💧 Water Quality (pH, turbidity)
-- 🌱 Soil Monitoring (moisture, pH)
-- ☀️ Solar-powered, low-power nodes
-- 📶 LoRaWAN or WiFi connectivity
-- 📊 Live dashboards + SMS/email alerts
-- 🤖 AI-powered anomaly detection + prediction
-- 🌍 Community-led deployment and data ownership
+- 🌱 Soil Health Monitoring (moisture, pH, nutrients)
+- 🌦️ Weather Tracking (temperature, humidity, rainfall)
+- ☀️ Solar-powered, low-maintenance sensor nodes
+- 📶 LoRaWAN or WiFi data transmission
+- 📊 Live dashboards + SMS alerts in local languages
+- 🤖 AI-powered irrigation and pest risk predictions
+- 🧑‍🌾 Farmer-centered deployment and co-design
 
 ---
 
@@ -43,13 +42,13 @@ EcoMesh is a decentralized, solar-powered network of open-source environmental s
 
 ## 📦 Repository Structure
 
-EcoMesh/
+AgroMesh/
 │
 ├── hardware/ # Wiring diagrams, BOM, and PCB designs
 │ └── sensor_node_v1.pdf
 │
-├── firmware/ # Arduino/C++ scripts for each sensor node
-│ └── air_quality_node.ino
+├── firmware/ # Arduino/C++ scripts for soil, weather, and climate sensors
+│ └── soil_monitor.ino
 │
 ├── backend/ # APIs and database code (Python/FastAPI/Firebase)
 │ └── api/
@@ -58,9 +57,9 @@ EcoMesh/
 │ └── app.py / index.js
 │
 ├── ml_models/ # Jupyter notebooks and trained models
-│ └── anomaly_detector.ipynb
+│ └── irrigation_forecast.ipynb
 │
-├── docs/ # Community tutorials, deployment guide
+├── docs/ # Deployment guides and farmer tutorials
 │ └── setup_guide.md
 │
 └── README.md
@@ -70,9 +69,10 @@ EcoMesh/
 
 ## 🧠 AI Functionality
 
-- **Anomaly Detection**: Detects sudden spikes or unusual readings using Isolation Forests and Autoencoders.
-- **Forecasting**: Uses historical environmental data + weather to predict future trends.
-- **Adaptive Sampling** *(coming soon)*: Adjusts data collection rate based on sensor variability using reinforcement learning.
+- **Irrigation Forecasting**: Suggests optimal watering schedules using weather + soil data.
+- **Anomaly Detection**: Identifies abnormal moisture drops or potential sensor faults.
+- **Pest & Disease Risk Prediction**: Detects conditions that typically precede fungal outbreaks or pest invasions.
+- **Yield Estimation** *(coming soon)*: Forecasts crop output based on seasonal data patterns.
 
 ---
 
@@ -81,36 +81,38 @@ EcoMesh/
 ### Prerequisites
 - Arduino IDE / Python 3.10+
 - Firebase account (for cloud data)
-- ESP8266 / Arduino board + sensors
+- ESP8266 / Arduino board + soil/weather sensors
 
 ### Setup Instructions
 
 ```bash
 # Clone repo
-git clone https://github.com/yourusername/EcoMesh.git
+git clone https://github.com/yourusername/AgroMesh.git
 
 # Navigate to backend and install dependencies
-cd EcoMesh/backend
+cd AgroMesh/backend
 pip install -r requirements.txt
 
 # Run local API server
 uvicorn api.main:app --reload
 
 🧪 Sample Use Case
-A school in Ghana deploys a node near a river. The system detects a pH drop and sends an alert via SMS. Students visualize the event on a real-time dashboard and investigate pollution sources, contributing to local environmental education and health safety.
+A cassava farmer in Northern Ghana installs a solar-powered sensor node in their field. AgroMesh sends an SMS advising early morning irrigation due to falling soil moisture and rising heat. A week later, the system flags a potential fungal risk window based on humidity levels. The farmer avoids crop stress, uses less water, and boosts yield by 20%.
 
 🤝 Community & Contribution
-We welcome collaborators! You can contribute by:
+We welcome collaborators from engineering, agriculture, and education!
 
-Improving sensor firmware
+You can contribute by:
 
-Enhancing the dashboard UI
+Improving sensor firmware or power efficiency
 
-Training new AI models
+Enhancing the farmer dashboard UX
 
-Translating documentation
+Developing AI models for different crops or climates
 
-Hosting a local EcoMesh node
+Translating tools or SMS alerts into local languages
+
+Partnering with farmer cooperatives or agri-extension programs
 
 How to Contribute
 Fork the repo
@@ -128,13 +130,16 @@ This project is licensed under the MIT License.
 
 👋 Contact
 Project Lead: Joseph Sackitey
-Email: sackiteyjoseph@gmail.com
-Follow the project on Twitter: @EcoMeshNet
+📧 Email: sackiteyjoseph@gmail.com
+🐦 Twitter: @AgroMeshNet
 
-
-🌍 Let's build a smarter, cleaner future—together.
+🌍 Let’s grow a smarter, greener future—one farm at a time.
 
 ---
 
-Let me know if you'd like help turning this into a real live repo, generating the initial file structure, or customizing this README with your actual project links.
+Let me know if you want:
+- A version in **Markdown format** ready to upload
+- A **README badge set** (e.g., build status, license, etc.)
+- Or to auto-generate the file structure with placeholders
 
+You're building something truly meaningful here. Let's make it real.
