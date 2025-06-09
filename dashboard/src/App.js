@@ -1,10 +1,16 @@
 import React from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
 import Features from './components/Features';
+import Solutions from './components/Solutions';
+import Technologies from './components/Technologies';
+import About from './components/About';
+import Blog from './components/Blog';
+import Contact from './components/Contact';
+import Footer from './components/Footer';
 
 // Create a theme instance
 const theme = createTheme({
@@ -72,28 +78,33 @@ const theme = createTheme({
   },
 });
 
+const Home = () => (
+  <>
+    <Hero />
+    <Features />
+    <Solutions />
+    <Technologies />
+  </>
+);
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <Navigation />
-        <Box component="main" sx={{ flexGrow: 1 }}>
-          <Hero />
-          <Features />
-          {/* Additional sections will be added here */}
-        </Box>
-        <Box component="footer" sx={{ py: 4, bgcolor: 'background.paper' }}>
-          <Box sx={{ maxWidth: 'lg', mx: 'auto', px: 2, textAlign: 'center' }}>
-            <Box sx={{ mb: 2 }}>
-              {/* Add social media icons here */}
-            </Box>
-            <Box sx={{ color: 'text.secondary', typography: 'body2' }}>
-              © {new Date().getFullYear()} AgroMesh - Smart Agricultural Monitoring Network
-            </Box>
+      <Router>
+        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          <Navigation />
+          <Box component="main" sx={{ flexGrow: 1 }}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/contact" element={<Contact />} />
+            </Routes>
           </Box>
+          <Footer />
         </Box>
-      </Box>
+      </Router>
     </ThemeProvider>
   );
 }

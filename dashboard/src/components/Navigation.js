@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Box,
@@ -12,24 +13,48 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
-import {
-  Menu as MenuIcon,
-  Notifications as NotificationsIcon,
-} from '@mui/icons-material';
+import { Menu as MenuIcon } from '@mui/icons-material';
 
 const pages = [
-  { title: 'Solutions', items: ['For Farmers', 'For Businesses', 'For Researchers'] },
-  { title: 'Technologies', items: ['Sensor Network', 'AI Analytics', 'Mobile App'] },
-  { title: 'About', items: ['Our Story', 'Team', 'Impact'] },
-  { title: 'Blog', items: [] },
-  { title: 'Contact', items: [] },
+  { 
+    title: 'Solutions', 
+    href: '#solutions',
+    path: '/',
+    onClick: (navigate) => {
+      navigate('/');
+      setTimeout(() => {
+        const element = document.querySelector('#solutions');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  },
+  { 
+    title: 'Technologies', 
+    href: '#technologies',
+    path: '/',
+    onClick: (navigate) => {
+      navigate('/');
+      setTimeout(() => {
+        const element = document.querySelector('#technologies');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  },
+  { title: 'About', path: '/about' },
+  { title: 'Blog', path: '/blog' },
+  { title: 'Contact', path: '/contact' },
 ];
 
 const Navigation = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -37,6 +62,22 @@ const Navigation = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleNavClick = (page) => {
+    handleCloseNavMenu();
+    if (page.onClick) {
+      page.onClick(navigate);
+    } else if (page.path) {
+      navigate(page.path);
+    }
+  };
+
+  const isActive = (page) => {
+    if (page.path) {
+      return location.pathname === page.path;
+    }
+    return false;
   };
 
   return (
@@ -47,14 +88,15 @@ const Navigation = () => {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/"
+            component={RouterLink}
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontWeight: 700,
               color: 'primary.main',
               textDecoration: 'none',
+              cursor: 'pointer',
             }}
           >
             AgroMesh
@@ -91,8 +133,19 @@ const Navigation = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page.title}</Typography>
+                <MenuItem 
+                  key={page.title} 
+                  onClick={() => handleNavClick(page)}
+                >
+                  <Typography 
+                    textAlign="center"
+                    sx={{ 
+                      color: isActive(page) ? 'primary.main' : 'inherit',
+                      fontWeight: isActive(page) ? 600 : 400,
+                    }}
+                  >
+                    {page.title}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -102,8 +155,8 @@ const Navigation = () => {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/"
+            component={RouterLink}
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -111,6 +164,7 @@ const Navigation = () => {
               fontWeight: 700,
               color: 'primary.main',
               textDecoration: 'none',
+              cursor: 'pointer',
             }}
           >
             AgroMesh
@@ -121,22 +175,29 @@ const Navigation = () => {
             {pages.map((page) => (
               <Button
                 key={page.title}
-                onClick={handleCloseNavMenu}
-                sx={{ mx: 1, color: 'text.primary', display: 'block' }}
+                onClick={() => handleNavClick(page)}
+                sx={{ 
+                  mx: 1, 
+                  color: isActive(page) ? 'primary.main' : 'text.primary',
+                  display: 'block',
+                  fontWeight: isActive(page) ? 600 : 400,
+                  '&:hover': {
+                    color: 'primary.main',
+                  }
+                }}
               >
                 {page.title}
               </Button>
             ))}
           </Box>
 
-          {/* Right side icons */}
+          {/* Right side - Get Started button */}
           <Box sx={{ display: 'flex' }}>
-            <IconButton color="inherit">
-              <NotificationsIcon />
-            </IconButton>
             <Button
               variant="contained"
               color="primary"
+              component={RouterLink}
+              to="/about"
               sx={{ ml: 2, display: { xs: 'none', md: 'block' } }}
             >
               Get Started
