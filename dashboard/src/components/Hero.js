@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Container, Typography, Button, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { Link as RouterLink } from 'react-router-dom';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/Assets/farmer-on a farm.jpg")`,
@@ -65,9 +66,9 @@ const Hero = () => {
                 <Button 
                   variant="contained" 
                   size="large" 
+                  component={RouterLink}
+                  to="/about"
                   sx={{ 
-                    mr: 2, 
-                    mb: 2,
                     px: 4,
                     py: 1.5,
                     fontSize: '1.1rem',
@@ -78,25 +79,6 @@ const Hero = () => {
                   }}
                 >
                   Get Started
-                </Button>
-                <Button 
-                  variant="outlined" 
-                  size="large" 
-                  sx={{ 
-                    color: 'white', 
-                    borderColor: 'white', 
-                    mb: 2,
-                    px: 4,
-                    py: 1.5,
-                    fontSize: '1.1rem',
-                    borderWidth: 2,
-                    '&:hover': {
-                      borderWidth: 2,
-                      backgroundColor: 'rgba(255,255,255,0.1)',
-                    }
-                  }}
-                >
-                  Learn More
                 </Button>
               </Box>
             </Grid>
