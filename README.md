@@ -128,7 +128,7 @@ This project is licensed under the MIT License.
 
 👋 Contact
 Project Lead: Joseph Sackitey
-Email: josephsackitey@example.com
+Email: sackiteyjoseph@gmail.com
 Follow the project on Twitter: @EcoMeshNet
 
 
