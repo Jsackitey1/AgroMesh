@@ -6,6 +6,7 @@ import {
   ArrowForward as ArrowForwardIcon,
   Science as ScienceIcon,
   Devices as DevicesIcon,
+  LinkedIn as LinkedInIcon,
 } from '@mui/icons-material';
 
 const AboutSection = styled(Box)(({ theme }) => ({
@@ -45,19 +46,30 @@ const NavigationButton = styled(Button)(({ theme }) => ({
   },
 }));
 
+const LinkedInButton = styled(Button)(({ theme }) => ({
+  marginTop: theme.spacing(1),
+  color: theme.palette.primary.main,
+  '&:hover': {
+    backgroundColor: 'transparent',
+    color: theme.palette.primary.dark,
+  },
+}));
+
 const About = () => {
   const teamMembers = [
     {
       name: 'Joseph Sackitey',
       role: 'Project Lead & Developer',
       image: '/Assets/Joseph-Sackitey.jpeg',
-      bio: 'Leading the development of AgroMesh with a focus on creating sustainable agricultural solutions for farmers worldwide.'
+      bio: 'Leading the development of AgroMesh with a focus on creating sustainable agricultural solutions for farmers worldwide.',
+      linkedin: 'https://www.linkedin.com/in/joseph-sackitey/'
     },
     {
       name: 'Andrew Agyemang Duah',
       role: 'Co-Developer & Technical Advisor',
-      image: '/Assets/Andrews Agyemang Duah.jpeg',
-      bio: 'Contributing technical expertise and innovative solutions to make AgroMesh accessible and effective for farmers.'
+      image: '/Assets/Andrews Agyemang Duah.jpg',
+      bio: 'Contributing technical expertise and innovative solutions to make AgroMesh accessible and effective for farmers.',
+      linkedin: 'https://www.linkedin.com/in/andrews-agyemang-duah-6a01b1289/'
     }
   ];
 
@@ -140,6 +152,16 @@ const About = () => {
                     <Typography variant="body2" color="text.secondary">
                       {member.bio}
                     </Typography>
+                    {member.linkedin && (
+                      <LinkedInButton
+                        href={member.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        startIcon={<LinkedInIcon />}
+                      >
+                        LinkedIn
+                      </LinkedInButton>
+                    )}
                   </CardContent>
                 </TeamMemberCard>
               </Grid>
