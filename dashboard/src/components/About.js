@@ -9,6 +9,7 @@ import {
   LinkedIn as LinkedInIcon,
 } from '@mui/icons-material';
 
+
 const AboutSection = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   padding: theme.spacing(8, 0),
