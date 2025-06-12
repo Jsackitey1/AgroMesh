@@ -6,6 +6,7 @@ import { Newspaper } from '@mui/icons-material';
 const BlogSection = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   padding: theme.spacing(8, 0),
+  
   backgroundColor: theme.palette.background.default,
 }));
 

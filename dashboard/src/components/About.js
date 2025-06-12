@@ -87,6 +87,7 @@ const About = () => {
           <Typography variant="h3" component="h1" align="center" gutterBottom sx={{ mb: 4 }}>
             About AgroMesh
           </Typography>
+          
           <Typography variant="h5" color="text.secondary" paragraph align="center" sx={{ mb: 4 }}>
             Empowering Farmers Through Technology
           </Typography>
