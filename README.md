@@ -3,7 +3,7 @@ https://agro-mesh.vercel.app/
 
 # 🌾 AgroMesh: A Community-Powered Smart Agricultural Monitoring Network
 
-**AgroMesh** is a decentralized, solar-powered network of open-source environmental sensors designed to help **farmers** in underserved regions optimize **crop yield**, **resource usage**, and **resilience to climate variability**. It monitors **soil conditions**, **weather patterns**, and **microclimates** in real time—and uses AI to generate smart irrigation alerts, pest risk warnings, and harvest forecasts.
+**AgroMesh** is a decentralized, solar-powered network of open-source environmental sensors designed to help **farmers** in  underserved regions optimize **crop yield**, **resource usage**, and **resilience to climate variability**. It monitors **soil conditions**, **weather patterns**, and **microclimates** in real time—and uses AI to generate smart irrigation alerts, pest risk warnings, and harvest forecasts.
 
 ---
 
