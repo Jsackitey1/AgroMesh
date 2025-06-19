@@ -25,9 +25,7 @@ https://agro-mesh.vercel.app/
 - 📊 Live dashboards + SMS alerts in local languages
 - 🤖 AI-powered irrigation and pest risk predictions
 - 🧑‍🌾 Farmer-centered deployment and co-design
-
 ---
-
 ## 🔧 Tech Stack
 
 | Component        | Technology Used                          |
