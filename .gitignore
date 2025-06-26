@@ -57,4 +57,12 @@ var/
 *.hex
 *.bin
 *.elf
-*.map 
+*.map
+
+# Ignore all .env files
+*.env
+.env*
+
+# Ignore client secret files
+client_secret*
+backend/client_secret_433079022437-soa1jhv7r42t9nl22p6ffe1nugd6ocap.apps.googleusercontent.com.json 
