@@ -118,11 +118,51 @@ AgroMesh/backend/
 
 ---
 
-## 🤖 AI/ML Integration Approach
+## 🤖 AI/ML Integration: Implementation & Progress
 
-- **Option 1:** Call Python microservice via HTTP/gRPC for predictions
-- **Option 2:** Use Node.js ML libraries (if simple models)
-- **Store** AI results in DB for traceability
+The AgroMesh backend integrates with the Gemini API to provide advanced AI-powered features for farmers. Below is the current status and progress of the AI/ML integration plan.
+
+### **Implemented Features**
+- **/api/ai/suggest**: Accepts sensor data, sends to Gemini API, returns actionable suggestions (e.g., irrigation, pest, anomaly).
+- **/api/ai/diagnose-image**: Accepts image upload, sends to Gemini API, returns plant health advice.
+- **/api/ai/diagnose-video**: Accepts video upload, sends to Gemini API, returns plant health advice (if supported).
+- **/api/ai/ask**: Accepts a text question, sends to Gemini API, returns an AI-powered answer.
+- **JWT authentication**: All AI endpoints require a valid JWT token.
+- **Rate limiting**: 10 requests per minute per IP enforced on all AI endpoints.
+- **Input validation & error handling**: All endpoints validate input and handle errors gracefully.
+- **Request/response logging**: All AI requests and responses are logged for traceability.
+- **Swagger/OpenAPI documentation**: Auto-generated and available at `/api/docs`.
+
+### **Not Yet Implemented / Optional**
+- **Python microservice integration**: (Optional) For custom models or fallback, not yet implemented.
+- **Live video streaming**: (Real-time frame-by-frame analysis) Not yet implemented; only video file upload is supported.
+- **Audio Q&A**: (Voice input) Not yet implemented; only text Q&A is supported.
+- **Storing AI results in the database**: For traceability/auditing, not yet implemented.
+
+### **Progress Summary Table**
+
+| Feature                                      | Status         |
+|-----------------------------------------------|----------------|
+| Sensor data → AI suggestion (Gemini)          | ✅ Implemented |
+| Image upload → AI diagnosis (Gemini)          | ✅ Implemented |
+| Video upload → AI diagnosis (Gemini)          | ✅ Implemented |
+| Text Q&A → AI answer (Gemini)                 | ✅ Implemented |
+| JWT authentication                            | ✅ Implemented |
+| Rate limiting                                 | ✅ Implemented |
+| Logging                                       | ✅ Implemented |
+| Swagger docs                                  | ✅ Implemented |
+| Python microservice integration (optional)     | ❌ Not yet     |
+| Live video streaming (real-time)               | ❌ Not yet     |
+| Audio Q&A                                     | ❌ Not yet     |
+| Store AI results in DB                        | ❌ Not yet     |
+
+---
+
+**In summary:**
+- The core plan for AI/ML integration using the Gemini API is fully implemented for all major endpoints, security, and documentation.
+- Optional features (Python microservice, live streaming, audio, DB storage) can be added as needed.
+
+See `/api/docs` for up-to-date API documentation.
 
 ---
 
