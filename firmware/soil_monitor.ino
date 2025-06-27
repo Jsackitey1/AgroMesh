@@ -44,8 +44,8 @@ void loop() {
   SensorData data = readSensors();
   transmitData(data);
   
-  // Sleep for 15 minutes
-  for(int i = 0; i < 15; i++) {
+  // Sleep for 15 minutes (113 loops of 8s)
+  for(int i = 0; i < 113; i++) {
     LowPower.idle(SLEEP_8S, ADC_OFF, TIMER2_OFF, TIMER1_OFF, TIMER0_OFF, 
                   SPI_OFF, USART0_OFF, TWI_OFF);
   }
