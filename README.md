@@ -32,7 +32,7 @@ https://agro-mesh.vercel.app/
 |------------------|-------------------------------------------|
 | Hardware         | Arduino / Raspberry Pi, Grove sensors     |
 | Networking       | LoRaWAN, ESP8266/ESP32, MQTT              |
-| Backend          | Firebase / FastAPI                        |
+| Backend          | Node.js / Express / Firebase (FastAPI example) |
 | Frontend         | React / Streamlit / Flask                 |
 | Database         | Firestore / SQLite                        |
 | AI & ML          | scikit-learn, TensorFlow, Edge Impulse    |
@@ -51,7 +51,7 @@ AgroMesh/
 ├── firmware/ # Arduino/C++ scripts for soil, weather, and climate sensors
 │ └── soil_monitor.ino
 │
-├── backend/ # APIs and database code (Python/FastAPI/Firebase)
+├── backend/ # APIs and database code (Node.js/Express/Firebase, FastAPI example)
 │ └── api/
 │
 ├── dashboard/ # Frontend code (React / Flask / Streamlit)
@@ -92,10 +92,10 @@ git clone https://github.com/yourusername/AgroMesh.git
 
 # Navigate to backend and install dependencies
 cd AgroMesh/backend
-pip install -r requirements.txt
+npm install
 
 # Run local API server
-uvicorn api.main:app --reload
+npm start   # see backend/python for FastAPI example
 
 🧪 Sample Use Case
 A cassava farmer in Northern Ghana installs a solar-powered sensor node in their field. AgroMesh sends an SMS advising early morning irrigation due to falling soil moisture and rising heat. A week later, the system flags a potential fungal risk window based on humidity levels. The farmer avoids crop stress, uses less water, and boosts yield by 20%.
