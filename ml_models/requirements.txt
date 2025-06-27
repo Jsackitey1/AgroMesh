@@ -9,4 +9,4 @@ notebook>=6.4.5
 edge-impulse-linux>=1.0.0
 joblib>=1.0.1
 xgboost>=1.5.0
-lightgbm>=3.2.1 
+lightgbm>=3.2.1
