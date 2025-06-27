@@ -98,6 +98,7 @@ pip install -r requirements.txt
 uvicorn api.main:app --reload
 
 🧪 Sample Use Case
+
 A cassava farmer in Northern Ghana installs a solar-powered sensor node in their field. AgroMesh sends an SMS advising early morning irrigation due to falling soil moisture and rising heat. A week later, the system flags a potential fungal risk window based on humidity levels. The farmer avoids crop stress, uses less water, and boosts yield by 20%.
 
 🤝 Community & Contribution

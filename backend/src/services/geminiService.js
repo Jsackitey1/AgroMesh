@@ -4,7 +4,7 @@ const fs = require('fs');
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
-// Sensor data -> AI suggestion (text)
+// Sensor data -> AI suggestion
 async function getSuggestionFromSensorData(sensorData) {
   const prompt = `Given the following data: ${JSON.stringify(sensorData)}, what should the farmer do next?`;
   const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
@@ -33,13 +33,11 @@ async function diagnoseVideo(videoBuffer, filename) {
   return { message: 'Video diagnosis is not yet supported by Gemini API.' };
 }
 
-// Farmer Q&A (text)
 async function askQuestion(question) {
   const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
   const result = await model.generateContent(question);
   return result.response;
 }
-
 module.exports = {
   getSuggestionFromSensorData,
   diagnoseImage,
