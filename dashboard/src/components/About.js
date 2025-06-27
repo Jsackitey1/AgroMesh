@@ -66,7 +66,7 @@ const About = () => {
       linkedin: 'https://www.linkedin.com/in/joseph-sackitey/'
     },
     {
-      name: 'Andrew Agyemang Duah',
+      name: 'Andrews Agyemang Duah',
       role: 'Co-Developer & Technical Advisor',
       image: '/Assets/Andrews Agyemang Duah.jpg',
       bio: 'Contributing technical expertise and innovative solutions to make AgroMesh accessible and effective for farmers.',
