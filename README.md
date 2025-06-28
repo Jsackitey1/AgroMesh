@@ -134,7 +134,6 @@ This project is licensed under the MIT License.
 Project Lead: Joseph Sackitey
 📧 Email: sackiteyjoseph@gmail.com
 🐦 Twitter: @AgroMeshNet
-
 🌍 Let’s grow a smarter, greener future—one farm at a time.
 
 ---
