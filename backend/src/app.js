@@ -5,8 +5,12 @@ const morgan = require('morgan');
 const aiRoutes = require('./routes/ai');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const connectDB = require('./config/mongoose');
 
 const app = express();
+
+// Connect to MongoDB
+connectDB();
 
 app.use(cors());
 app.use(helmet());
