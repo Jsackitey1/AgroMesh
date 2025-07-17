@@ -3,7 +3,6 @@
 This backend powers the AgroMesh platform, providing secure APIs for sensor data ingestion, user management, real-time alerts, and AI-driven agricultural insights. Built with Node.js and Express.js, it is designed for flexibility, scalability, and ease of integration with both hardware and frontend dashboards.
 
 ---
-
 ## 📁 Project Structure
 
 ```
