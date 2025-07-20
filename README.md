@@ -136,11 +136,4 @@ Project Lead: Joseph Sackitey
 🐦 Twitter: @AgroMeshNet
 🌍 Let’s grow a smarter, greener future—one farm at a time.
 
----
-
-Let me know if you want:
-- A version in **Markdown format** ready to upload
-- A **README badge set** (e.g., build status, license, etc.)
-- Or to auto-generate the file structure with placeholders
-
 You're building something truly meaningful here. Let's make it real.
