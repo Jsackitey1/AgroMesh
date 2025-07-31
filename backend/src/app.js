@@ -3,6 +3,10 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const aiRoutes = require('./routes/ai');
+const authRoutes = require('./routes/auth');
+const sensorRoutes = require('./routes/sensors');
+const alertRoutes = require('./routes/alerts');
+const dashboardRoutes = require('./routes/dashboard');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const connectDB = require('./config/mongoose');
@@ -48,7 +52,11 @@ const swaggerOptions = {
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// AI endpoints
+// API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/sensors', sensorRoutes);
+app.use('/api/alerts', alertRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/ai', aiRoutes);
 
 // Health check
