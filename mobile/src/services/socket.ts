@@ -1,7 +1,7 @@
 import { io, Socket } from 'socket.io-client';
 import { SocketEvents } from '../types';
 
-const SOCKET_URL = 'http://localhost:5000'; // Change to your backend URL
+const SOCKET_URL = 'http://192.168.1.92:5000'; // Use your computer's IP address
 
 class SocketService {
   private socket: Socket | null = null;
