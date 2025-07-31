@@ -105,7 +105,15 @@ const RegisterScreen: React.FC = () => {
       return;
     }
 
-    const { confirmPassword, ...registerData } = formData;
+    const { confirmPassword, phoneNumber, ...registerData } = formData;
+    
+    // Only include phoneNumber if it's not empty
+    if (phoneNumber && phoneNumber.trim() !== '') {
+      registerData.phoneNumber = phoneNumber;
+    }
+    
+    // Debug: Log the data being sent
+    console.log('Sending registration data:', registerData);
     
     const success = await register(registerData);
     

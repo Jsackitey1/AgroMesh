@@ -63,7 +63,7 @@ router.post('/register', [
   body('password').isLength({ min: 6 }),
   body('firstName').notEmpty().trim(),
   body('lastName').notEmpty().trim(),
-  body('phoneNumber').optional().isMobilePhone(),
+  body('phoneNumber').optional(),
   body('role').optional().isIn(['Farmer', 'Admin', 'Researcher'])
 ], async (req, res) => {
   try {
@@ -91,7 +91,7 @@ router.post('/register', [
       profile: {
         firstName,
         lastName,
-        phoneNumber
+        phoneNumber: phoneNumber || undefined // Only set if provided
       }
     });
 

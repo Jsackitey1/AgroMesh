@@ -16,7 +16,7 @@ import {
   ProfileUpdateForm,
 } from '../types';
 
-const API_BASE_URL = 'http://192.168.1.92:5000/api'; // Use your computer's IP address
+const API_BASE_URL = 'http://192.168.1.92:5001/api'; // Use your computer's IP address
 
 class ApiService {
   private api: AxiosInstance;

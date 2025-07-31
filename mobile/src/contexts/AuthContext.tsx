@@ -129,8 +129,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return false;
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Registration failed';
-      dispatch({ type: 'SET_ERROR', payload: errorMessage });
+      console.error('Registration error:', error.response?.data);
+      
+      if (error.response?.data?.errors) {
+        // Handle validation errors
+        const validationErrors = error.response.data.errors;
+        const errorMessages = validationErrors.map((err: any) => `${err.path}: ${err.msg}`).join(', ');
+        dispatch({ type: 'SET_ERROR', payload: `Validation errors: ${errorMessages}` });
+      } else {
+        const errorMessage = error.response?.data?.message || 'Registration failed';
+        dispatch({ type: 'SET_ERROR', payload: errorMessage });
+      }
       return false;
     }
   };
