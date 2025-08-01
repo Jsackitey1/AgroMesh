@@ -1,0 +1,10 @@
+{
+  "appdistribution": {
+    "app": "1:498338987011:android:73752f4a535bb451356236",
+    "groups": "testers",
+    "release_notes": "Initial test build for AgroMesh mobile app"
+  },
+  "android": {
+    "package": "com.agromesh.app"
+  }
+}

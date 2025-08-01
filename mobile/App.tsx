@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { AuthProvider } from './src/contexts/AuthContext';
 import AppNavigator from './src/navigation/AppNavigator';
 import socketService from './src/services/socket';
+// import './src/config/firebase'; // Initialize Firebase - temporarily disabled
 
 export default function App() {
   useEffect(() => {
