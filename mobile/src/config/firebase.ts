@@ -1,14 +1,14 @@
 import { initializeApp } from '@react-native-firebase/app';
 import appDistribution from '@react-native-firebase/app-distribution';
 
-// Your Firebase configuration from google-services.json
+// Your Firebase configuration from environment variables
 const firebaseConfig = {
-  apiKey: "AIzaSyCzzSujRIERxd41oN2gAnXvzKxM60I-ITY",
-  authDomain: "agromesh-495d4.firebaseapp.com",
-  projectId: "agromesh-495d4",
-  storageBucket: "agromesh-495d4.firebasestorage.app",
-  messagingSenderId: "498338987011",
-  appId: "1:498338987011:android:73752f4a535bb451356236"
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY || "AIzaSyCzzSujRIERxd41oN2gAnXvzKxM60I-ITY",
+  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || "agromesh-495d4.firebaseapp.com",
+  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || "agromesh-495d4",
+  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET || "agromesh-495d4.firebasestorage.app",
+  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "498338987011",
+  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID || "1:498338987011:android:73752f4a535bb451356236"
 };
 
 // Initialize Firebase
