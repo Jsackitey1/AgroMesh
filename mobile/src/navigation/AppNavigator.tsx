@@ -15,6 +15,9 @@ import SensorsScreen from '../screens/main/SensorsScreen';
 import AlertsScreen from '../screens/main/AlertsScreen';
 import AIScreen from '../screens/main/AIScreen';
 import ProfileScreen from '../screens/main/ProfileScreen';
+import VideosScreen from '../screens/main/VideosScreen';
+import VideoCaptureScreen from '../screens/main/VideoCaptureScreen';
+import LiveStreamScreen from '../screens/main/LiveStreamScreen';
 
 // Loading Screen
 import LoadingScreen from '../screens/LoadingScreen';
@@ -121,7 +124,12 @@ const AppNavigator: React.FC = () => {
         }}
       >
         {isAuthenticated ? (
-          <Stack.Screen name="Main" component={MainTabNavigator} />
+          <>
+            <Stack.Screen name="Main" component={MainTabNavigator} />
+            <Stack.Screen name="Videos" component={VideosScreen} />
+            <Stack.Screen name="VideoCapture" component={VideoCaptureScreen} />
+            <Stack.Screen name="LiveStream" component={LiveStreamScreen} />
+          </>
         ) : (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />

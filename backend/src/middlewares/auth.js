@@ -1,6 +1,11 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  console.error('❌ JWT_SECRET not found in environment variables. Authentication will not work.');
+  process.exit(1);
+}
 
 function authenticateJWT(req, res, next) {
   const authHeader = req.headers.authorization;

@@ -218,6 +218,9 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   ForgotPassword: undefined;
+  Videos: undefined;
+  VideoCapture: undefined;
+  LiveStream: undefined;
 };
 
 export type MainTabParamList = {

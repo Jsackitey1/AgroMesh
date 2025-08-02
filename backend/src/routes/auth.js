@@ -6,7 +6,12 @@ const authenticateJWT = require('../middlewares/auth');
 
 const router = express.Router();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  console.error('❌ JWT_SECRET not found in environment variables. Authentication will not work.');
+  process.exit(1);
+}
 
 // Generate JWT token
 function generateToken(user) {
