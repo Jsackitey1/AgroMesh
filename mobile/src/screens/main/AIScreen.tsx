@@ -62,31 +62,53 @@ const AIScreen: React.FC<{ navigation: AIScreenNavigationProp }> = ({ navigation
             </View>
           </TouchableOpacity>
 
-          <View style={styles.featureCard}>
+          <TouchableOpacity
+            style={styles.featureCard}
+            onPress={() => navigation.navigate('ImageDiagnosis')}
+          >
             <View style={styles.featureIcon}>
-              <Ionicons name="camera" size={32} color="#666" />
+              <Ionicons name="camera" size={32} color="#2E7D32" />
             </View>
             <Text style={styles.featureTitle}>Image Diagnosis</Text>
             <Text style={styles.featureDescription}>
               Upload photos for plant disease detection and treatment recommendations
             </Text>
-            <View style={styles.comingSoonBadge}>
-              <Text style={styles.comingSoonText}>Coming Soon</Text>
+            <View style={styles.featureBadge}>
+              <Text style={styles.badgeText}>NEW</Text>
             </View>
-          </View>
+          </TouchableOpacity>
 
-          <View style={styles.featureCard}>
+          <TouchableOpacity
+            style={styles.featureCard}
+            onPress={() => navigation.navigate('AIChat')}
+          >
             <View style={styles.featureIcon}>
-              <Ionicons name="chatbubbles" size={32} color="#666" />
+              <Ionicons name="chatbubbles" size={32} color="#2E7D32" />
             </View>
             <Text style={styles.featureTitle}>AI Chat</Text>
             <Text style={styles.featureDescription}>
               Ask questions about farming practices, crop management, and more
             </Text>
-            <View style={styles.comingSoonBadge}>
-              <Text style={styles.comingSoonText}>Coming Soon</Text>
+            <View style={styles.featureBadge}>
+              <Text style={styles.badgeText}>NEW</Text>
             </View>
-          </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.featureCard}
+            onPress={() => navigation.navigate('SmartRecommendations')}
+          >
+            <View style={styles.featureIcon}>
+              <Ionicons name="bulb" size={32} color="#2E7D32" />
+            </View>
+            <Text style={styles.featureTitle}>Smart Recommendations</Text>
+            <Text style={styles.featureDescription}>
+              Get personalized farming advice based on your data and conditions
+            </Text>
+            <View style={styles.featureBadge}>
+              <Text style={styles.badgeText}>NEW</Text>
+            </View>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.infoSection}>

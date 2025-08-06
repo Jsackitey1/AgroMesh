@@ -18,6 +18,9 @@ import ProfileScreen from '../screens/main/ProfileScreen';
 import VideosScreen from '../screens/main/VideosScreen';
 import VideoCaptureScreen from '../screens/main/VideoCaptureScreen';
 import LiveStreamScreen from '../screens/main/LiveStreamScreen';
+import ImageDiagnosisScreen from '../screens/main/ImageDiagnosisScreen';
+import AIChatScreen from '../screens/main/AIChatScreen';
+import SmartRecommendationsScreen from '../screens/main/SmartRecommendationsScreen';
 
 // Loading Screen
 import LoadingScreen from '../screens/LoadingScreen';
@@ -129,6 +132,9 @@ const AppNavigator: React.FC = () => {
             <Stack.Screen name="Videos" component={VideosScreen} />
             <Stack.Screen name="VideoCapture" component={VideoCaptureScreen} />
             <Stack.Screen name="LiveStream" component={LiveStreamScreen} />
+            <Stack.Screen name="ImageDiagnosis" component={ImageDiagnosisScreen} />
+            <Stack.Screen name="AIChat" component={AIChatScreen} />
+            <Stack.Screen name="SmartRecommendations" component={SmartRecommendationsScreen} />
           </>
         ) : (
           <>

@@ -187,9 +187,16 @@ export interface AnalyticsData {
 
 // AI Types
 export interface AIResponse {
-  message: string;
+  success?: boolean;
+  message?: string;
+  answer?: string;
+  diagnosis?: string;
+  recommendations?: string;
   data?: any;
   error?: string;
+  tokensUsed?: any;
+  model?: string;
+  timestamp?: string;
 }
 
 // API Response Types
@@ -213,14 +220,21 @@ export interface PaginatedResponse<T> {
 
 // Navigation Types
 export type RootStackParamList = {
-  Auth: undefined;
-  Main: undefined;
+  Loading: undefined;
   Login: undefined;
   Register: undefined;
-  ForgotPassword: undefined;
-  Videos: undefined;
+  Main: undefined;
+  Dashboard: undefined;
+  Sensors: undefined;
+  Alerts: undefined;
+  AI: undefined;
+  Profile: undefined;
   VideoCapture: undefined;
+  Videos: undefined;
   LiveStream: undefined;
+  ImageDiagnosis: undefined;
+  AIChat: undefined;
+  SmartRecommendations: undefined;
 };
 
 export type MainTabParamList = {

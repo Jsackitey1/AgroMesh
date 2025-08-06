@@ -3,6 +3,7 @@ const multer = require('multer');
 const rateLimit = require('express-rate-limit');
 const geminiService = require('../services/geminiService');
 const authenticateJWT = require('../middlewares/auth');
+const { body, validationResult } = require('express-validator');
 
 const router = express.Router();
 const upload = multer();
@@ -155,6 +156,161 @@ router.post('/ask', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to get AI answer', error: err.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/ai/diagnose-image-enhanced:
+ *   post:
+ *     summary: Enhanced plant health diagnosis from image
+ *     tags: [AI]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *               cropType:
+ *                 type: string
+ *                 description: Type of crop in the image
+ *               location:
+ *                 type: string
+ *                 description: Location where image was taken
+ *     responses:
+ *       200:
+ *         description: Enhanced AI diagnosis with structured response
+ */
+router.post('/diagnose-image-enhanced', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file || !req.file.buffer) {
+      return res.status(400).json({ message: 'Image file is required' });
+    }
+
+    const options = {
+      cropType: req.body.cropType,
+      location: req.body.location
+    };
+
+    const result = await geminiService.diagnoseImage(req.file.buffer, req.file.originalname, options);
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to diagnose image', error: err.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/ai/ask-question:
+ *   post:
+ *     summary: Ask farming-related questions with context
+ *     tags: [AI]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               question:
+ *                 type: string
+ *                 required: true
+ *               context:
+ *                 type: object
+ *                 properties:
+ *                   location:
+ *                     type: string
+ *                   season:
+ *                     type: string
+ *                   crop:
+ *                     type: string
+ *     responses:
+ *       200:
+ *         description: AI response with farming advice
+ */
+router.post('/ask-question', [
+  body('question').trim().isLength({ min: 1, max: 1000 }).withMessage('Question is required and must be less than 1000 characters'),
+  body('context').optional().isObject()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        message: 'Validation failed', 
+        errors: errors.array() 
+      });
+    }
+
+    const { question, context = {} } = req.body;
+    const result = await geminiService.askQuestion(question, context);
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to process question', error: err.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/ai/smart-recommendations:
+ *   post:
+ *     summary: Get personalized farming recommendations
+ *     tags: [AI]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               sensorData:
+ *                 type: object
+ *               weather:
+ *                 type: object
+ *               season:
+ *                 type: string
+ *               crop:
+ *                 type: string
+ *               location:
+ *                 type: string
+ *               soilData:
+ *                 type: object
+ *               pestHistory:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Personalized farming recommendations
+ */
+router.post('/smart-recommendations', [
+  body('sensorData').optional().isObject(),
+  body('weather').optional().isObject(),
+  body('season').optional().isString(),
+  body('crop').optional().isString(),
+  body('location').optional().isString(),
+  body('soilData').optional().isObject(),
+  body('pestHistory').optional().isArray()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        message: 'Validation failed', 
+        errors: errors.array() 
+      });
+    }
+
+    const result = await geminiService.getSmartRecommendations(req.body);
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to generate recommendations', error: err.message });
   }
 });
 

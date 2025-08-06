@@ -239,6 +239,28 @@ class ApiService {
     return response.data;
   }
 
+  async diagnoseImageEnhanced(formData: FormData): Promise<AIResponse> {
+    const response: AxiosResponse<AIResponse> = await this.api.post('/ai/diagnose-image-enhanced', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  }
+
+  async askQuestion(question: string, context: any = {}): Promise<AIResponse> {
+    const response: AxiosResponse<AIResponse> = await this.api.post('/ai/ask-question', {
+      question,
+      context,
+    });
+    return response.data;
+  }
+
+  async getSmartRecommendations(data: any): Promise<AIResponse> {
+    const response: AxiosResponse<AIResponse> = await this.api.post('/ai/smart-recommendations', data);
+    return response.data;
+  }
+
   // Health Check
   async healthCheck(): Promise<{ status: string }> {
     const response: AxiosResponse<{ status: string }> = await this.api.get('/health');
