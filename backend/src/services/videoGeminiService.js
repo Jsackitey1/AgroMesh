@@ -1,4 +1,4 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { GoogleGenAI } = require('@google/genai');
 const fs = require('fs').promises;
 const path = require('path');
 const logger = require('../utils/logger');
@@ -11,7 +11,7 @@ if (!GEMINI_API_KEY) {
   logger.warn('⚠️ GEMINI_API_KEY not found in environment variables. Video analysis features will be disabled.');
 } else {
   try {
-    genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+    genAI = new GoogleGenAI(GEMINI_API_KEY);
     logger.info('✅ Gemini AI initialized successfully for video analysis');
   } catch (error) {
     logger.warn('Failed to initialize Gemini AI for video analysis:', error.message);
@@ -49,17 +49,6 @@ async function analyzeVideo(videoPath, prompt, options = {}) {
       throw new Error(`Unsupported video format: ${ext}`);
     }
 
-    // Initialize the model
-    const model = genAI.getGenerativeModel({ 
-      model: options.model || "gemini-2.0-flash",
-      generationConfig: {
-        temperature: options.temperature || 0.4,
-        topK: options.topK || 32,
-        topP: options.topP || 1,
-        maxOutputTokens: options.maxOutputTokens || 2048,
-      }
-    });
-
     // Create the content parts
     const parts = [
       {
@@ -83,18 +72,24 @@ Be specific and actionable in your response.`
       }
     ];
 
-    // Generate content
-    const result = await model.generateContent({
-      contents: [{ parts }]
+    // Generate content using the new API
+    const result = await genAI.models.generateContent({
+      model: options.model || "models/gemini-1.5-flash",
+      contents: [{ parts }],
+      generationConfig: {
+        temperature: options.temperature || 0.4,
+        topK: options.topK || 32,
+        topP: options.topP || 1,
+        maxOutputTokens: options.maxOutputTokens || 2048,
+      }
     });
 
-    const response = await result.response;
-    const text = response.text();
+    const text = result.candidates[0].content.parts[0].text;
     
     const processingTime = Date.now() - startTime;
 
     // Extract usage statistics if available
-    const usageMetadata = response.usageMetadata;
+    const usageMetadata = result.usageMetadata;
     const tokensUsed = {
       input: usageMetadata?.promptTokenCount || 0,
       output: usageMetadata?.candidatesTokenCount || 0
@@ -250,14 +245,15 @@ async function testGeminiConnection() {
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-    const result = await model.generateContent("Hello, this is a test message.");
-    const response = await result.response;
+    const result = await genAI.models.generateContent({
+      model: "models/gemini-1.5-flash",
+      contents: [{ text: "Hello, this is a test message." }]
+    });
     
     return {
       success: true,
       message: 'Gemini API connection successful',
-      response: response.text()
+      response: result.candidates[0].content.parts[0].text
     };
   } catch (error) {
     return {

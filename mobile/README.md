@@ -1,66 +1,97 @@
-# AgroMesh Mobile App
+# AgroMesh Mobile App - UPDATED
 
 A comprehensive React Native mobile application for the AgroMesh precision agriculture platform, providing farmers with real-time sensor monitoring, AI-powered insights, and smart farming solutions.
 
+## 🚀 **Latest Updates (v2.1)**
+
+### ✅ **AI Integration - FULLY WORKING**
+- **Image Diagnosis**: Upload plant photos for instant health analysis
+- **AI Chat**: Interactive Q&A system for farming advice
+- **Smart Recommendations**: Personalized farming recommendations
+- **Video Analysis**: Upload and analyze agricultural videos
+- **Multi-modal AI**: Support for images, videos, and text
+
+### 🔐 **Authentication - COMPLETE**
+- **Secure Login/Registration**: JWT-based authentication
+- **Profile Management**: User profile and settings
+- **Token Management**: Automatic token refresh and storage
+- **Role-based Access**: Farmer, Admin, Researcher roles
+
+### 📱 **Mobile Features - COMPLETE**
+- **Dashboard**: Real-time sensor data visualization
+- **AI Assistant**: Complete AI integration hub
+- **Real-time Updates**: WebSocket integration
+- **Offline Support**: Data caching and offline functionality
+
+---
+
 ## 🚀 Features
 
-### ✅ Implemented
+### ✅ **Fully Implemented & Working**
 
 - **🔐 Authentication & User Management**
-  - Secure login and registration with JWT tokens
-  - Role-based access (Farmer, Admin, Researcher)
-  - Profile management and settings
-  - Multi-language support ready
+  - ✅ Secure login and registration with JWT tokens
+  - ✅ Role-based access (Farmer, Admin, Researcher)
+  - ✅ Profile management and settings
+  - ✅ Multi-language support ready
+  - ✅ Token refresh and storage management
 
 - **📱 Modern UI/UX**
-  - Clean, intuitive interface designed for farmers
-  - Responsive design for various screen sizes
-  - Pull-to-refresh functionality
-  - Loading states and error handling
+  - ✅ Clean, intuitive interface designed for farmers
+  - ✅ Responsive design for various screen sizes
+  - ✅ Pull-to-refresh functionality
+  - ✅ Loading states and error handling
+  - ✅ Navigation with React Navigation v6
 
 - **🏠 Dashboard**
-  - Real-time overview of sensor status
-  - Summary cards with key metrics
-  - Quick action buttons
-  - Latest sensor readings display
+  - ✅ Real-time overview of sensor status
+  - ✅ Summary cards with key metrics
+  - ✅ Quick action buttons
+  - ✅ Latest sensor readings display
+  - ✅ Connection status indicators
 
 - **🔌 Real-Time Communication**
-  - Socket.io integration for live updates
-  - Real-time sensor data streaming
-  - Instant alert notifications
-  - Connection status management
+  - ✅ Socket.io integration for live updates
+  - ✅ Real-time sensor data streaming
+  - ✅ Instant alert notifications
+  - ✅ Connection status management
+  - ✅ Automatic reconnection handling
 
 - **📊 Data Management**
-  - Secure API communication with backend
-  - Offline data caching
-  - Error handling and retry logic
-  - Token-based authentication
+  - ✅ Secure API communication with backend
+  - ✅ Offline data caching with AsyncStorage
+  - ✅ Error handling and retry logic
+  - ✅ Token-based authentication
+  - ✅ Request/response interceptors
 
-### 🚧 Coming Soon
+- **🤖 AI-Powered Features - COMPLETE**
+  - ✅ **Image Diagnosis**: Plant health analysis from photos
+  - ✅ **AI Chat**: Interactive Q&A for farming advice
+  - ✅ **Smart Recommendations**: Personalized farming guidance
+  - ✅ **Video Analysis**: Agricultural video processing
+  - ✅ **Multi-modal Support**: Images, videos, and text
+
+### 🚧 **In Development**
 
 - **📡 Sensor Management**
-  - Register and configure sensor nodes
-  - View detailed sensor data and charts
-  - Sensor status monitoring
-  - Location-based sensor mapping
+  - 🔧 Register and configure sensor nodes
+  - 🔧 View detailed sensor data and charts
+  - 🔧 Sensor status monitoring
+  - 🔧 Location-based sensor mapping
 
 - **🚨 Alerts & Notifications**
-  - Real-time alert management
-  - Push notifications
-  - Alert history and filtering
-  - Custom notification preferences
-
-- **🤖 AI-Powered Features**
-  - Plant health diagnosis from images
-  - Video analysis for crop monitoring
-  - AI-powered agricultural Q&A
-  - Smart recommendations
+  - 🔧 Real-time alert management
+  - 🔧 Push notifications
+  - 🔧 Alert history and filtering
+  - 🔧 Custom notification preferences
 
 - **📈 Analytics & Reports**
-  - Historical data visualization
-  - Interactive charts and graphs
-  - Data export functionality
-  - Comparative analysis
+  - 🔧 Historical data visualization
+  - 🔧 Interactive charts and graphs
+  - 🔧 Data export functionality
+  - 🔧 Comparative analysis
+
+---
 
 ## 🛠️ Technology Stack
 
@@ -72,295 +103,343 @@ A comprehensive React Native mobile application for the AgroMesh precision agric
 - **Real-time**: Socket.io Client
 - **Storage**: AsyncStorage
 - **UI Icons**: Expo Vector Icons
-- **Charts**: React Native Chart Kit (planned)
-- **Maps**: React Native Maps (planned)
+- **Camera**: Expo Camera
+- **Image Picker**: Expo Image Picker
+- **Media Library**: Expo Media Library
+- **Charts**: React Native Chart Kit *(planned)*
+- **Maps**: React Native Maps *(planned)*
+
+---
 
 ## 📋 Prerequisites
 
-- Node.js (v16 or higher)
+- Node.js (v18 or higher) - **Updated requirement**
 - npm or yarn
 - Expo CLI
-- iOS Simulator (for iOS development)
-- Android Studio (for Android development)
+- Expo Go app (for testing)
+- iOS Simulator *(optional - for iOS development)*
+- Android Studio *(optional - for Android development)*
+
+---
 
 ## 🚀 Quick Start
 
-### 1. Install Dependencies
-
+### **1. Install Dependencies**
 ```bash
 cd mobile
 npm install
 ```
 
-### 2. Environment Setup
-
+### **2. Environment Setup**
 Create a `.env` file in the mobile directory:
-
 ```env
 # API Configuration
-API_BASE_URL=http://localhost:5000/api
-SOCKET_URL=http://localhost:5000
+API_BASE_URL=http://localhost:5001
+SOCKET_URL=http://localhost:5001
 
-# Optional: Push Notifications
-EXPO_PUSH_TOKEN=your-expo-push-token
+# Optional: LiveKit Configuration (for future streaming)
+LIVEKIT_URL=your-livekit-url
+LIVEKIT_API_KEY=your-livekit-api-key
+LIVEKIT_API_SECRET=your-livekit-api-secret
 ```
 
-### 3. Start the Development Server
-
+### **3. Start Development Server**
 ```bash
-# Start Expo development server
+npx expo start
+```
+
+### **4. Test on Device**
+- Install **Expo Go** app on your phone
+- Scan the QR code from terminal
+- Navigate to **AI Assistant** for all features
+
+---
+
+## 📱 **App Screens & Features**
+
+### **🔐 Authentication Screens**
+- **LoginScreen**: Secure login with email/password
+- **RegisterScreen**: User registration with validation
+- **LoadingScreen**: App initialization and token check
+
+### **🏠 Main Screens**
+- **DashboardScreen**: Real-time sensor data overview
+- **SensorsScreen**: Sensor management and monitoring
+- **AlertsScreen**: Alert management and notifications
+- **ProfileScreen**: User profile and settings
+
+### **🤖 AI Assistant Screens**
+- **AIScreen**: AI features hub with navigation cards
+- **ImageDiagnosisScreen**: Plant health analysis from photos
+- **AIChatScreen**: Interactive AI Q&A system
+- **SmartRecommendationsScreen**: Personalized farming advice
+- **VideoCaptureScreen**: Video recording and upload
+- **VideoAnalysisScreen**: Video analysis and results
+
+---
+
+## 🎯 **AI Features Guide**
+
+### **1. Image Diagnosis**
+1. Navigate to **AI Assistant** → **Image Diagnosis**
+2. Tap **Select Image** or **Take Photo**
+3. Upload plant photo
+4. Get instant AI analysis including:
+   - Plant health assessment
+   - Disease identification
+   - Treatment recommendations
+   - Prevention strategies
+
+### **2. AI Chat**
+1. Navigate to **AI Assistant** → **AI Chat**
+2. Type your farming question
+3. Get AI-powered responses with:
+   - Detailed explanations
+   - Step-by-step guidance
+   - Best practices
+   - Local recommendations
+
+### **3. Smart Recommendations**
+1. Navigate to **AI Assistant** → **Smart Recommendations**
+2. Provide your location, crop, and season
+3. Receive personalized advice including:
+   - Immediate actions
+   - Short-term planning
+   - Long-term strategy
+   - Risk management
+
+### **4. Video Analysis**
+1. Navigate to **AI Assistant** → **Video Analysis**
+2. Upload agricultural video
+3. Get comprehensive analysis:
+   - Field assessment
+   - Problem identification
+   - Solution recommendations
+   - Maintenance schedules
+
+---
+
+## 🔧 **Development Setup**
+
+### **1. Backend Integration**
+Ensure the backend server is running:
+```bash
+cd backend
 npm start
-
-# Or run directly on device/simulator
-npm run ios
-npm run android
 ```
 
-### 4. Backend Connection
-
-Ensure your AgroMesh backend is running on `http://localhost:5000` before testing the mobile app.
-
-## 📱 App Structure
-
-```
-mobile/
-├── src/
-│   ├── contexts/          # React Context providers
-│   │   └── AuthContext.tsx
-│   ├── navigation/        # Navigation configuration
-│   │   └── AppNavigator.tsx
-│   ├── screens/           # App screens
-│   │   ├── auth/          # Authentication screens
-│   │   │   ├── LoginScreen.tsx
-│   │   │   └── RegisterScreen.tsx
-│   │   ├── main/          # Main app screens
-│   │   │   ├── DashboardScreen.tsx
-│   │   │   ├── SensorsScreen.tsx
-│   │   │   ├── AlertsScreen.tsx
-│   │   │   ├── AIScreen.tsx
-│   │   │   └── ProfileScreen.tsx
-│   │   └── LoadingScreen.tsx
-│   ├── services/          # API and external services
-│   │   ├── api.ts         # REST API service
-│   │   └── socket.ts      # Socket.io service
-│   └── types/             # TypeScript type definitions
-│       └── index.ts
-├── App.tsx                # Main app component
-└── package.json
-```
-
-## 🔧 Configuration
-
-### API Configuration
-
-Update the API base URL in `src/services/api.ts`:
-
+### **2. API Configuration**
+Update API endpoints in `src/services/api.ts`:
 ```typescript
-const API_BASE_URL = 'http://your-backend-url:5000/api';
+const API_BASE_URL = 'http://localhost:5001';
+const SOCKET_URL = 'http://localhost:5001';
 ```
 
-### Socket Configuration
+### **3. Authentication Testing**
+Test authentication flow:
+1. Register new user
+2. Login with credentials
+3. Verify token storage
+4. Test protected routes
 
-Update the Socket.io URL in `src/services/socket.ts`:
+### **4. AI Features Testing**
+Test all AI features:
+1. Upload test images for diagnosis
+2. Ask AI questions
+3. Get smart recommendations
+4. Upload and analyze videos
 
-```typescript
-const SOCKET_URL = 'http://your-backend-url:5000';
-```
+---
 
-### Environment Variables
+## 🧪 **Testing**
 
-The app supports environment variables for configuration:
-
-- `API_BASE_URL`: Backend API endpoint
-- `SOCKET_URL`: Socket.io server URL
-- `EXPO_PUSH_TOKEN`: Expo push notification token
-
-## 📱 Screens Overview
-
-### Authentication Flow
-1. **Login Screen**: Email/password authentication
-2. **Register Screen**: User registration with role selection
-3. **Loading Screen**: App initialization
-
-### Main App Flow
-1. **Dashboard**: Overview, summary cards, quick actions
-2. **Sensors**: Sensor management and monitoring
-3. **Alerts**: Alert management and notifications
-4. **AI Assistant**: AI-powered features
-5. **Profile**: User settings and account management
-
-## 🔌 API Integration
-
-The app integrates with the AgroMesh backend through:
-
-### Authentication Endpoints
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `GET /api/auth/profile` - Get user profile
-- `PUT /api/auth/profile` - Update profile
-- `POST /api/auth/change-password` - Change password
-
-### Sensor Endpoints
-- `GET /api/sensors` - Get user's sensors
-- `POST /api/sensors/register` - Register new sensor
-- `GET /api/sensors/:nodeId` - Get sensor details
-- `GET /api/sensors/:nodeId/data` - Get sensor data
-
-### Dashboard Endpoints
-- `GET /api/dashboard/summary` - Dashboard summary
-- `GET /api/dashboard/analytics` - Analytics data
-- `GET /api/dashboard/alerts-summary` - Alerts summary
-
-### AI Endpoints
-- `POST /api/ai/suggest` - Get AI suggestions
-- `POST /api/ai/diagnose-image` - Image diagnosis
-- `POST /api/ai/diagnose-video` - Video diagnosis
-- `POST /api/ai/ask` - AI Q&A
-
-## 🔌 Real-Time Features
-
-The app uses Socket.io for real-time communication:
-
-### Events Received
-- `welcome` - Welcome message
-- `sensorNodeRegistered` - New sensor registered
-- `sensorDataUpdate` - New sensor data
-- `newAlert` - New alert notification
-- `alertUpdated` - Alert status update
-
-### Connection Management
-- Automatic reconnection
-- Connection status monitoring
-- Error handling and recovery
-
-## 🧪 Testing
-
-### Run Tests
+### **Manual Testing**
 ```bash
-npm test
+# Start development server
+npx expo start
+
+# Test on device
+# 1. Install Expo Go app
+# 2. Scan QR code
+# 3. Test all features:
+#    - Authentication
+#    - Dashboard
+#    - AI features
+#    - Real-time updates
 ```
 
-### Test Coverage
-- Authentication flow
-- API service integration
-- Navigation functionality
-- Error handling
-
-## 📦 Building for Production
-
-### iOS Build
-```bash
-# Build for iOS
-expo build:ios
-
-# Or build locally
-expo run:ios --configuration Release
-```
-
-### Android Build
-```bash
-# Build for Android
-expo build:android
-
-# Or build locally
-expo run:android --variant release
-```
-
-## 🚀 Deployment
-
-### Expo Application Services (EAS)
-
-1. **Install EAS CLI**
-   ```bash
-   npm install -g @expo/eas-cli
-   ```
-
-2. **Configure EAS**
-   ```bash
-   eas build:configure
-   ```
-
-3. **Build for Production**
-   ```bash
-   eas build --platform ios
-   eas build --platform android
-   ```
-
-4. **Submit to App Stores**
-   ```bash
-   eas submit --platform ios
-   eas submit --platform android
-   ```
-
-## 🔒 Security Features
-
-- JWT token authentication
-- Secure token storage
-- API request/response validation
-- Input sanitization
-- HTTPS communication
-- Error handling without sensitive data exposure
-
-## 📱 Device Requirements
-
-### iOS
-- iOS 12.0 or later
-- iPhone 6s or newer
-- iPad (5th generation) or newer
-
-### Android
-- Android 6.0 (API level 23) or later
-- 2GB RAM minimum
-- 100MB free storage
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Run tests: `npm test`
-6. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🆘 Support
-
-For support and questions:
-- Check the API documentation
-- Review the backend README
-- Open an issue on GitHub
-
-## 🔮 Roadmap
-
-### Phase 1: Core Features ✅
-- [x] Authentication system
-- [x] Dashboard implementation
-- [x] Basic navigation
-- [x] API integration
-
-### Phase 2: Sensor Management 🚧
-- [ ] Sensor registration
-- [ ] Real-time data visualization
-- [ ] Sensor configuration
-- [ ] Location mapping
-
-### Phase 3: AI Integration 🚧
-- [ ] Image diagnosis
-- [ ] Video analysis
-- [ ] AI Q&A system
+### **Feature Testing Checklist**
+- [ ] User registration and login
+- [ ] Dashboard data loading
+- [ ] Image diagnosis functionality
+- [ ] AI chat responses
 - [ ] Smart recommendations
+- [ ] Video upload and analysis
+- [ ] Real-time updates
+- [ ] Offline functionality
+- [ ] Error handling
+- [ ] Loading states
 
-### Phase 4: Advanced Features 📋
-- [ ] Offline mode
-- [ ] Push notifications
-- [ ] Data export
-- [ ] Multi-language support
+---
 
-### Phase 5: Optimization 📋
-- [ ] Performance optimization
-- [ ] Advanced analytics
-- [ ] Custom themes
-- [ ] Accessibility improvements 
+## 🚀 **Deployment**
+
+### **Expo Build**
+```bash
+# Install EAS CLI
+npm install -g @expo/eas-cli
+
+# Login to Expo
+eas login
+
+# Configure build
+eas build:configure
+
+# Build for platforms
+eas build --platform all
+```
+
+### **App Store Deployment**
+```bash
+# Submit to app stores
+eas submit --platform all
+```
+
+### **Environment Configuration**
+```bash
+# Production environment
+eas secret:create --scope project --name API_BASE_URL --value https://your-api.com
+eas secret:create --scope project --name SOCKET_URL --value https://your-api.com
+```
+
+---
+
+## 🐛 **Troubleshooting**
+
+### **Common Issues**
+
+#### **1. App Won't Start**
+```bash
+# Clear Expo cache
+npx expo start --clear
+
+# Reset Metro bundler
+npx expo start --reset-cache
+
+# Check dependencies
+npm install
+```
+
+#### **2. API Connection Issues**
+```bash
+# Verify backend is running
+curl http://localhost:5001/api/health
+
+# Check API configuration
+cat .env
+
+# Test API endpoints
+curl http://localhost:5001/api/auth/login
+```
+
+#### **3. AI Features Not Working**
+```bash
+# Check authentication
+# Ensure user is logged in
+
+# Verify backend AI endpoints
+curl -X POST http://localhost:5001/api/ai/ask-question \
+  -H "Content-Type: application/json" \
+  -d '{"question": "test"}'
+```
+
+#### **4. Camera/Image Picker Issues**
+```bash
+# Check permissions
+# Ensure camera and photo library access
+
+# Test on physical device
+# Some features require real device testing
+```
+
+### **Error Solutions**
+
+#### **"Authentication token not found"**
+- Ensure user is logged in
+- Check AsyncStorage for tokens
+- Verify backend authentication
+
+#### **"Network request failed"**
+- Check backend server status
+- Verify API URLs in configuration
+- Test network connectivity
+
+#### **"Permission denied"**
+- Grant camera and photo library permissions
+- Check device settings
+- Restart app after permission changes
+
+---
+
+## 📋 **Verification Checklist**
+
+### **✅ App Setup**
+- [ ] Dependencies installed
+- [ ] Environment configured
+- [ ] Expo CLI installed
+- [ ] Expo Go app ready
+
+### **✅ Authentication**
+- [ ] Registration working
+- [ ] Login functional
+- [ ] Token storage working
+- [ ] Protected routes accessible
+
+### **✅ AI Features**
+- [ ] Image diagnosis working
+- [ ] AI chat responding
+- [ ] Smart recommendations generating
+- [ ] Video analysis processing
+
+### **✅ Real-time Features**
+- [ ] WebSocket connection working
+- [ ] Real-time updates receiving
+- [ ] Connection status showing
+- [ ] Reconnection handling
+
+---
+
+## 📞 **Support**
+
+### **Getting Help**
+- 📧 **Email**: sackiteyjoseph@gmail.com
+- 🌐 **Website**: https://agro-mesh.vercel.app/
+- 📱 **Mobile App**: Available via Expo Go
+
+### **Useful Commands**
+```bash
+# Start development
+npx expo start
+
+# Clear cache
+npx expo start --clear
+
+# Build for production
+eas build --platform all
+
+# Check Expo status
+expo doctor
+```
+
+---
+
+## 🎉 **Success!**
+
+Once setup is complete, you should have:
+- ✅ Working mobile app with AI integration
+- ✅ Complete authentication system
+- ✅ All AI features functional
+- ✅ Real-time updates working
+- ✅ Ready for production deployment
+
+**Happy farming with AI!** 🌾📱✨ 

@@ -1,4 +1,4 @@
-const { GoogleGenerativeAI } = require('@google/genai');
+const { GoogleGenAI } = require('@google/genai');
 const fs = require('fs');
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -7,7 +7,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 let genAI = null;
 if (GEMINI_API_KEY) {
   try {
-    genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+    genAI = new GoogleGenAI(GEMINI_API_KEY);
   } catch (error) {
     console.warn('Failed to initialize Gemini AI:', error.message);
   }
@@ -21,8 +21,10 @@ async function getSuggestionFromSensorData(sensorData) {
   
   try {
     const prompt = `Given the following data: ${JSON.stringify(sensorData)}, what should the farmer do next?`;
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-    const result = await model.generateContent(prompt);
+    const result = await genAI.models.generateContent({
+      model: 'models/gemini-1.5-flash',
+      contents: [{ text: prompt }]
+    });
     return result.response;
   } catch (error) {
     console.error('Gemini AI error:', error);
@@ -40,16 +42,6 @@ async function diagnoseImage(imageBuffer, filename, options = {}) {
   }
   
   try {
-    const model = genAI.getGenerativeModel({ 
-      model: 'gemini-pro-vision',
-      generationConfig: {
-        temperature: 0.3,
-        topK: 32,
-        topP: 1,
-        maxOutputTokens: 2048,
-      }
-    });
-
     const base64Image = imageBuffer.toString('base64');
     
     const prompt = `You are an expert agricultural AI assistant specializing in plant health diagnosis. Analyze this image and provide a comprehensive assessment.
@@ -81,16 +73,24 @@ Please provide your analysis in the following structured format:
 
 Be specific, actionable, and provide evidence-based recommendations. If the image quality is poor or unclear, mention this and suggest what additional photos might help.`;
 
-    const result = await model.generateContent([
-      { text: prompt },
-      { inlineData: { data: base64Image, mimeType: 'image/jpeg' } },
-    ]);
+    const result = await genAI.models.generateContent({
+      model: 'models/gemini-1.5-flash',
+      contents: [
+        { text: prompt },
+        { inlineData: { data: base64Image, mimeType: 'image/jpeg' } }
+      ],
+      generationConfig: {
+        temperature: 0.3,
+        topK: 32,
+        topP: 1,
+        maxOutputTokens: 2048,
+      }
+    });
     
-    const response = await result.response;
-    const text = response.text();
+    const text = result.candidates[0].content.parts[0].text;
     
     // Extract usage statistics if available
-    const usageMetadata = response.usageMetadata;
+    const usageMetadata = result.usageMetadata;
     const tokensUsed = {
       input: usageMetadata?.promptTokenCount || 0,
       output: usageMetadata?.candidatesTokenCount || 0
@@ -100,7 +100,7 @@ Be specific, actionable, and provide evidence-based recommendations. If the imag
       success: true,
       diagnosis: text,
       tokensUsed,
-      model: 'gemini-pro-vision',
+      model: 'models/gemini-1.5-flash',
       timestamp: new Date().toISOString(),
       filename: filename
     };
@@ -114,12 +114,92 @@ Be specific, actionable, and provide evidence-based recommendations. If the imag
   }
 }
 
-// Video-based plant diagnosis (if supported)
+// Video-based plant diagnosis
 async function diagnoseVideo(videoBuffer, filename) {
-  // Gemini API may not support video directly; if not, return not implemented
-  // If supported, similar to image, but with video mimeType
-  // For now, return a not implemented message
-  return { message: 'Video diagnosis is not yet supported by Gemini API.' };
+  if (!genAI) {
+    return { 
+      success: false,
+      message: 'AI service not available. Please configure GEMINI_API_KEY.' 
+    };
+  }
+  
+  try {
+    const base64Video = videoBuffer.toString('base64');
+    
+    const prompt = `You are an expert agricultural AI assistant specializing in plant health diagnosis from video footage. Analyze this video and provide a comprehensive assessment.
+
+Please provide your analysis in the following structured format:
+
+**Video Content Analysis:**
+- What you observe in the video
+- Plant health indicators
+- Environmental conditions visible
+- Any equipment or farming activities shown
+
+**Plant Health Assessment:**
+- Overall health status (Healthy/Concerning/Critical)
+- Visible symptoms and their severity
+- Potential diseases or pests identified
+- Environmental stress factors
+
+**Diagnosis:**
+- Specific disease or pest identification (if any)
+- Confidence level in diagnosis (High/Medium/Low)
+- Similar conditions or look-alike issues to consider
+
+**Treatment Recommendations:**
+- Immediate actions to take
+- Long-term management strategies
+- Preventive measures
+- When to consult a professional
+
+**Additional Observations:**
+- Growth stage assessment
+- Nutrient deficiency signs
+- Watering or care issues
+- Environmental conditions
+
+Be specific, actionable, and provide evidence-based recommendations. If the video quality is poor or unclear, mention this and suggest what additional footage might help.`;
+
+    const result = await genAI.models.generateContent({
+      model: 'models/gemini-1.5-flash',
+      contents: [
+        { text: prompt },
+        { inlineData: { data: base64Video, mimeType: 'video/mp4' } }
+      ],
+      generationConfig: {
+        temperature: 0.3,
+        topK: 32,
+        topP: 1,
+        maxOutputTokens: 2048,
+      }
+    });
+    
+    const text = result.candidates[0].content.parts[0].text;
+    
+    // Extract usage statistics if available
+    const usageMetadata = result.usageMetadata;
+    const tokensUsed = {
+      input: usageMetadata?.promptTokenCount || 0,
+      output: usageMetadata?.candidatesTokenCount || 0
+    };
+
+    return {
+      success: true,
+      diagnosis: text,
+      tokensUsed,
+      model: 'models/gemini-1.5-flash',
+      timestamp: new Date().toISOString(),
+      filename: filename
+    };
+  } catch (error) {
+    console.error('Gemini AI error:', error);
+    return { 
+      success: false,
+      message: 'AI service temporarily unavailable.',
+      error: error.message
+    };
+  }
 }
 
 async function askQuestion(question, context = {}) {
@@ -131,16 +211,6 @@ async function askQuestion(question, context = {}) {
   }
   
   try {
-    const model = genAI.getGenerativeModel({ 
-      model: 'gemini-pro',
-      generationConfig: {
-        temperature: 0.4,
-        topK: 32,
-        topP: 1,
-        maxOutputTokens: 2048,
-      }
-    });
-
     // Build context-aware prompt
     const contextInfo = context.location ? `Location: ${context.location}. ` : '';
     const seasonInfo = context.season ? `Current season: ${context.season}. ` : '';
@@ -175,12 +245,20 @@ Please provide a comprehensive, practical response that includes:
 
 Be specific, practical, and provide evidence-based advice. If the question requires more context or specific details, ask clarifying questions.`;
 
-    const result = await model.generateContent(enhancedPrompt);
-    const response = await result.response;
-    const text = response.text();
+    const result = await genAI.models.generateContent({
+      model: 'models/gemini-1.5-flash',
+      contents: [{ text: enhancedPrompt }],
+      generationConfig: {
+        temperature: 0.4,
+        topK: 32,
+        topP: 1,
+        maxOutputTokens: 2048,
+      }
+    });
+    const text = result.candidates[0].content.parts[0].text;
     
     // Extract usage statistics if available
-    const usageMetadata = response.usageMetadata;
+    const usageMetadata = result.usageMetadata;
     const tokensUsed = {
       input: usageMetadata?.promptTokenCount || 0,
       output: usageMetadata?.candidatesTokenCount || 0
@@ -190,7 +268,7 @@ Be specific, practical, and provide evidence-based advice. If the question requi
       success: true,
       answer: text,
       tokensUsed,
-      model: 'gemini-pro',
+      model: 'models/gemini-1.5-flash',
       timestamp: new Date().toISOString(),
       context: context
     };
@@ -214,16 +292,6 @@ async function getSmartRecommendations(data = {}) {
   }
   
   try {
-    const model = genAI.getGenerativeModel({ 
-      model: 'gemini-pro',
-      generationConfig: {
-        temperature: 0.3,
-        topK: 32,
-        topP: 1,
-        maxOutputTokens: 2048,
-      }
-    });
-
     const {
       sensorData = {},
       weather = {},
@@ -279,12 +347,20 @@ Please provide comprehensive, personalized recommendations in this format:
 
 Provide specific, actionable advice tailored to the farmer's situation. Include timing, quantities, and methods where applicable.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const result = await genAI.models.generateContent({
+      model: 'models/gemini-1.5-flash',
+      contents: [{ text: prompt }],
+      generationConfig: {
+        temperature: 0.3,
+        topK: 32,
+        topP: 1,
+        maxOutputTokens: 2048,
+      }
+    });
+    const text = result.candidates[0].content.parts[0].text;
     
     // Extract usage statistics if available
-    const usageMetadata = response.usageMetadata;
+    const usageMetadata = result.usageMetadata;
     const tokensUsed = {
       input: usageMetadata?.promptTokenCount || 0,
       output: usageMetadata?.candidatesTokenCount || 0
@@ -294,7 +370,7 @@ Provide specific, actionable advice tailored to the farmer's situation. Include 
       success: true,
       recommendations: text,
       tokensUsed,
-      model: 'gemini-pro',
+      model: 'models/gemini-1.5-flash',
       timestamp: new Date().toISOString(),
       dataSource: data
     };

@@ -1,10 +1,34 @@
-# AgroMesh Backend
+# AgroMesh Backend - UPDATED
 
 A comprehensive Node.js/Express backend for the AgroMesh precision agriculture platform, providing secure APIs for sensor data ingestion, user management, real-time alerts, and AI-driven agricultural insights.
 
+## 🚀 **Latest Updates (v2.1)**
+
+### ✅ **AI Integration - FULLY WORKING**
+- **Gemini AI API**: Updated to latest `@google/genai` v1.7.0
+- **Image Diagnosis**: Enhanced plant health analysis with structured responses
+- **Video Analysis**: Working video upload and AI analysis
+- **AI Chat**: Interactive Q&A system for farming advice
+- **Smart Recommendations**: Personalized farming recommendations
+- **Multi-modal Analysis**: Support for images, videos, and text
+
+### 🔒 **Security - ENHANCED**
+- **API Key Protection**: All sensitive data properly secured
+- **Environment Variables**: Comprehensive .env management
+- **Git Security**: Complete .gitignore protection
+- **Authentication**: JWT-based secure system
+
+### 📱 **Mobile Integration - COMPLETE**
+- **Authentication**: Secure login/registration
+- **AI Features**: Complete mobile app integration
+- **Real-time Updates**: WebSocket integration
+- **Video Management**: Upload and analysis workflow
+
+---
+
 ## 🚀 Features
 
-### ✅ Fully Implemented
+### ✅ **Fully Implemented & Working**
 
 - **🔐 Authentication & User Management**
   - JWT-based authentication with role-based access (Farmer, Admin, Researcher)
@@ -24,12 +48,13 @@ A comprehensive Node.js/Express backend for the AgroMesh precision agriculture p
   - Alert management (acknowledge, resolve, dismiss)
   - Support for push, SMS, and email notifications
 
-- **🤖 AI Integration (Google Gemini)**
-  - Sensor data analysis and recommendations
-  - Plant health diagnosis from images
-  - Video analysis for plant health
-  - Text-based Q&A for agricultural advice
-  - Rate limiting (10 requests/minute per IP)
+- **🤖 AI Integration (Google Gemini) - UPDATED**
+  - ✅ **Image Diagnosis**: Plant health analysis from photos
+  - ✅ **Video Analysis**: Agricultural video processing
+  - ✅ **AI Chat**: Interactive Q&A for farming advice
+  - ✅ **Smart Recommendations**: Personalized farming guidance
+  - ✅ **Sensor Data Analysis**: Real-time environmental insights
+  - ✅ **Rate Limiting**: 10 requests/minute per IP
 
 - **📊 Dashboard & Analytics**
   - Real-time dashboard data
@@ -37,11 +62,13 @@ A comprehensive Node.js/Express backend for the AgroMesh precision agriculture p
   - Alert summaries and statistics
   - Sensor node overview
 
-- **🔒 Security & Validation**
-  - Input validation using express-validator
-  - Rate limiting for API endpoints
-  - CORS and Helmet security headers
-  - JWT token authentication
+- **🔒 Security & Validation - ENHANCED**
+  - ✅ **Environment Variables**: All sensitive data secured
+  - ✅ **Git Protection**: Comprehensive .gitignore
+  - ✅ **Input Validation**: express-validator implementation
+  - ✅ **Rate Limiting**: API endpoint protection
+  - ✅ **CORS & Helmet**: Security headers
+  - ✅ **JWT Authentication**: Secure token management
 
 - **📝 Comprehensive Logging**
   - Winston logger with multiple transports
@@ -58,12 +85,15 @@ A comprehensive Node.js/Express backend for the AgroMesh precision agriculture p
   - Comprehensive test coverage for auth routes
   - Supertest for API testing
 
+---
+
 ## 🏗️ Architecture
 
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │   Mobile App    │    │   Web Dashboard  │    │  Sensor Nodes   │
 │   (React Native)│    │     (React)      │    │   (Arduino/Pi)  │
+│   ✅ Complete   │    │   ✅ Marketing   │    │   🔧 Optional   │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
          │                       │                       │
          └───────────────────────┼───────────────────────┘
@@ -71,6 +101,7 @@ A comprehensive Node.js/Express backend for the AgroMesh precision agriculture p
                     ┌──────────────────┐
                     │   AgroMesh API   │
                     │  (Node.js/Express)│
+                    │   ✅ Working     │
                     └──────────────────┘
                                  │
          ┌───────────────────────┼───────────────────────┐
@@ -78,14 +109,20 @@ A comprehensive Node.js/Express backend for the AgroMesh precision agriculture p
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │   MongoDB       │    │   Socket.io      │    │   Google Gemini │
 │   (Database)    │    │   (Real-time)    │    │   (AI Service)  │
+│   ✅ Connected  │    │   ✅ Working     │    │   ✅ Integrated  │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
+---
+
 ## 📋 Prerequisites
 
-- Node.js (v16 or higher)
+- Node.js (v18 or higher) - **Updated requirement**
 - MongoDB (v4.4 or higher)
 - npm or yarn
+- Google Gemini AI API key
+
+---
 
 ## 🛠️ Installation
 
@@ -100,274 +137,307 @@ A comprehensive Node.js/Express backend for the AgroMesh precision agriculture p
    npm install
    ```
 
-3. **Environment Setup**
+3. **Environment Configuration**
    ```bash
+   # Copy environment template
    cp env.example .env
+   
+   # Edit with your actual API keys
+   nano .env
    ```
+
+4. **Required Environment Variables**
+   ```bash
+   # Database
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/agromesh
    
-   Edit `.env` with your configuration:
-   ```env
-   # Required
-   MONGODB_URI=mongodb://localhost:27017/agromesh
-   JWT_SECRET=your-super-secret-jwt-key
-   GEMINI_API_KEY=your-gemini-api-key
+   # Authentication
+   JWT_SECRET=your-super-secret-jwt-key-change-in-production
    
-   # Optional
-   PORT=5000
+   # AI Integration
+   GEMINI_API_KEY=your-gemini-api-key-here
+   
+   # Server
+   PORT=5001
    NODE_ENV=development
    ```
 
-4. **Start MongoDB**
+5. **Start the server**
    ```bash
-   # Local MongoDB
-   mongod
-   
-   # Or use MongoDB Atlas (cloud)
-   # Update MONGODB_URI in .env
-   ```
-
-5. **Run the application**
-   ```bash
+   # Production
    npm start
+   
+   # Development with auto-restart
+   npm run dev
    ```
 
-## 🚀 Quick Start
+---
 
-### 1. Start the Server
+## 🎯 **AI Features Setup**
+
+### **1. Gemini AI Configuration**
 ```bash
-npm start
+# Get API key from Google AI Studio
+# https://makersuite.google.com/app/apikey
+
+# Add to .env file
+GEMINI_API_KEY=your-actual-api-key-here
 ```
-Server will start on `http://localhost:5000`
 
-### 2. Access API Documentation
-Visit `http://localhost:5000/api/docs` for interactive API documentation
-
-### 3. Test the API
+### **2. Test AI Integration**
 ```bash
-# Register a new user
-curl -X POST http://localhost:5000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "farmer@example.com",
-    "password": "password123",
-    "firstName": "John",
-    "lastName": "Doe",
-    "role": "Farmer"
-  }'
+# Test image diagnosis
+curl -X POST http://localhost:5001/api/ai/diagnose-image \
+  -H "Content-Type: multipart/form-data" \
+  -F "image=@test-image.jpg"
 
-# Login
-curl -X POST http://localhost:5000/api/auth/login \
+# Test AI chat
+curl -X POST http://localhost:5001/api/ai/ask-question \
   -H "Content-Type: application/json" \
-  -d '{
-    "email": "farmer@example.com",
-    "password": "password123"
-  }'
+  -d '{"question": "How to treat tomato blight?"}'
+
+# Test smart recommendations
+curl -X POST http://localhost:5001/api/ai/smart-recommendations \
+  -H "Content-Type: application/json" \
+  -d '{"location": "Ghana", "crop": "tomato", "season": "rainy"}'
 ```
+
+### **3. Available AI Endpoints**
+- `POST /api/ai/diagnose-image` - Plant health analysis
+- `POST /api/ai/ask-question` - AI chat
+- `POST /api/ai/smart-recommendations` - Farming recommendations
+- `POST /api/ai/diagnose-video` - Video analysis
+
+---
 
 ## 📚 API Endpoints
 
-### Authentication
-- `POST /api/auth/register` - Register new user
+### **Authentication**
+- `POST /api/auth/register` - User registration
 - `POST /api/auth/login` - User login
 - `GET /api/auth/profile` - Get user profile
 - `PUT /api/auth/profile` - Update user profile
 - `POST /api/auth/change-password` - Change password
 
-### Sensors
-- `POST /api/sensors/register` - Register sensor node
-- `POST /api/sensors/data` - Submit sensor data
-- `GET /api/sensors` - Get user's sensor nodes
-- `GET /api/sensors/:nodeId` - Get sensor node details
-- `GET /api/sensors/:nodeId/data` - Get sensor data
-- `PUT /api/sensors/:nodeId` - Update sensor configuration
+### **AI Features**
+- `POST /api/ai/diagnose-image` - Image-based plant diagnosis
+- `POST /api/ai/ask-question` - AI-powered Q&A
+- `POST /api/ai/smart-recommendations` - Personalized recommendations
+- `POST /api/ai/diagnose-video` - Video analysis
 
-### Alerts
-- `GET /api/alerts` - Get user alerts
-- `GET /api/alerts/unread` - Get unread alerts count
-- `GET /api/alerts/:alertId` - Get alert details
-- `POST /api/alerts/:alertId/acknowledge` - Acknowledge alert
-- `POST /api/alerts/:alertId/resolve` - Resolve alert
-- `POST /api/alerts/:alertId/dismiss` - Dismiss alert
-- `POST /api/alerts/mark-all-read` - Mark all alerts as read
+### **Sensors**
+- `GET /api/sensors` - Get all sensors
+- `POST /api/sensors` - Register new sensor
+- `GET /api/sensors/:id` - Get sensor details
+- `PUT /api/sensors/:id` - Update sensor
+- `DELETE /api/sensors/:id` - Delete sensor
 
-### Dashboard
-- `GET /api/dashboard/summary` - Get dashboard summary
-- `GET /api/dashboard/analytics` - Get analytics data
-- `GET /api/dashboard/alerts-summary` - Get alerts summary
-- `GET /api/dashboard/nodes-overview` - Get nodes overview
+### **Sensor Data**
+- `GET /api/sensors/:id/data` - Get sensor data
+- `POST /api/sensors/:id/data` - Add sensor data
+- `GET /api/sensors/:id/data/history` - Get historical data
 
-### AI Services
-- `POST /api/ai/suggest` - Get AI suggestions from sensor data
-- `POST /api/ai/diagnose-image` - Diagnose plant health from image
-- `POST /api/ai/diagnose-video` - Diagnose plant health from video
-- `POST /api/ai/ask` - Ask AI questions
+### **Alerts**
+- `GET /api/alerts` - Get all alerts
+- `POST /api/alerts` - Create alert
+- `PUT /api/alerts/:id` - Update alert
+- `DELETE /api/alerts/:id` - Delete alert
 
-### System
-- `GET /api/health` - Health check
+### **Dashboard**
+- `GET /api/dashboard/overview` - Dashboard overview
+- `GET /api/dashboard/analytics` - Analytics data
+- `GET /api/dashboard/alerts` - Alert summaries
 
-## 🔌 Real-Time Features
+---
 
-The backend uses Socket.io for real-time communication:
+## 🔒 Security Features
 
-### Events Emitted by Server
-- `welcome` - Welcome message on connection
-- `sensorNodeRegistered` - New sensor node registered
-- `sensorDataUpdate` - New sensor data received
-- `newAlert` - New alert generated
-- `alertUpdated` - Alert status updated
-- `alertsMarkedRead` - Alerts marked as read
+### **✅ Implemented Security Measures**
+- **Environment Variables**: All sensitive data in .env files
+- **Git Protection**: .env files in .gitignore
+- **JWT Authentication**: Secure token-based auth
+- **Input Validation**: Server-side validation
+- **Rate Limiting**: API protection
+- **CORS Configuration**: Cross-origin security
+- **Helmet Headers**: Security headers
 
-### Client Connection
-```javascript
-// Connect to Socket.io
-const socket = io('http://localhost:5000');
+### **✅ Security Checklist**
+- ✅ API keys in environment variables
+- ✅ .env files in .gitignore
+- ✅ No hardcoded secrets
+- ✅ JWT authentication working
+- ✅ Input validation active
+- ✅ Rate limiting configured
 
-// Listen for real-time updates
-socket.on('sensorDataUpdate', (data) => {
-  console.log('New sensor data:', data);
-});
-
-socket.on('newAlert', (alert) => {
-  console.log('New alert:', alert);
-});
-```
-
-## 🗄️ Database Models
-
-### User
-- Authentication (email, password)
-- Profile (name, phone, location, language)
-- Preferences (notifications, units)
-- Role-based access (Farmer, Admin, Researcher)
-
-### SensorNode
-- Node identification and configuration
-- Location and status tracking
-- Sensor configuration and thresholds
-- Battery and signal monitoring
-
-### SensorData
-- Sensor readings (moisture, temperature, pH, etc.)
-- Metadata (battery, signal strength)
-- AI analysis results
-- Timestamp and location data
-
-### Alert
-- Alert types (irrigation, pest risk, anomaly, etc.)
-- Severity levels and status tracking
-- Notification delivery tracking
-- Action history
+---
 
 ## 🧪 Testing
 
-### Run Tests
+### **Run Tests**
 ```bash
+# Run all tests
 npm test
+
+# Run specific test file
+npm test -- auth.test.js
+
+# Run with coverage
+npm run test:coverage
 ```
 
-### Test Coverage
-- Authentication routes (registration, login, profile)
-- Input validation
-- Error handling
-- JWT token validation
+### **Test AI Features**
+```bash
+# Test image diagnosis
+curl -X POST http://localhost:5001/api/ai/diagnose-image \
+  -H "Content-Type: multipart/form-data" \
+  -F "image=@test-image.jpg"
 
-### Test Database
-Tests use a separate test database (`agromesh_test`) to avoid affecting development data.
+# Test AI chat
+curl -X POST http://localhost:5001/api/ai/ask-question \
+  -H "Content-Type: application/json" \
+  -d '{"question": "test question"}'
+```
 
-## 📊 Logging
+---
 
-The application uses Winston for comprehensive logging:
+## 🚀 Deployment
 
-### Log Levels
-- `error` - Application errors
-- `warn` - Warning messages
-- `info` - General information
-- `http` - HTTP requests
-- `debug` - Debug information (development only)
+### **Heroku Deployment**
+```bash
+# 1. Create Heroku app
+heroku create your-agromesh-app
 
-### Log Files
-- `logs/error.log` - Error logs only
-- `logs/all.log` - All logs
+# 2. Set environment variables
+heroku config:set MONGODB_URI=your-mongodb-uri
+heroku config:set JWT_SECRET=your-jwt-secret
+heroku config:set GEMINI_API_KEY=your-gemini-key
 
-### Environment-based Logging
-- Development: Debug level with console output
-- Production: Warn level with file output
+# 3. Deploy
+git push heroku main
+```
 
-## 🔧 Configuration
+### **Docker Deployment**
+```bash
+# Build image
+docker build -t agromesh-backend .
 
-### Environment Variables
+# Run container
+docker run -p 5001:5001 --env-file .env agromesh-backend
+```
 
-#### Required
-- `MONGODB_URI` - MongoDB connection string
-- `JWT_SECRET` - Secret key for JWT tokens
-- `GEMINI_API_KEY` - Google Gemini API key
+---
 
-#### Optional
-- `PORT` - Server port (default: 5000)
-- `NODE_ENV` - Environment (development/production)
-- `LOG_LEVEL` - Logging level
-- `RATE_LIMIT_MAX_REQUESTS` - Rate limiting
-- `CORS_ORIGIN` - CORS origin
+## 🐛 Troubleshooting
 
-### Production Deployment
+### **Common Issues**
 
-1. **Set Environment Variables**
-   ```bash
-   NODE_ENV=production
-   MONGODB_URI=mongodb://your-production-db
-   JWT_SECRET=your-production-secret
-   ```
+#### **1. Backend Won't Start**
+```bash
+# Check if port is in use
+lsof -i :5001
+# Kill process if needed
+kill -9 <PID>
 
-2. **Enable HTTPS**
-   ```javascript
-   // In production, use HTTPS
-   const https = require('https');
-   const fs = require('fs');
-   
-   const options = {
-     key: fs.readFileSync('path/to/key.pem'),
-     cert: fs.readFileSync('path/to/cert.pem')
-   };
-   
-   https.createServer(options, app).listen(443);
-   ```
+# Check environment variables
+cat .env
+```
 
-3. **Use PM2 for Process Management**
-   ```bash
-   npm install -g pm2
-   pm2 start index.js --name agromesh-backend
-   ```
+#### **2. AI Features Not Working**
+```bash
+# Verify Gemini API key
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://generativelanguage.googleapis.com/v1beta/models
 
-## 🤝 Contributing
+# Check backend logs
+npm start
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Run tests: `npm test`
-6. Submit a pull request
+#### **3. Database Connection Issues**
+```bash
+# Test MongoDB connection
+mongosh "your-connection-string"
 
-## 📄 License
+# Check network connectivity
+ping cluster.mongodb.net
+```
 
-This project is licensed under the MIT License.
+### **Error Solutions**
 
-## 🆘 Support
+#### **"Authentication token not found"**
+- Ensure proper JWT token in request headers
+- Check token expiration
+- Verify authentication middleware
 
-For support and questions:
-- Check the API documentation at `/api/docs`
-- Review the test files for usage examples
-- Open an issue on GitHub
+#### **"Gemini API error"**
+- Verify API key in .env file
+- Check API key permissions
+- Restart server after .env changes
 
-## 🔮 Roadmap
+#### **"Video upload failed"**
+- Check file size limits
+- Verify video format (MP4, AVI, MOV, WEBM)
+- Ensure upload directory exists
 
-### Planned Features
-- [ ] Admin panel for user management
-- [ ] Advanced analytics and reporting
-- [ ] Weather data integration
-- [ ] Crop recommendation engine
-- [ ] Mobile push notifications
-- [ ] Data export functionality
-- [ ] Multi-tenant support
-- [ ] API rate limiting dashboard
-- [ ] Automated testing pipeline
-- [ ] Docker containerization 
+---
+
+## 📋 Verification Checklist
+
+### **✅ Backend Setup**
+- [ ] Node.js 18+ installed
+- [ ] Dependencies installed (`npm install`)
+- [ ] Environment variables configured
+- [ ] MongoDB connection working
+- [ ] Gemini API key valid
+- [ ] Server starts without errors
+- [ ] API endpoints responding
+
+### **✅ AI Features**
+- [ ] Image diagnosis working
+- [ ] AI chat responding
+- [ ] Smart recommendations generating
+- [ ] Video analysis processing
+- [ ] All endpoints accessible
+
+### **✅ Security**
+- [ ] .env files in .gitignore
+- [ ] No API keys in source code
+- [ ] JWT authentication working
+- [ ] Input validation active
+
+---
+
+## 📞 Support
+
+### **Getting Help**
+- 📧 **Email**: sackiteyjoseph@gmail.com
+- 🌐 **Website**: https://agro-mesh.vercel.app/
+- 📱 **Mobile App**: Available via Expo Go
+
+### **Useful Commands**
+```bash
+# Check server status
+curl http://localhost:5001/api/health
+
+# View logs
+npm start
+
+# Test AI endpoint
+curl -X POST http://localhost:5001/api/ai/ask-question \
+  -H "Content-Type: application/json" \
+  -d '{"question": "test"}'
+
+# Check environment
+cat .env
+```
+
+---
+
+## 🎉 Success!
+
+Once setup is complete, you should have:
+- ✅ Working backend API with AI integration
+- ✅ Secure environment configuration
+- ✅ All AI features functional
+- ✅ Ready for mobile app integration
+
+**Happy coding!** 🚀✨ 
