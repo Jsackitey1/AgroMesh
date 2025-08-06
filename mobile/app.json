@@ -14,7 +14,12 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.agromesh.app"
+      "bundleIdentifier": "com.agromesh.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to capture plant photos for AI diagnosis.",
+        "NSPhotoLibraryUsageDescription": "This app accesses your photo library to select images for AI analysis.",
+        "NSMicrophoneUsageDescription": "This app uses the microphone for video recording."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -22,11 +27,41 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.agromesh.app"
+      "package": "com.agromesh.app",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "RECORD_AUDIO",
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow AgroMesh to access your camera to capture plant photos for AI diagnosis."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow AgroMesh to access your photo library to select images for AI analysis."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow AgroMesh to access your media library to select videos for AI analysis.",
+          "savePhotosPermission": "Allow AgroMesh to save analyzed images to your photo library.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ]
+    ],
     "extra": {
       "eas": {
         "projectId": "e921d05a-a0e5-4cf5-b3a9-0f4884e71377"
