@@ -1,4 +1,4 @@
-# AgroMesh Mobile App - UPDATED
+# AgroMesh Mobile App
 
 A comprehensive React Native mobile application for the AgroMesh precision agriculture platform, providing farmers with real-time sensor monitoring, AI-powered insights, and smart farming solutions.
 
