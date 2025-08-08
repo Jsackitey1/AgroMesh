@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
-import { API_BASE_URL } from '../../services/api';
+import { API_BASE_URL, apiService } from '../../services/api';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types';
 
@@ -200,9 +200,7 @@ const VideosScreen: React.FC<{ navigation: VideosScreenNavigationProp }> = ({ na
   };
 
   const getAuthToken = async (): Promise<string | null> => {
-    // This should get the token from your auth context or storage
-    // For now, we'll return null and handle it in the functions
-    return null;
+    return await apiService.getAuthToken();
   };
 
   const formatFileSize = (bytes: number) => {

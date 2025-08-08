@@ -443,3 +443,90 @@ Once setup is complete, you should have:
 - ✅ Ready for production deployment
 
 **Happy farming with AI!** 🌾📱✨ 
+
+## Authentication Issues & Solutions
+
+### Common Authentication Problems
+
+If you're experiencing authentication failures, especially after publishing the app, here are the most common issues and solutions:
+
+#### 1. API Base URL Configuration
+
+**Problem**: The app uses a hardcoded IP address that may not be accessible from published apps.
+
+**Solution**: 
+- Create a `.env` file in the mobile directory with your backend URL:
+```bash
+EXPO_PUBLIC_API_BASE_URL=https://your-backend-domain.com/api
+EXPO_PUBLIC_SOCKET_URL=https://your-backend-domain.com
+```
+
+- For local development, use your computer's IP address:
+```bash
+EXPO_PUBLIC_API_BASE_URL=http://192.168.1.92:5001/api
+EXPO_PUBLIC_SOCKET_URL=http://192.168.1.92:5001
+```
+
+#### 2. Backend CORS Configuration
+
+**Problem**: Published apps may be blocked by CORS policies.
+
+**Solution**: Update your backend CORS configuration in `backend/src/app.js`:
+
+```javascript
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:19006',
+    'exp://localhost:19000',
+    'https://your-frontend-domain.com',
+    // Add your Expo development URLs
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
+```
+
+#### 3. Environment Variables
+
+**Problem**: Missing or incorrect environment variables.
+
+**Solution**: Ensure your `.env` file is properly configured and not gitignored:
+
+```bash
+# Copy the example file
+cp env.example .env
+
+# Edit with your actual values
+nano .env
+```
+
+#### 4. Token Storage Issues
+
+**Problem**: Authentication tokens not being properly stored or retrieved.
+
+**Solution**: The app now properly uses `apiService.getAuthToken()` instead of broken local functions.
+
+### Testing Authentication
+
+1. **Check API Connectivity**:
+```bash
+curl http://your-backend-url/api/health
+```
+
+2. **Test Authentication Endpoint**:
+```bash
+curl -X POST http://your-backend-url/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"password"}'
+```
+
+3. **Verify Token Storage**: Check if tokens are properly stored in AsyncStorage.
+
+### Debugging Steps
+
+1. **Check Network Requests**: Use React Native Debugger or Flipper to monitor API calls
+2. **Verify Environment Variables**: Log `process.env.EXPO_PUBLIC_API_BASE_URL` to ensure it's set correctly
+3. **Test Backend Connectivity**: Ensure your backend is accessible from the device/emulator
+4. **Check CORS Headers**: Verify that your backend is sending proper CORS headers 
