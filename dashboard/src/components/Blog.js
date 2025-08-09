@@ -25,7 +25,7 @@ const BlogCard = styled(Card)(({ theme }) => ({
 
 const Blog = () => {
   const handleDownloadApp = () => {
-    window.open('https://expo.dev/accounts/sackjo02/projects/agromesh-mobile/builds/4eff0d15-268f-4702-8c10-ef84895f0696', '_blank');
+    window.open('https://expo.dev/artifacts/eas/o5u7pE7RPwZCzPgzKhVD1d.aab', '_blank');
   };
 
   return (
