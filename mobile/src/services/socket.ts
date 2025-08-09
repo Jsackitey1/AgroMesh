@@ -1,7 +1,7 @@
 import { io, Socket } from 'socket.io-client';
 import { SocketEvents } from '../types';
 
-const SOCKET_URL = 'http://192.168.1.92:5001'; // Use your computer's IP address
+const SOCKET_URL = process.env.EXPO_PUBLIC_SOCKET_URL || 'http://192.168.1.92:5001';
 
 class SocketService {
   private socket: Socket | null = null;
@@ -19,12 +19,18 @@ class SocketService {
 
   private initializeSocket(): void {
     try {
+      console.log('Initializing socket connection to:', SOCKET_URL);
+      
       this.socket = io(SOCKET_URL, {
         transports: ['websocket', 'polling'],
         timeout: 20000,
         reconnection: true,
         reconnectionAttempts: this.maxReconnectAttempts,
         reconnectionDelay: this.reconnectDelay,
+        forceNew: true,
+        autoConnect: true,
+        // Add CORS handling for deployed backend
+        withCredentials: false,
       });
 
       this.setupEventListeners();
