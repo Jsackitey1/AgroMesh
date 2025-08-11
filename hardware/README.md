@@ -12,7 +12,6 @@ This directory contains the hardware specifications, wiring diagrams, and setup 
   - Soil pH  
   - Soil conductivity  
   - Soil NPK content (N - Nitrogen, P - Phosphorus, K - Potassium)
-- **Solar panel** – 5V, 1A minimum
 - **LiPo battery** – 3.7V, 2000mAh minimum
 - **Push buttons** – For interaction and control
 - **LCD_I2C** – For real-time display
