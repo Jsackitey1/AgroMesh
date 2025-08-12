@@ -1,0 +1,26 @@
+About AgriMonitor
+
+AgriMonitor is an innovative, farmer-friendly soil analysis device designed to empower farmers with accurate, real-time insights into their soil’s health. By integrating advanced sensing technology with AI-powered recommendations via our mobile app, AgriMonitor bridges the gap between field data and actionable farming practices.
+
+Equipped with a 7-in-1 NPK Sensor, AgriMonitor measures seven key soil parameters essential for optimal crop growth:
+
+1. Soil moisture
+2. pH level
+3. Soil conductivity
+4. Nitrogen (N)
+5. Phosphorus (P)
+6. Potassium (K)
+7. Soil temperature and humidity
+
+Data collected from the device is wirelessly transmitted to our AI system on the mobile app, which processes the readings and provides farmers with tailored, science-backed recommendations for improving soil quality and crop yield.
+
+To ensure simplicity and ease of use, AgriMonitor features just three control buttons:
+
+ Center button – Initializes new sensor readings at any time. Upon pressing, the device captures fresh data and displays it instantly on the LCD screen.
+ Right button – Navigates forward through the displayed sensor readings.
+ Left button – Navigates backward through the displayed sensor readings.
+
+AgriMonitor is powered by a LiPo battery, ensuring reliable operation even in remote farming locations without consistent access to electricity. Its robust yet straightforward design makes it an accessible tool for both smallholder farmers and large-scale agricultural operations.
+
+With AgriMonitor, farmers can make informed, timely decisions for healthier soil, better yields, and more sustainable farming practices.
+

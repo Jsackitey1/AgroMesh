@@ -168,9 +168,7 @@ const VideoCaptureScreen: React.FC<VideoCaptureScreenProps> = ({ navigation }) =
   };
 
   const getAuthToken = async (): Promise<string | null> => {
-    // This should get the token from your auth context or storage
-    // For now, we'll return null and handle it in the upload function
-    return null;
+    return await apiService.getAuthToken();
   };
 
   const toggleCameraType = () => {

@@ -16,7 +16,7 @@ import {
   ProfileUpdateForm,
 } from '../types';
 
-const API_BASE_URL = 'http://192.168.1.92:5001/api'; // Use your computer's IP address
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || 'http://192.168.1.92:5001/api';
 
 class ApiService {
   private api: AxiosInstance;
