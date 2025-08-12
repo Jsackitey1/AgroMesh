@@ -26,19 +26,6 @@ Update `mobile/.env` to use the deployed backend:
 EXPO_PUBLIC_API_BASE_URL=http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api
 EXPO_PUBLIC_SOCKET_URL=http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com
 
-# Optional services (can be added later)
-EXPO_PUBLIC_FIREBASE_API_KEY=
-EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN=
-EXPO_PUBLIC_FIREBASE_PROJECT_ID=
-EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET=
-EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-EXPO_PUBLIC_FIREBASE_APP_ID=
-
-EXPO_PUBLIC_LIVEKIT_URL=
-EXPO_PUBLIC_LIVEKIT_API_KEY=
-EXPO_PUBLIC_LIVEKIT_API_SECRET=
-```
-
 ### 🎯 Start Development
 
 ```bash
