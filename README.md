@@ -1,357 +1,309 @@
 
 https://agro-mesh.vercel.app/
 
-# 🌾 AgroMesh: A Community-Powered Smart Agricultural Monitoring Network
+# AgroMesh - Smart Agricultural Monitoring System
 
-**AgroMesh** is a decentralized, solar-powered network of open-source environmental sensors designed to help **farmers** in underserved regions optimize **crop yield**, **resource usage**, and **resilience to climate variability**. It monitors **soil conditions**, **weather patterns**, and **microclimates** in real time—and uses AI to generate smart irrigation alerts, pest risk warnings, and harvest forecasts.
+A comprehensive IoT-based agricultural monitoring system with mobile app, backend API, and hardware components.
 
-## 🚀 **Latest Features (v2.1) - UPDATED**
+## 🚀 Quick Start Guide
 
-### ✅ **AI Integration - FULLY WORKING**
-- **Gemini AI API**: Fully integrated and tested with Google Gemini AI
-- **Image Diagnosis**: Upload plant photos for instant health analysis
-- **AI Chat**: Interactive Q&A system for farming advice
-- **Smart Recommendations**: Personalized farming recommendations based on multiple data sources
-- **Video Analysis**: AI-powered analysis of agricultural videos *(Mobile App)*
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+- Expo CLI (`npm install -g @expo/cli`)
+- EAS CLI (`npm install -g eas-cli`)
 
-### 📱 **Mobile App - COMPLETE**
-- **Authentication**: Secure login/registration system
-- **Dashboard**: Real-time sensor data visualization
-- **AI Assistant**: Complete AI integration with all features
-- **Video Capture**: Record and upload agricultural videos
-- **Image Diagnosis**: Upload plant photos for AI analysis
-- **Smart Recommendations**: Get personalized farming advice
-- **Real-time Updates**: Live sensor data and alerts
+### 🎯 Choose Your Setup Path
 
-### 🎥 **Video Analysis - WORKING**
-- **Video Upload**: Seamlessly upload videos from mobile gallery
-- **AI Analysis**: Get instant insights on plant health, soil conditions, and pest detection
-- **Multiple Analysis Types**: Summary, diagnosis, Q&A, and recommendations
-- **Analysis History**: View all previous analyses with timestamps
-- **Interactive Chat**: Ask specific questions about video content
+#### Option A: Frontend-Only Development (Recommended for UI/UX contributors)
+- **No API keys needed**
+- **No backend setup required**
+- **Use deployed backend on AWS**
+- **Perfect for UI/UX improvements, new features, bug fixes**
 
-### 🔒 **Security - ENHANCED**
-- **API Key Protection**: All sensitive data properly secured in environment variables
-- **Git Security**: Comprehensive .gitignore protection for all sensitive files
-- **Authentication**: JWT-based secure authentication system
-- **Environment Variables**: All API keys and secrets properly managed
+#### Option B: Full-Stack Development (For backend contributors)
+- **Requires API keys and services**
+- **Local backend setup needed**
+- **For backend changes, API modifications, new endpoints**
 
----
+### 📱 Mobile App Setup (Frontend-Only)
 
-## 🚀 Project Goals
+### 📱 Mobile App Setup (Frontend-Only)
 
-- Empower smallholder farmers with real-time, actionable environmental data.
-- Build a low-cost, replicable precision agriculture platform.
-- Use AI to forecast irrigation needs, detect crop stress, and improve yield.
-- Encourage open collaboration between engineers, farmers, and educators.
+1. **Navigate to mobile directory:**
+   ```bash
+   cd mobile
+   ```
 
----
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-## 🛠️ Features
+3. **Set up environment variables:**
+   ```bash
+   cp env.example .env
+   ```
+   
+   Update `.env` to use the deployed backend:
+   ```bash
+   # Use deployed backend (no local setup needed!)
+   EXPO_PUBLIC_API_BASE_URL=http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api
+   EXPO_PUBLIC_SOCKET_URL=http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com
+   
+   # Optional services (can be added later)
+   EXPO_PUBLIC_FIREBASE_API_KEY=
+   EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN=
+   EXPO_PUBLIC_FIREBASE_PROJECT_ID=
+   EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET=
+   EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+   EXPO_PUBLIC_FIREBASE_APP_ID=
+   
+   EXPO_PUBLIC_LIVEKIT_URL=
+   EXPO_PUBLIC_LIVEKIT_API_KEY=
+   EXPO_PUBLIC_LIVEKIT_API_SECRET=
+   ```
 
-### ✅ **Core Features - WORKING**
-- 🌱 Soil Health Monitoring (moisture, pH, nutrients)
-- 🌦️ Weather Tracking (temperature, humidity, rainfall)
-- ☀️ Solar-powered, low-maintenance sensor nodes
-- 📶 LoRaWAN or WiFi data transmission
-- 📊 Live dashboards + SMS alerts in local languages
-- 🤖 AI-powered irrigation and pest risk predictions
-- 🧑‍🌾 Farmer-centered deployment and co-design
+4. **Start development server:**
+   ```bash
+   npm start
+   ```
 
-### ✅ **AI Features - FULLY FUNCTIONAL**
-- 📱 Mobile app with complete AI integration
-- 🖼️ Image diagnosis for plant health analysis
-- 💬 Interactive AI chat for farming advice
-- 🎯 Smart recommendations based on multiple data sources
-- 🎥 Video analysis for agricultural insights
-- 📊 Real-time sensor data analysis
+5. **Test your changes:**
+   - Scan QR code with Expo Go app
+   - Test all features against deployed backend
+   - No local backend needed!
 
-### 🚧 **In Development**
-- 📡 LiveKit real-time video streaming *(Coming Soon)*
-- 🎥 Live video streaming with real-time AI analysis
-- 👥 Multi-participant collaboration features
+6. **Build for production:**
+   ```bash
+   # Android only
+   eas build --platform android --profile production
+   
+   # Both platforms (requires Apple Developer account for iOS)
+   eas build --platform all
+   ```
 
----
+### 🔧 Backend Setup (Optional - For Backend Contributors)
 
-## 🔧 Tech Stack
+> **Note**: If you're only contributing to the frontend/mobile app, you can skip this section and use the deployed backend on AWS.
 
-| Component        | Technology Used                          | Status |
-|------------------|-------------------------------------------|---------|
-| Hardware         | Arduino / Raspberry Pi, Grove sensors     | not  Ready |
-| Networking       | LoRaWAN, ESP8266/ESP32, MQTT              | ✅ Ready |
-| Backend          | Node.js / Express / MongoDB / Gemini AI   | ✅ Working |
-| Frontend         | React / Material-UI                       | ✅ Working |
-| Mobile App       | React Native / Expo                       | ✅ Complete |
-| Database         | MongoDB Atlas                             | ✅ Connected |
-| AI & ML          | Google Gemini AI (v1.7.0)                 | ✅ Integrated |
-| Video Analysis   | Gemini AI Video Processing                | ✅ Working |
-| Authentication   | JWT / bcryptjs                            | ✅ Secure |
-| Alerts           | Twilio (SMS), email (SMTP)                | 🔧 Configured |
-| Deployment       | Heroku / Netlify / Vercel                 | 🔧 Ready |
+1. **Navigate to backend directory:**
+   ```bash
+   cd backend
+   ```
 
----
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-## 📦 Repository Structure
+3. **Set up environment variables:**
+   ```bash
+   cp env.example .env
+   ```
+   
+   Update `.env` with your configuration:
+   ```bash
+   # Server Configuration
+   PORT=5001
+   NODE_ENV=development
+   
+   # Database
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/agromesh?retryWrites=true&w=majority
+   
+   # Authentication
+   JWT_SECRET=your_jwt_secret_key_here
+   JWT_EXPIRES_IN=7d
+   
+   # AI Services
+   GEMINI_API_KEY=your_gemini_api_key_here
+   
+   # CORS (for development)
+   CORS_ORIGIN=http://localhost:3000,http://localhost:19006
+   ```
+
+4. **Start development server:**
+   ```bash
+   npm start
+   ```
+
+### ☁️ Backend Deployment (AWS Elastic Beanstalk)
+
+1. **Install AWS CLI and EB CLI:**
+   ```bash
+   # Install AWS CLI
+   curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+   sudo installer -pkg AWSCLIV2.pkg -target /
+   
+   # Install EB CLI
+   pip3 install awsebcli
+   ```
+
+2. **Configure AWS credentials:**
+   ```bash
+   aws configure
+   # Enter your AWS Access Key ID, Secret Access Key, region, and output format
+   ```
+
+3. **Deploy to Elastic Beanstalk:**
+   ```bash
+   cd backend
+   chmod +x scripts/quick-deploy.sh
+   ./scripts/quick-deploy.sh
+   ```
+
+4. **Set environment variables in AWS:**
+   ```bash
+   eb setenv NODE_ENV=production PORT=8080
+   eb setenv MONGODB_URI="your_mongodb_atlas_connection_string"
+   eb setenv JWT_SECRET="your_jwt_secret"
+   eb setenv GEMINI_API_KEY="your_gemini_api_key"
+   ```
+
+### 🗄️ Database Setup (MongoDB Atlas)
+
+1. **Create MongoDB Atlas account:**
+   - Go to [MongoDB Atlas](https://www.mongodb.com/atlas)
+   - Create a free cluster
+
+2. **Configure database access:**
+   - Create a database user with read/write permissions
+   - Note down username and password
+
+3. **Configure network access:**
+   - Add your IP address or `0.0.0.0/0` for all IPs
+
+4. **Get connection string:**
+   - Format: `mongodb+srv://username:password@cluster.mongodb.net/agromesh?retryWrites=true&w=majority`
+   - Replace `username`, `password`, and `cluster` with your actual values
+
+### 🤖 AI Services Setup (Google Gemini)
+
+1. **Get Gemini API key:**
+   - Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+   - Create a new API key
+
+2. **Add to environment variables:**
+   - Backend: Add to `.env` file
+   - AWS: Set using `eb setenv GEMINI_API_KEY="your_key"`
+
+### 📋 Required Services Setup
+
+#### MongoDB Atlas
+- **Purpose**: Database for user data, sensor readings, videos, alerts
+- **Setup**: Follow the database setup section above
+- **Cost**: Free tier available
+
+#### Google Gemini API
+- **Purpose**: AI-powered video analysis and recommendations
+- **Setup**: Follow the AI services setup section above
+- **Cost**: Pay-per-use, generous free tier
+
+#### AWS Elastic Beanstalk (Optional)
+- **Purpose**: Host backend API in production
+- **Setup**: Follow the backend deployment section above
+- **Cost**: Free tier available for 12 months
+
+#### Firebase (Optional)
+- **Purpose**: Push notifications, analytics
+- **Setup**: Create Firebase project and add config to mobile `.env`
+- **Cost**: Generous free tier
+
+#### LiveKit (Optional)
+- **Purpose**: Real-time video streaming
+- **Setup**: Create LiveKit account and add config to mobile `.env`
+- **Cost**: Pay-per-use
+
+### 🔍 Testing the Setup
+
+1. **Test Backend:**
+   ```bash
+   cd backend
+   npm start
+   curl http://localhost:5001/api/health
+   ```
+
+2. **Test Mobile App:**
+   ```bash
+   cd mobile
+   npm start
+   # Scan QR code with Expo Go app
+   ```
+
+3. **Test Authentication:**
+   - Register a new user in the mobile app
+   - Try logging in
+   - Test video upload functionality
+
+### 🚨 Common Issues & Solutions
+
+#### Authentication Issues
+- **Problem**: "Authentication token not found"
+- **Solution**: Ensure JWT_SECRET is set in backend environment variables
+
+#### Database Connection Issues
+- **Problem**: "MongoDB connection failed"
+- **Solution**: Check MONGODB_URI format and network access settings
+
+#### Mobile App Connection Issues
+- **Problem**: "Cannot connect to backend"
+- **Solution**: Verify EXPO_PUBLIC_API_BASE_URL points to correct backend URL
+
+#### WebSocket Issues
+- **Problem**: "Socket connection error"
+- **Solution**: Ensure EXPO_PUBLIC_SOCKET_URL is set correctly
+
+### 📁 Project Structure
 
 ```
 AgroMesh/
-│
-├── hardware/                    # Wiring diagrams, BOM, and PCB designs
-│ ├── sensor_node_v1.pdf
-│ └── README.md
-│
-├── firmware/                    # Arduino/C++ scripts for sensors
-│ └── soil_monitor.ino
-│
-├── backend/                     # APIs and database code (Node.js/Express/MongoDB)
-│ ├── src/
-│ │   ├── services/
-│ │   │   ├── geminiService.js   # ✅ Updated Gemini AI integration
-│ │   │   └── videoGeminiService.js # ✅ Video analysis service
-│ │   ├── routes/
-│ │   │   ├── ai.js              # ✅ AI endpoints
-│ │   │   ├── auth.js            # ✅ Authentication
-│ │   │   ├── sensors.js         # ✅ Sensor data
-│ │   │   ├── videos.js          # ✅ Video management
-│ │   │   └── alerts.js          # ✅ Alert system
-│ │   ├── models/                # ✅ Database models
-│ │   └── middlewares/           # ✅ Authentication middleware
-│ ├── .env                       # 🔒 SECURED - API keys and secrets
-│ ├── env.example                # ✅ Template for deployment
-│ └── tests/                     # API tests
-│
-├── dashboard/                   # Web dashboard (React/Material-UI)
-│ ├── src/components/
-│ │   ├── VideoAnalysis.js       # ✅ Video analysis interface
-│ │   └── ...                    # Other components
-│ └── public/                    # Static assets
-│
-├── mobile/                      # React Native mobile app
-│ ├── src/screens/
-│ │   ├── main/
-│ │   │   ├── AIScreen.tsx       # ✅ AI Assistant hub
-│ │   │   ├── ImageDiagnosisScreen.tsx # ✅ Image analysis
-│ │   │   ├── AIChatScreen.tsx   # ✅ AI chat interface
-│ │   │   ├── SmartRecommendationsScreen.tsx # ✅ Smart recommendations
-│ │   │   ├── VideoCaptureScreen.tsx # ✅ Video capture
-│ │   │   └── ...                # Other screens
-│ │   └── auth/                  # ✅ Authentication screens
-│ ├── src/services/
-│ │   ├── api.ts                 # ✅ API integration
-│ │   └── livekit.ts             # 🔧 LiveKit integration
-│ └── src/navigation/            # ✅ App navigation
-│
-├── ml_models/                   # Jupyter notebooks and trained models
-│ └── irrigation_forecast.ipynb
-│
-├── docs/                        # Documentation and guides
-│ ├── setup_guide.md             # ✅ Updated setup guide
-│ └── gemini_video_feature_plan.md
-│
-├── .gitignore                   # 🔒 Comprehensive security protection
-├── SECURITY.md                  # 🔒 Security best practices
-└── README.md                    # This file
+├── mobile/                 # React Native mobile app
+│   ├── src/
+│   │   ├── screens/       # App screens
+│   │   ├── services/      # API and WebSocket services
+│   │   ├── contexts/      # React contexts
+│   │   └── components/    # Reusable components
+│   ├── .env              # Environment variables
+│   └── package.json
+├── backend/               # Node.js backend API
+│   ├── src/
+│   │   ├── routes/        # API routes
+│   │   ├── models/        # MongoDB models
+│   │   ├── controllers/   # Route controllers
+│   │   └── services/      # Business logic
+│   ├── .env              # Environment variables
+│   └── package.json
+├── hardware/              # Arduino sensor code
+├── firmware/              # IoT device firmware
+└── docs/                  # Documentation
 ```
 
----
+### 🤝 Contributing
 
-## 🧠 AI Functionality - FULLY WORKING
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-### ✅ **Core AI Features**
-- **Image Diagnosis**: Upload plant photos for instant health analysis
-- **AI Chat**: Interactive Q&A system for farming advice
-- **Smart Recommendations**: Personalized farming recommendations
-- **Video Analysis**: AI-powered analysis of agricultural videos
-- **Sensor Data Analysis**: Real-time analysis of environmental data
-
-### ✅ **AI Integration Status**
-- **Gemini AI API**: ✅ Fully integrated and tested
-- **Image Processing**: ✅ Working with plant health analysis
-- **Video Processing**: ✅ Working with agricultural video analysis
-- **Text Generation**: ✅ Working for Q&A and recommendations
-- **Multi-modal Analysis**: ✅ Working with images and videos
-
-### 🚧 **Future AI Features**
-- **Real-time Streaming Analysis**: Live AI analysis during video streams
-- **Yield Estimation**: Forecasts crop output based on seasonal data patterns
-- **Advanced Pest Detection**: Enhanced pest and disease identification
-
----
-
-## 📈 Getting Started
-
-### Prerequisites
-- Node.js 18+ and npm
-- MongoDB Atlas account (for database)
-- Google Gemini AI API key (for AI features)
-- Expo CLI (for mobile development)
-- ESP8266 / Arduino board + soil/weather sensors *(optional)*
-
-### Quick Start - AI-First Setup
-
-1. **Backend Setup**:
-```bash
-cd backend
-npm install
-# Copy environment template and add your API keys
-cp env.example .env
-# Edit .env with your actual API keys (DO NOT commit .env files)
-npm start
-```
-
-⚠️ **SECURITY WARNING**: Never commit API keys or secrets to version control. Always use environment variables.
-
-2. **Mobile App Setup** *(Primary Interface)*:
-```bash
-cd mobile
-npm install
-npx expo start
-# Scan QR code with Expo Go app
-# Navigate to AI Assistant for all features
-```
-
-3. **Dashboard Setup** *(Optional - Marketing/Info Only)*:
-```bash
-cd dashboard
-npm install
-npm start
-# Visit http://localhost:3000 for project information
-```
-
-### Environment Variables Required
-
-```bash
-# Backend .env file
-MONGODB_URI=your-mongodb-connection-string
-JWT_SECRET=your-super-secret-jwt-key
-GEMINI_API_KEY=your-gemini-api-key
-PORT=5001
-NODE_ENV=development
-```
-
-### Mobile App Features
-
-- **Authentication**: Secure login/registration
-- **Dashboard**: Real-time sensor data visualization
-- **AI Assistant**: Complete AI integration
-  - Image Diagnosis: Upload plant photos
-  - AI Chat: Ask farming questions
-  - Smart Recommendations: Get personalized advice
-  - Video Analysis: Upload and analyze videos
-- **Real-time Updates**: Live sensor data and alerts
-
----
-
-## 🔒 Security Features
-
-### ✅ **Implemented Security Measures**
-- **Environment Variables**: All sensitive data stored in .env files
-- **Git Protection**: Comprehensive .gitignore for all sensitive files
-- **JWT Authentication**: Secure token-based authentication
-- **API Key Management**: Proper API key handling and protection
-- **Input Validation**: Server-side validation for all inputs
-- **Rate Limiting**: API rate limiting for security
-
-### ✅ **Security Checklist**
-- ✅ API keys in environment variables
-- ✅ .env files in .gitignore
-- ✅ No hardcoded secrets in source code
-- ✅ Template files for deployment
-- ✅ Secure authentication system
-- ✅ Input validation and sanitization
-
----
-
-## 🧪 Sample Use Cases
-
-### **AI-Powered Plant Health Analysis**
-A farmer uploads a photo of their tomato plants showing yellowing leaves. The AI analyzes the image and provides:
-- **Diagnosis**: Early blight disease identification
-- **Treatment**: Specific fungicide recommendations
-- **Prevention**: Cultural practices to prevent future outbreaks
-- **Timeline**: Expected recovery time and monitoring schedule
-
-### **Smart Farming Recommendations**
-A farmer provides their location, crop type, and current season. The AI generates:
-- **Immediate Actions**: Priority tasks for the next 24-48 hours
-- **Short-term Planning**: Upcoming tasks and preparations
-- **Long-term Strategy**: Seasonal planning and crop rotation
-- **Risk Management**: Potential threats and preventive measures
-
-### **Video Analysis for Field Assessment**
-A farmer records a video of their field showing irrigation issues. The AI analyzes the video and provides:
-- **Field Assessment**: Overall field condition analysis
-- **Irrigation Issues**: Specific problems and solutions
-- **Equipment Recommendations**: Tools and systems needed
-- **Maintenance Schedule**: Preventive maintenance timeline
-
----
-
-## 🤝 Community & Contribution
-
-We welcome collaborators from engineering, agriculture, and education!
-
-### **How to Contribute**
-
-1. **Fork the repo**
-2. **Create your feature branch**: `git checkout -b feature/YourFeature`
-3. **Commit your changes**: `git commit -m 'Add new feature'`
-4. **Push to the branch**: `git push origin feature/YourFeature`
-5. **Open a pull request**
-
-### **Areas for Contribution**
-
-- **AI Model Enhancement**: Improve plant disease detection accuracy
-- **Mobile App Features**: Add new AI capabilities or UI improvements
-- **Sensor Integration**: Enhance hardware sensor compatibility
-- **Localization**: Translate tools into local languages
-- **Documentation**: Improve setup guides and user documentation
-- **Testing**: Add comprehensive test coverage
-
----
-
-## 📋 TODO / Roadmap
-
-### ✅ **Completed Features**
-- [x] Gemini AI API integration
-- [x] Mobile app authentication
-- [x] Image diagnosis functionality
-- [x] AI chat system
-- [x] Smart recommendations
-- [x] Video analysis (upload and analyze)
-- [x] Security implementation
-- [x] Backend API development
-- [x] Database models and schemas
-
-### 🚧 **In Progress**
-- [ ] LiveKit real-time video streaming
-- [ ] Advanced video analysis features
-- [ ] Multi-language support
-- [ ] Offline mode for mobile app
-
-### 🔮 **Future Features**
-- [ ] Real-time sensor data visualization
-- [ ] Advanced AI model training
-- [ ] Integration with weather APIs
-- [ ] SMS alert system
-- [ ] Farmer community features
-- [ ] Crop yield prediction
-- [ ] Pest detection algorithms
-- [ ] Soil health monitoring sensors
-
----
-
-## 📜 License
+### 📄 License
 
 This project is licensed under the MIT License.
 
+### 🆘 Support
+
+For issues and questions:
+1. Check the Common Issues section above
+2. Review the logs in your terminal
+3. Check AWS Elastic Beanstalk logs if deployed
+4. Create an issue in the repository
+
 ---
 
-## 👋 Contact
-
-- 📧 **Email**: sackiteyjoseph@gmail.com
-- 🌐 **Website**: https://agro-mesh.vercel.app/
-- 📱 **Mobile App**: Available via Expo Go
-
-**Let's grow a smarter, greener future—one farm at a time!** 🌾✨
+**Note**: This is a production-ready application. Make sure to:
+- Use strong JWT secrets in production
+- Configure proper CORS settings
+- Set up monitoring and logging
+- Follow security best practices
+- Keep dependencies updated
 
