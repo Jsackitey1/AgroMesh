@@ -10,6 +10,7 @@ node_modules/
 /build
 /dist
 
+
 # Misc
 .DS_Store
 .env
@@ -17,6 +18,8 @@ node_modules/
 .env.development.local
 .env.test.local
 .env.production.local
+aws/
+awscliv2.zip
 
 # Debug logs
 npm-debug.log*
