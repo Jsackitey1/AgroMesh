@@ -1,7 +1,7 @@
 const express = require('express');
-const { body, validationResult, query } = require('express-validator');
 const authenticateJWT = require('../middlewares/auth');
 const sensorController = require('../controllers/sensorController');
+const { validationChains, validateThresholdRanges } = require('../validators/sensorValidators');
 
 const router = express.Router();
 
@@ -53,7 +53,7 @@ const router = express.Router();
  *                 pages:
  *                   type: integer
  */
-router.get('/', authenticateJWT, sensorController.getSensors);
+router.get('/', authenticateJWT, validationChains.getSensors, sensorController.getSensors);
 
 /**
  * @swagger
@@ -102,14 +102,7 @@ router.get('/', authenticateJWT, sensorController.getSensors);
  *       409:
  *         description: Sensor node already exists
  */
-router.post('/register', authenticateJWT, [
-  body('nodeId').notEmpty().trim().withMessage('Node ID is required'),
-  body('name').notEmpty().trim().withMessage('Name is required'),
-  body('coordinates').isArray({ min: 2, max: 2 }).withMessage('Coordinates must be an array of 2 numbers'),
-  body('coordinates.*').isFloat({ min: -180, max: 180 }).withMessage('Invalid coordinate value'),
-  body('cropType').optional().trim(),
-  body('soilType').optional().isIn(['sandy', 'clay', 'loamy', 'silty', 'unknown']).withMessage('Invalid soil type')
-], sensorController.registerSensor);
+router.post('/register', authenticateJWT, validationChains.registerSensor, sensorController.registerSensor);
 
 /**
  * @swagger
@@ -136,7 +129,7 @@ router.post('/register', authenticateJWT, [
  *       404:
  *         description: Sensor node not found
  */
-router.get('/:nodeId', authenticateJWT, sensorController.getSensorDetails);
+router.get('/:nodeId', authenticateJWT, validationChains.getSensorDetails, sensorController.getSensorDetails);
 
 /**
  * @swagger
@@ -183,17 +176,7 @@ router.get('/:nodeId', authenticateJWT, sensorController.getSensorDetails);
  *       404:
  *         description: Sensor node not found
  */
-router.put('/:nodeId', authenticateJWT, [
-  body('name').optional().trim(),
-  body('configuration.soilType').optional().isIn(['sandy', 'clay', 'loamy', 'silty', 'unknown']),
-  body('configuration.irrigationType').optional().isIn(['drip', 'sprinkler', 'flood', 'manual', 'none']),
-  body('configuration.thresholds.soilMoisture.min').optional().isFloat({ min: 0, max: 100 }),
-  body('configuration.thresholds.soilMoisture.max').optional().isFloat({ min: 0, max: 100 }),
-  body('configuration.thresholds.temperature.min').optional().isFloat({ min: -50, max: 100 }),
-  body('configuration.thresholds.temperature.max').optional().isFloat({ min: -50, max: 100 }),
-  body('configuration.thresholds.ph.min').optional().isFloat({ min: 0, max: 14 }),
-  body('configuration.thresholds.ph.max').optional().isFloat({ min: 0, max: 14 })
-], sensorController.updateSensor);
+router.put('/:nodeId', authenticateJWT, validationChains.updateSensor, validateThresholdRanges, sensorController.updateSensor);
 
 /**
  * @swagger
@@ -247,7 +230,7 @@ router.put('/:nodeId', authenticateJWT, [
  *       404:
  *         description: Sensor node not found
  */
-router.get('/:nodeId/data', authenticateJWT, sensorController.getSensorData);
+router.get('/:nodeId/data', authenticateJWT, validationChains.getSensorData, sensorController.getSensorData);
 
 /**
  * @swagger
@@ -311,16 +294,7 @@ router.get('/:nodeId/data', authenticateJWT, sensorController.getSensorData);
  *       404:
  *         description: Sensor node not found
  */
-router.post('/:nodeId/data', authenticateJWT, [
-  body('soilMoisture').optional().isFloat({ min: 0, max: 100 }),
-  body('temperature').optional().isFloat({ min: -50, max: 100 }),
-  body('humidity').optional().isFloat({ min: 0, max: 100 }),
-  body('ph').optional().isFloat({ min: 0, max: 14 }),
-  body('light').optional().isFloat({ min: 0 }),
-  body('batteryLevel').optional().isFloat({ min: 0, max: 100 }),
-  body('signalStrength').optional().isFloat({ min: -120, max: 0 }),
-  body('timestamp').optional().isISO8601()
-], sensorController.submitSensorData);
+router.post('/:nodeId/data', authenticateJWT, validationChains.submitSensorData, sensorController.submitSensorData);
 
 /**
  * @swagger
@@ -343,6 +317,6 @@ router.post('/:nodeId/data', authenticateJWT, [
  *       404:
  *         description: Sensor node not found
  */
-router.delete('/:nodeId', authenticateJWT, sensorController.deleteSensor);
+router.delete('/:nodeId', authenticateJWT, validationChains.deleteSensor, sensorController.deleteSensor);
 
 module.exports = router; 

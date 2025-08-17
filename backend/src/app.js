@@ -8,6 +8,7 @@ const swaggerUi = require('swagger-ui-express');
 const config = require('./config');
 const swaggerSpec = require('./config/swagger');
 const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler');
+const { requestLogger, logger } = require('./utils/logger');
 
 // Import routes
 const aiRoutes = require('./routes/ai');
@@ -41,8 +42,17 @@ app.use(helmet({
 // CORS configuration
 app.use(cors(config.cors));
 
+// Request logging middleware (before other middleware)
+app.use(requestLogger);
+
 // Logging middleware
-app.use(morgan(config.logging.format));
+app.use(morgan(config.logging.format, {
+  stream: {
+    write: (message) => {
+      logger.info('HTTP Request', { message: message.trim() });
+    },
+  },
+}));
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
@@ -64,6 +74,12 @@ app.use(`${config.api.prefix}/videos`, videoRoutes);
 
 // Health check endpoint
 app.get(`${config.api.prefix}/health`, (req, res) => {
+  logger.info('Health check requested', {
+    requestId: req.headers['x-request-id'],
+    userAgent: req.get('User-Agent'),
+    ip: req.ip,
+  });
+
   res.json({ 
     status: 'ok',
     timestamp: new Date().toISOString(),

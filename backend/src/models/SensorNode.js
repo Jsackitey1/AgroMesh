@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 const config = require('../config');
+const {
+  SENSOR_STATUS,
+  SOIL_TYPES,
+  IRRIGATION_TYPES,
+  SENSOR_TYPES,
+  DEFAULT_SENSOR_CONFIG,
+  FIRMWARE_DEFAULTS,
+} = require('../constants/sensorDefaults');
 
 const sensorNodeSchema = new mongoose.Schema({
   nodeId: {
@@ -34,8 +42,8 @@ const sensorNodeSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: Object.values(config.sensors.status),
-    default: config.sensors.status.offline
+    enum: Object.values(SENSOR_STATUS),
+    default: SENSOR_STATUS.OFFLINE
   },
   lastSeen: {
     type: Date,
@@ -60,41 +68,92 @@ const sensorNodeSchema = new mongoose.Schema({
     },
     soilType: {
       type: String,
-      enum: config.sensors.soilTypes,
-      default: 'unknown'
+      enum: Object.values(SOIL_TYPES),
+      default: SOIL_TYPES.UNKNOWN
     },
     irrigationType: {
       type: String,
-      enum: config.sensors.irrigationTypes,
-      default: 'none'
+      enum: Object.values(IRRIGATION_TYPES),
+      default: IRRIGATION_TYPES.NONE
     },
     sensors: {
-      soilMoisture: { type: Boolean, default: true },
-      temperature: { type: Boolean, default: true },
-      humidity: { type: Boolean, default: true },
-      ph: { type: Boolean, default: false },
-      nutrients: { type: Boolean, default: false },
-      light: { type: Boolean, default: false }
+      [SENSOR_TYPES.SOIL_MOISTURE]: { type: Boolean, default: DEFAULT_SENSOR_CONFIG.sensors[SENSOR_TYPES.SOIL_MOISTURE] },
+      [SENSOR_TYPES.TEMPERATURE]: { type: Boolean, default: DEFAULT_SENSOR_CONFIG.sensors[SENSOR_TYPES.TEMPERATURE] },
+      [SENSOR_TYPES.HUMIDITY]: { type: Boolean, default: DEFAULT_SENSOR_CONFIG.sensors[SENSOR_TYPES.HUMIDITY] },
+      [SENSOR_TYPES.PH]: { type: Boolean, default: DEFAULT_SENSOR_CONFIG.sensors[SENSOR_TYPES.PH] },
+      [SENSOR_TYPES.NUTRIENTS]: { type: Boolean, default: DEFAULT_SENSOR_CONFIG.sensors[SENSOR_TYPES.NUTRIENTS] },
+      [SENSOR_TYPES.LIGHT]: { type: Boolean, default: DEFAULT_SENSOR_CONFIG.sensors[SENSOR_TYPES.LIGHT] }
     },
     thresholds: {
-      soilMoisture: {
-        min: { type: Number, default: config.sensors.thresholds.soilMoisture.min },
-        max: { type: Number, default: config.sensors.thresholds.soilMoisture.max }
+      [SENSOR_TYPES.SOIL_MOISTURE]: {
+        min: { type: Number, default: DEFAULT_SENSOR_CONFIG.thresholds[SENSOR_TYPES.SOIL_MOISTURE].min },
+        max: { type: Number, default: DEFAULT_SENSOR_CONFIG.thresholds[SENSOR_TYPES.SOIL_MOISTURE].max }
       },
-      temperature: {
-        min: { type: Number, default: config.sensors.thresholds.temperature.min },
-        max: { type: Number, default: config.sensors.thresholds.temperature.max }
+      [SENSOR_TYPES.TEMPERATURE]: {
+        min: { type: Number, default: DEFAULT_SENSOR_CONFIG.thresholds[SENSOR_TYPES.TEMPERATURE].min },
+        max: { type: Number, default: DEFAULT_SENSOR_CONFIG.thresholds[SENSOR_TYPES.TEMPERATURE].max }
       },
-      ph: {
-        min: { type: Number, default: config.sensors.thresholds.ph.min },
-        max: { type: Number, default: config.sensors.thresholds.ph.max }
+      [SENSOR_TYPES.PH]: {
+        min: { type: Number, default: DEFAULT_SENSOR_CONFIG.thresholds[SENSOR_TYPES.PH].min },
+        max: { type: Number, default: DEFAULT_SENSOR_CONFIG.thresholds[SENSOR_TYPES.PH].max }
+      }
+    },
+    irrigation: {
+      type: {
+        type: String,
+        enum: Object.values(IRRIGATION_TYPES),
+        default: DEFAULT_SENSOR_CONFIG.irrigation.type
+      },
+      schedule: {
+        enabled: { type: Boolean, default: DEFAULT_SENSOR_CONFIG.irrigation.schedule.enabled },
+        frequency: { type: String, default: DEFAULT_SENSOR_CONFIG.irrigation.schedule.frequency },
+        time: { type: String, default: DEFAULT_SENSOR_CONFIG.irrigation.schedule.time },
+        duration: { type: Number, default: DEFAULT_SENSOR_CONFIG.irrigation.schedule.duration }
+      },
+      thresholds: {
+        soilMoisture: { type: Number, default: DEFAULT_SENSOR_CONFIG.irrigation.thresholds.soilMoisture },
+        temperature: { type: Number, default: DEFAULT_SENSOR_CONFIG.irrigation.thresholds.temperature }
+      }
+    },
+    alerts: {
+      enabled: { type: Boolean, default: DEFAULT_SENSOR_CONFIG.alerts.enabled },
+      channels: {
+        email: { type: Boolean, default: DEFAULT_SENSOR_CONFIG.alerts.channels.email },
+        push: { type: Boolean, default: DEFAULT_SENSOR_CONFIG.alerts.channels.push },
+        sms: { type: Boolean, default: DEFAULT_SENSOR_CONFIG.alerts.channels.sms }
+      },
+      thresholds: {
+        soilMoisture: {
+          low: { type: Number, default: DEFAULT_SENSOR_CONFIG.alerts.thresholds.soilMoisture.low },
+          high: { type: Number, default: DEFAULT_SENSOR_CONFIG.alerts.thresholds.soilMoisture.high }
+        },
+        temperature: {
+          low: { type: Number, default: DEFAULT_SENSOR_CONFIG.alerts.thresholds.temperature.low },
+          high: { type: Number, default: DEFAULT_SENSOR_CONFIG.alerts.thresholds.temperature.high }
+        },
+        ph: {
+          low: { type: Number, default: DEFAULT_SENSOR_CONFIG.alerts.thresholds.ph.low },
+          high: { type: Number, default: DEFAULT_SENSOR_CONFIG.alerts.thresholds.ph.high }
+        }
       }
     }
   },
   firmware: {
     version: {
       type: String,
-      default: '1.0.0'
+      default: FIRMWARE_DEFAULTS.version
+    },
+    updateChannel: {
+      type: String,
+      default: FIRMWARE_DEFAULTS.updateChannel
+    },
+    autoUpdate: {
+      type: Boolean,
+      default: FIRMWARE_DEFAULTS.autoUpdate
+    },
+    checkInterval: {
+      type: Number,
+      default: FIRMWARE_DEFAULTS.checkInterval
     },
     lastUpdate: {
       type: Date,
@@ -146,22 +205,22 @@ sensorNodeSchema.statics.getStatistics = async function(userId) {
         total: { $sum: 1 },
         online: {
           $sum: {
-            $cond: [{ $eq: ['$status', config.sensors.status.online] }, 1, 0]
+            $cond: [{ $eq: ['$status', SENSOR_STATUS.ONLINE] }, 1, 0]
           }
         },
         offline: {
           $sum: {
-            $cond: [{ $eq: ['$status', config.sensors.status.offline] }, 1, 0]
+            $cond: [{ $eq: ['$status', SENSOR_STATUS.OFFLINE] }, 1, 0]
           }
         },
         maintenance: {
           $sum: {
-            $cond: [{ $eq: ['$status', config.sensors.status.maintenance] }, 1, 0]
+            $cond: [{ $eq: ['$status', SENSOR_STATUS.MAINTENANCE] }, 1, 0]
           }
         },
         error: {
           $sum: {
-            $cond: [{ $eq: ['$status', config.sensors.status.error] }, 1, 0]
+            $cond: [{ $eq: ['$status', SENSOR_STATUS.ERROR] }, 1, 0]
           }
         },
         avgBatteryLevel: { $avg: '$batteryLevel' },
@@ -186,22 +245,25 @@ sensorNodeSchema.pre('save', function(next) {
   const { thresholds } = this.configuration;
   
   // Validate soil moisture thresholds
-  if (thresholds.soilMoisture) {
-    if (thresholds.soilMoisture.min >= thresholds.soilMoisture.max) {
+  if (thresholds[SENSOR_TYPES.SOIL_MOISTURE]) {
+    const { min, max } = thresholds[SENSOR_TYPES.SOIL_MOISTURE];
+    if (min >= max) {
       return next(new Error('Soil moisture min must be less than max'));
     }
   }
   
   // Validate temperature thresholds
-  if (thresholds.temperature) {
-    if (thresholds.temperature.min >= thresholds.temperature.max) {
+  if (thresholds[SENSOR_TYPES.TEMPERATURE]) {
+    const { min, max } = thresholds[SENSOR_TYPES.TEMPERATURE];
+    if (min >= max) {
       return next(new Error('Temperature min must be less than max'));
     }
   }
   
   // Validate pH thresholds
-  if (thresholds.ph) {
-    if (thresholds.ph.min >= thresholds.ph.max) {
+  if (thresholds[SENSOR_TYPES.PH]) {
+    const { min, max } = thresholds[SENSOR_TYPES.PH];
+    if (min >= max) {
       return next(new Error('pH min must be less than max'));
     }
   }

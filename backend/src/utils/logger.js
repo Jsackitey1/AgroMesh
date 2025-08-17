@@ -1,66 +1,124 @@
 const winston = require('winston');
-const path = require('path');
+const config = require('../config');
 
-// Define log levels
-const levels = {
-  error: 0,
-  warn: 1,
-  info: 2,
-  http: 3,
-  debug: 4,
-};
-
-// Define colors for each level
-const colors = {
-  error: 'red',
-  warn: 'yellow',
-  info: 'green',
-  http: 'magenta',
-  debug: 'white',
-};
-
-// Tell winston that you want to link the colors
-winston.addColors(colors);
-
-// Define which level to log based on environment
-const level = () => {
-  const env = process.env.NODE_ENV || 'development';
-  const isDevelopment = env === 'development';
-  return isDevelopment ? 'debug' : 'warn';
-};
-
-// Define format for logs
-const format = winston.format.combine(
-  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-  winston.format.colorize({ all: true }),
-  winston.format.printf(
-    (info) => `${info.timestamp} ${info.level}: ${info.message}`,
-  ),
+// Custom format for structured logging
+const customFormat = winston.format.combine(
+  winston.format.timestamp(),
+  winston.format.errors({ stack: true }),
+  winston.format.json(),
+  winston.format.printf(({ timestamp, level, message, ...meta }) => {
+    const logEntry = {
+      timestamp,
+      level,
+      message,
+      ...meta,
+    };
+    return JSON.stringify(logEntry);
+  })
 );
 
-// Define transports
-const transports = [
-  // Console transport
-  new winston.transports.Console(),
-  
-  // File transport for errors
-  new winston.transports.File({
-    filename: path.join(__dirname, '../../logs/error.log'),
-    level: 'error',
-  }),
-  
-  // File transport for all logs
-  new winston.transports.File({
-    filename: path.join(__dirname, '../../logs/all.log'),
-  }),
-];
-
-// Create the logger
+// Create logger instance
 const logger = winston.createLogger({
-  level: level(),
-  levels,
-  format,
-  transports,
+  level: config.logging.level,
+  format: customFormat,
+  defaultMeta: { service: 'agromesh-backend' },
+  transports: [
+    // Console transport for development
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple()
+      ),
+    }),
+    // File transport for production
+    ...(config.server.isProduction ? [
+      new winston.transports.File({
+        filename: 'logs/error.log',
+        level: 'error',
+      }),
+      new winston.transports.File({
+        filename: 'logs/combined.log',
+      }),
+    ] : []),
+  ],
 });
 
-module.exports = logger; 
+// Request logger middleware
+const requestLogger = (req, res, next) => {
+  const startTime = Date.now();
+  const requestId = req.headers['x-request-id'] || generateRequestId();
+  
+  // Add request ID to response headers
+  res.setHeader('x-request-id', requestId);
+  
+  // Log request
+  logger.info('HTTP Request', {
+    requestId,
+    method: req.method,
+    url: req.url,
+    userAgent: req.get('User-Agent'),
+    ip: req.ip,
+    userId: req.user?.id,
+    timestamp: new Date().toISOString(),
+  });
+
+  // Log response
+  res.on('finish', () => {
+    const duration = Date.now() - startTime;
+    logger.info('HTTP Response', {
+      requestId,
+      method: req.method,
+      url: req.url,
+      statusCode: res.statusCode,
+      duration: `${duration}ms`,
+      userId: req.user?.id,
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  next();
+};
+
+// Socket logger
+const socketLogger = (socket, event, data = {}) => {
+  logger.info('Socket Event', {
+    socketId: socket.id,
+    event,
+    userId: socket.userId,
+    data: typeof data === 'object' ? data : { message: data },
+    timestamp: new Date().toISOString(),
+  });
+};
+
+// Error logger
+const errorLogger = (error, context = {}) => {
+  logger.error('Application Error', {
+    error: {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    },
+    context,
+    timestamp: new Date().toISOString(),
+  });
+};
+
+// Generate unique request ID
+const generateRequestId = () => {
+  return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+};
+
+// Create child logger with context
+const createChildLogger = (context) => {
+  return logger.child(context);
+};
+
+// Export logger functions
+module.exports = {
+  logger,
+  requestLogger,
+  socketLogger,
+  errorLogger,
+  createChildLogger,
+  generateRequestId,
+}; 
