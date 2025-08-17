@@ -232,6 +232,72 @@
 
 ---
 
+### **9. "Error fetching videos: Network request failed"**
+
+**Symptoms:**
+- Video library shows "Network request failed" error
+- Cannot load uploaded videos
+- Video upload fails
+- Video analysis doesn't work
+
+**Causes:**
+- Incorrect API base URL configuration
+- Network connectivity issues
+- Backend video endpoints down
+- Authentication issues
+
+**Solutions:**
+1. **Check API configuration:**
+   ```bash
+   cd mobile
+   cat .env
+   # Should contain:
+   # EXPO_PUBLIC_API_BASE_URL=http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api
+   ```
+
+2. **Test video API endpoints:**
+   ```bash
+   # Test backend health
+   curl http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api/health
+   
+   # Test video endpoint (will return 401 if not authenticated, which is expected)
+   curl http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api/videos
+   ```
+
+3. **Clear app cache and restart:**
+   ```bash
+   cd mobile
+   npx expo start --clear
+   ```
+
+4. **Check authentication:**
+   - Ensure you're logged in
+   - Try logging out and back in
+   - Check if auth token is valid
+
+5. **Use the connection test utility:**
+   ```javascript
+   // In your app, you can run:
+   import { runFullConnectionTest } from '../utils/testConnection';
+   const result = await runFullConnectionTest();
+   console.log(result.summary);
+   ```
+
+6. **If using local development:**
+   ```bash
+   # Update mobile/.env to use local backend
+   EXPO_PUBLIC_API_BASE_URL=http://localhost:5001/api
+   ```
+
+**Recent Fixes Applied:**
+- ✅ **Fixed API base URL** - Now uses correct deployed backend URL
+- ✅ **Improved error handling** - Better network error messages
+- ✅ **Added video API methods** - Consistent API service interface
+- ✅ **Enhanced error recovery** - Retry options and specific error messages
+- ✅ **Added connection testing** - Diagnostic tools for troubleshooting
+
+---
+
 ### **8. "Build fails" (Production builds)**
 
 **Symptoms:**

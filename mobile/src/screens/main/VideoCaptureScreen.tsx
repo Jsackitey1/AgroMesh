@@ -16,9 +16,9 @@ import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
-import { API_BASE_URL } from '../../services/api';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types';
+import { apiService } from '../../services/api';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -121,46 +121,37 @@ const VideoCaptureScreen: React.FC<VideoCaptureScreenProps> = ({ navigation }) =
       formData.append('title', videoTitle);
       formData.append('description', videoDescription || 'Recorded from mobile app');
 
-      const token = await getAuthToken();
-      if (!token) {
-        throw new Error('Authentication token not found');
-      }
-
-      const response = await fetch(`${API_BASE_URL}/videos/upload`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        Alert.alert(
-          'Success',
-          'Video uploaded successfully! You can now analyze it with AI.',
-          [
-            {
-              text: 'OK',
-              onPress: () => {
-                setShowUploadModal(false);
-                setRecordedVideo(null);
-                setShowPreview(false);
-                setVideoTitle('');
-                setVideoDescription('');
-                navigation.navigate('Videos');
-              },
+      const data = await apiService.uploadVideo(formData);
+      
+      Alert.alert(
+        'Success',
+        'Video uploaded successfully! You can now analyze it with AI.',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              setShowUploadModal(false);
+              setRecordedVideo(null);
+              setShowPreview(false);
+              setVideoTitle('');
+              setVideoDescription('');
+              navigation.navigate('Videos');
             },
-          ]
-        );
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Upload failed');
-      }
-    } catch (error) {
+          },
+        ]
+      );
+    } catch (error: any) {
       console.error('Upload error:', error);
-      Alert.alert('Error', 'Failed to upload video. Please try again.');
+      
+      if (error.message?.includes('Network Error') || error.message?.includes('Network request failed')) {
+        Alert.alert('Connection Error', 'Unable to connect to the server. Please check your internet connection and try again.');
+      } else if (error.response?.status === 413) {
+        Alert.alert('File Too Large', 'The video file is too large. Please try a shorter video.');
+      } else if (error.response?.status === 401) {
+        Alert.alert('Authentication Error', 'Please log in again to continue.');
+      } else {
+        Alert.alert('Error', 'Failed to upload video. Please try again later.');
+      }
     } finally {
       setUploading(false);
       setUploadProgress(0);
@@ -204,7 +195,7 @@ const VideoCaptureScreen: React.FC<VideoCaptureScreenProps> = ({ navigation }) =
           style={styles.button}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.buttonText}>Go Back</Text>
+          <Text style={styles.secondaryButtonText}>Go Back</Text>
         </TouchableOpacity>
       </View>
     );

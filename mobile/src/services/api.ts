@@ -16,7 +16,7 @@ import {
   ProfileUpdateForm,
 } from '../types';
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || 'http://192.168.1.92:5001/api';
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || 'http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api';
 
 class ApiService {
   private api: AxiosInstance;
@@ -264,6 +264,46 @@ class ApiService {
   // Health Check
   async healthCheck(): Promise<{ status: string }> {
     const response: AxiosResponse<{ status: string }> = await this.api.get('/health');
+    return response.data;
+  }
+
+  // Video APIs
+  async getVideos(page: number = 1, limit: number = 10, status?: string): Promise<{ videos: any[]; pagination: any }> {
+    const params: any = { page, limit };
+    if (status) params.status = status;
+    const response: AxiosResponse<{ videos: any[]; pagination: any }> = await this.api.get('/videos', { params });
+    return response.data;
+  }
+
+  async getVideo(videoId: string): Promise<{ video: any }> {
+    const response: AxiosResponse<{ video: any }> = await this.api.get(`/videos/${videoId}`);
+    return response.data;
+  }
+
+  async uploadVideo(formData: FormData): Promise<{ message: string; video: any }> {
+    const response: AxiosResponse<{ message: string; video: any }> = await this.api.post('/videos/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  }
+
+  async analyzeVideo(videoId: string, prompt: string, analysisType: string = 'question'): Promise<{ success: boolean; analysis: any }> {
+    const response: AxiosResponse<{ success: boolean; analysis: any }> = await this.api.post(`/videos/${videoId}/analyze`, {
+      prompt,
+      analysisType,
+    });
+    return response.data;
+  }
+
+  async getVideoAnalysisHistory(videoId: string): Promise<{ analyses: any[] }> {
+    const response: AxiosResponse<{ analyses: any[] }> = await this.api.get(`/videos/${videoId}/history`);
+    return response.data;
+  }
+
+  async deleteVideo(videoId: string): Promise<{ message: string }> {
+    const response: AxiosResponse<{ message: string }> = await this.api.delete(`/videos/${videoId}`);
     return response.data;
   }
 

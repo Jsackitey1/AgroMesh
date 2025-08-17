@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
-import { API_BASE_URL, apiService } from '../../services/api';
+import { apiService } from '../../services/api';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types';
 
@@ -70,22 +70,26 @@ const VideosScreen: React.FC<{ navigation: VideosScreenNavigationProp }> = ({ na
         return;
       }
 
-      const response = await fetch(`${API_BASE_URL}/videos`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setVideos(data.videos || []);
-      } else {
-        throw new Error('Failed to fetch videos');
-      }
-    } catch (error) {
+      const data = await apiService.getVideos();
+      setVideos(data.videos || []);
+    } catch (error: any) {
       console.error('Error fetching videos:', error);
-      Alert.alert('Error', 'Failed to load videos');
+      
+      // Provide more specific error messages
+      if (error.message?.includes('Network Error') || error.message?.includes('Network request failed')) {
+        Alert.alert(
+          'Connection Error', 
+          'Unable to connect to the server. Please check your internet connection and try again.',
+          [
+            { text: 'Retry', onPress: () => fetchVideos() },
+            { text: 'Cancel', style: 'cancel' }
+          ]
+        );
+      } else if (error.response?.status === 401) {
+        Alert.alert('Authentication Error', 'Please log in again to continue.');
+      } else {
+        Alert.alert('Error', 'Failed to load videos. Please try again later.');
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -97,19 +101,11 @@ const VideosScreen: React.FC<{ navigation: VideosScreenNavigationProp }> = ({ na
       const token = await getAuthToken();
       if (!token) return;
 
-      const response = await fetch(`${API_BASE_URL}/videos/${videoId}/history`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setAnalysisHistory(data.analyses || []);
-      }
-    } catch (error) {
+      const data = await apiService.getVideoAnalysisHistory(videoId);
+      setAnalysisHistory(data.analyses || []);
+    } catch (error: any) {
       console.error('Error fetching analysis history:', error);
+      // Don't show alert for history fetch errors as they're not critical
     }
   };
 
@@ -121,40 +117,29 @@ const VideosScreen: React.FC<{ navigation: VideosScreenNavigationProp }> = ({ na
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${API_BASE_URL}/videos/${videoId}/analyze`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          prompt,
-          analysisType,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        
-        // Add to analysis history
-        setAnalysisHistory(prev => [...prev, data.analysis]);
-        
-        // Update video list if summary was generated
-        if (analysisType === 'summary' && data.success) {
-          fetchVideos();
-        }
-
-        Alert.alert(
-          'Success',
-          data.success ? 'Analysis completed!' : 'Analysis failed',
-          [{ text: 'OK' }]
-        );
-      } else {
-        throw new Error('Analysis failed');
+      const data = await apiService.analyzeVideo(videoId, prompt, analysisType);
+      
+      // Add to analysis history
+      setAnalysisHistory(prev => [...prev, data.analysis]);
+      
+      // Update video list if summary was generated
+      if (analysisType === 'summary' && data.success) {
+        fetchVideos();
       }
-    } catch (error) {
+
+      Alert.alert(
+        'Success',
+        data.success ? 'Analysis completed!' : 'Analysis failed',
+        [{ text: 'OK' }]
+      );
+    } catch (error: any) {
       console.error('Analysis error:', error);
-      Alert.alert('Error', 'Failed to analyze video');
+      
+      if (error.message?.includes('Network Error') || error.message?.includes('Network request failed')) {
+        Alert.alert('Connection Error', 'Unable to connect to the server. Please check your internet connection and try again.');
+      } else {
+        Alert.alert('Error', 'Failed to analyze video. Please try again later.');
+      }
     } finally {
       setAnalyzing(false);
     }
@@ -171,27 +156,17 @@ const VideosScreen: React.FC<{ navigation: VideosScreenNavigationProp }> = ({ na
           style: 'destructive',
           onPress: async () => {
             try {
-              const token = await getAuthToken();
-              if (!token) {
-                throw new Error('Authentication required');
-              }
-
-              const response = await fetch(`${API_BASE_URL}/videos/${videoId}`, {
-                method: 'DELETE',
-                headers: {
-                  'Authorization': `Bearer ${token}`,
-                },
-              });
-
-              if (response.ok) {
-                setVideos(prev => prev.filter(video => video._id !== videoId));
-                Alert.alert('Success', 'Video deleted successfully');
+              await apiService.deleteVideo(videoId);
+              setVideos(prev => prev.filter(video => video._id !== videoId));
+              Alert.alert('Success', 'Video deleted successfully');
+            } catch (error: any) {
+              console.error('Error deleting video:', error);
+              
+              if (error.message?.includes('Network Error') || error.message?.includes('Network request failed')) {
+                Alert.alert('Connection Error', 'Unable to connect to the server. Please check your internet connection and try again.');
               } else {
-                throw new Error('Delete failed');
+                Alert.alert('Error', 'Failed to delete video. Please try again later.');
               }
-            } catch (error) {
-              console.error('Delete error:', error);
-              Alert.alert('Error', 'Failed to delete video');
             }
           },
         },
