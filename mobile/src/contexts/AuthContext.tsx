@@ -194,7 +194,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return false;
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Password change failed';
+      let errorMessage = 'Password change failed';
+      
+      if (error.response?.status === 401) {
+        errorMessage = 'Current password is incorrect';
+      } else if (error.response?.status === 400) {
+        errorMessage = error.response?.data?.message || 'Invalid password format';
+      } else if (error.response?.status === 422) {
+        // Handle validation errors
+        if (error.response?.data?.errors) {
+          const validationErrors = error.response.data.errors;
+          const errorMessages = validationErrors.map((err: any) => err.msg).join(', ');
+          errorMessage = `Validation errors: ${errorMessages}`;
+        } else {
+          errorMessage = error.response?.data?.message || 'Password validation failed';
+        }
+      } else if (error.response?.status >= 500) {
+        errorMessage = 'Server error. Please try again later.';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
       return false;
     }
