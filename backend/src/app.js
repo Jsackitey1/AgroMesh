@@ -2,14 +2,22 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const swaggerUi = require('swagger-ui-express');
+
+// Import centralized configuration
+const config = require('./config');
+const swaggerSpec = require('./config/swagger');
+const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler');
+
+// Import routes
 const aiRoutes = require('./routes/ai');
 const authRoutes = require('./routes/auth');
 const sensorRoutes = require('./routes/sensors');
 const alertRoutes = require('./routes/alerts');
 const dashboardRoutes = require('./routes/dashboard');
 const videoRoutes = require('./routes/videos');
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
+
+// Import database connection
 const connectDB = require('./config/mongoose');
 
 const app = express();
@@ -17,68 +25,57 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:19006',
-    'http://localhost:19000',
-    'exp://localhost:19000',
-    'exp://192.168.1.92:19000',
-    // Add your production domains here
-    'https://your-frontend-domain.com',
-    // Allow all origins for development (remove in production)
-    ...(process.env.NODE_ENV === 'development' ? ['*'] : [])
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
-}));
-app.use(helmet());
-app.use(morgan('dev'));
-app.use(express.json());
-
-// Swagger setup
-const swaggerDefinition = {
-  openapi: '3.0.0',
-  info: {
-    title: 'AgroMesh Backend API',
-    version: '1.0.0',
-    description: 'API documentation for AgroMesh AI endpoints',
-  },
-  servers: [
-    { url: 'http://localhost:5000', description: 'Local server' },
-  ],
-  components: {
-    securitySchemes: {
-      bearerAuth: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-      },
+// Security middleware
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
     },
   },
-  security: [{ bearerAuth: [] }],
-};
+}));
 
-const swaggerOptions = {
-  swaggerDefinition,
-  apis: ['./src/routes/*.js'],
-};
+// CORS configuration
+app.use(cors(config.cors));
 
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Logging middleware
+app.use(morgan(config.logging.format));
+
+// Body parsing middleware
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// API documentation
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: swaggerSpec.customCss,
+  customSiteTitle: swaggerSpec.customSiteTitle,
+}));
 
 // API routes
-app.use('/api/auth', authRoutes);
-app.use('/api/sensors', sensorRoutes);
-app.use('/api/alerts', alertRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/ai', aiRoutes);
-app.use('/api/videos', videoRoutes);
+app.use(`${config.api.prefix}/auth`, authRoutes);
+app.use(`${config.api.prefix}/sensors`, sensorRoutes);
+app.use(`${config.api.prefix}/alerts`, alertRoutes);
+app.use(`${config.api.prefix}/dashboard`, dashboardRoutes);
+app.use(`${config.api.prefix}/ai`, aiRoutes);
+app.use(`${config.api.prefix}/videos`, videoRoutes);
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok' });
+// Health check endpoint
+app.get(`${config.api.prefix}/health`, (req, res) => {
+  res.json({ 
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    version: config.api.version,
+    environment: config.server.nodeEnv,
+  });
 });
+
+// 404 handler
+app.use(notFoundHandler);
+
+// Global error handler (must be last)
+app.use(errorHandler);
 
 module.exports = app;

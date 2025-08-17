@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const config = require('../config');
 
 const sensorNodeSchema = new mongoose.Schema({
   nodeId: {
@@ -33,8 +34,8 @@ const sensorNodeSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['online', 'offline', 'maintenance', 'error'],
-    default: 'offline'
+    enum: Object.values(config.sensors.status),
+    default: config.sensors.status.offline
   },
   lastSeen: {
     type: Date,
@@ -59,12 +60,12 @@ const sensorNodeSchema = new mongoose.Schema({
     },
     soilType: {
       type: String,
-      enum: ['sandy', 'clay', 'loamy', 'silty', 'unknown'],
+      enum: config.sensors.soilTypes,
       default: 'unknown'
     },
     irrigationType: {
       type: String,
-      enum: ['drip', 'sprinkler', 'flood', 'manual', 'none'],
+      enum: config.sensors.irrigationTypes,
       default: 'none'
     },
     sensors: {
@@ -77,16 +78,16 @@ const sensorNodeSchema = new mongoose.Schema({
     },
     thresholds: {
       soilMoisture: {
-        min: { type: Number, default: 20 },
-        max: { type: Number, default: 80 }
+        min: { type: Number, default: config.sensors.thresholds.soilMoisture.min },
+        max: { type: Number, default: config.sensors.thresholds.soilMoisture.max }
       },
       temperature: {
-        min: { type: Number, default: 10 },
-        max: { type: Number, default: 35 }
+        min: { type: Number, default: config.sensors.thresholds.temperature.min },
+        max: { type: Number, default: config.sensors.thresholds.temperature.max }
       },
       ph: {
-        min: { type: Number, default: 5.5 },
-        max: { type: Number, default: 7.5 }
+        min: { type: Number, default: config.sensors.thresholds.ph.min },
+        max: { type: Number, default: config.sensors.thresholds.ph.max }
       }
     }
   },
@@ -100,9 +101,19 @@ const sensorNodeSchema = new mongoose.Schema({
       default: Date.now
     }
   },
-  isActive: {
-    type: Boolean,
-    default: true
+  metadata: {
+    manufacturer: {
+      type: String,
+      trim: true
+    },
+    model: {
+      type: String,
+      trim: true
+    },
+    serialNumber: {
+      type: String,
+      trim: true
+    }
   }
 }, {
   timestamps: true
@@ -111,43 +122,91 @@ const sensorNodeSchema = new mongoose.Schema({
 // Index for geospatial queries
 sensorNodeSchema.index({ location: '2dsphere' });
 
-// Index for efficient queries by owner
-sensorNodeSchema.index({ owner: 1, isActive: 1 });
+// Index for efficient queries
+sensorNodeSchema.index({ owner: 1, status: 1 });
+sensorNodeSchema.index({ nodeId: 1 }, { unique: true });
 
-// Method to get sensor status based on last seen time
-sensorNodeSchema.methods.getStatus = function() {
-  const now = new Date();
-  const timeDiff = now - this.lastSeen;
-  const fiveMinutes = 5 * 60 * 1000; // 5 minutes in milliseconds
+// Method to get public JSON representation
+sensorNodeSchema.methods.toPublicJSON = function() {
+  const obj = this.toObject();
   
-  if (timeDiff > fiveMinutes) {
-    return 'offline';
-  }
-  return this.status;
+  // Remove sensitive fields
+  delete obj.__v;
+  
+  return obj;
 };
 
-// Method to get public data (without sensitive info)
-sensorNodeSchema.methods.toPublicJSON = function() {
-  const node = this.toObject();
-  return {
-    id: node._id,
-    nodeId: node.nodeId,
-    name: node.name,
-    location: node.location,
-    status: this.getStatus(),
-    lastSeen: node.lastSeen,
-    batteryLevel: node.batteryLevel,
-    signalStrength: node.signalStrength,
-    configuration: {
-      cropType: node.configuration.cropType,
-      soilType: node.configuration.soilType,
-      irrigationType: node.configuration.irrigationType,
-      sensors: node.configuration.sensors
-    },
-    firmware: {
-      version: node.firmware.version
+// Static method to get sensor statistics
+sensorNodeSchema.statics.getStatistics = async function(userId) {
+  const stats = await this.aggregate([
+    { $match: { owner: mongoose.Types.ObjectId(userId) } },
+    {
+      $group: {
+        _id: null,
+        total: { $sum: 1 },
+        online: {
+          $sum: {
+            $cond: [{ $eq: ['$status', config.sensors.status.online] }, 1, 0]
+          }
+        },
+        offline: {
+          $sum: {
+            $cond: [{ $eq: ['$status', config.sensors.status.offline] }, 1, 0]
+          }
+        },
+        maintenance: {
+          $sum: {
+            $cond: [{ $eq: ['$status', config.sensors.status.maintenance] }, 1, 0]
+          }
+        },
+        error: {
+          $sum: {
+            $cond: [{ $eq: ['$status', config.sensors.status.error] }, 1, 0]
+          }
+        },
+        avgBatteryLevel: { $avg: '$batteryLevel' },
+        avgSignalStrength: { $avg: '$signalStrength' }
+      }
     }
+  ]);
+
+  return stats[0] || {
+    total: 0,
+    online: 0,
+    offline: 0,
+    maintenance: 0,
+    error: 0,
+    avgBatteryLevel: 0,
+    avgSignalStrength: 0
   };
 };
+
+// Pre-save middleware to validate thresholds
+sensorNodeSchema.pre('save', function(next) {
+  const { thresholds } = this.configuration;
+  
+  // Validate soil moisture thresholds
+  if (thresholds.soilMoisture) {
+    if (thresholds.soilMoisture.min >= thresholds.soilMoisture.max) {
+      return next(new Error('Soil moisture min must be less than max'));
+    }
+  }
+  
+  // Validate temperature thresholds
+  if (thresholds.temperature) {
+    if (thresholds.temperature.min >= thresholds.temperature.max) {
+      return next(new Error('Temperature min must be less than max'));
+    }
+  }
+  
+  // Validate pH thresholds
+  if (thresholds.ph) {
+    if (thresholds.ph.min >= thresholds.ph.max) {
+      return next(new Error('pH min must be less than max'));
+    }
+  }
+  
+  next();
+});
 
 module.exports = mongoose.model('SensorNode', sensorNodeSchema); 
