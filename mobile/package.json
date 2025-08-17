@@ -9,7 +9,8 @@
     "web": "expo start --web",
     "build:android": "./scripts/build-android.sh",
     "distribute": "./scripts/distribute.sh",
-    "build:distribute": "npm run build:android && npm run distribute"
+    "build:distribute": "npm run build:android && npm run distribute",
+    "postinstall": "node -e \"const fs=require('fs'); if(!fs.existsSync('.env')) { fs.copyFileSync('env.example', '.env'); console.log('✅ Created .env file from env.example'); }\""
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",

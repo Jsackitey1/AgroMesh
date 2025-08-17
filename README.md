@@ -14,7 +14,7 @@ git clone <repository-url>
 cd AgroMesh
 ./setup-frontend.sh
 ```
-**Setup time**: 2 minutes | **No API keys needed**
+**Setup time**: 2-3 minutes | **No API keys needed**
 
 ### 🔧 **For Backend Developers**
 Working on API changes, new endpoints, or backend features?
@@ -32,6 +32,8 @@ cd AgroMesh
 
 | Document | Purpose | For |
 |----------|---------|-----|
+| **[QUICK_START.md](QUICK_START.md)** | **Quick setup guide with common fixes** | **All contributors** |
+| **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** | **Common issues and solutions** | **All contributors** |
 | **[CONTRIBUTOR_GUIDE.md](CONTRIBUTOR_GUIDE.md)** | Complete setup and development guide | All contributors |
 | **[BUILD_STATUS.md](BUILD_STATUS.md)** | Current project status and what's working | Everyone |
 | **[SECURITY.md](SECURITY.md)** | Security best practices and checklist | Backend developers |
@@ -111,15 +113,18 @@ curl http://localhost:5001/api/health
 - **"Cannot connect to backend"** → Check if AWS backend is running
 - **"Authentication failed"** → Backend issue, contact maintainer
 - **"MongoDB connection failed"** → Check MONGODB_URI format (backend only)
+- **"Node.js version incompatible"** → Install Node.js v18+ (see TROUBLESHOOTING.md)
+- **"QR code doesn't work"** → Try tunnel mode: `npx expo start --tunnel`
 
 ---
 
 ## 📞 Support
 
-1. Check **[CONTRIBUTOR_GUIDE.md](CONTRIBUTOR_GUIDE.md)** for detailed instructions
-2. Review **[BUILD_STATUS.md](BUILD_STATUS.md)** for current status
-3. Check AWS Elastic Beanstalk logs for backend issues
-4. Create an issue in the repository
+1. **First**: Check **[QUICK_START.md](QUICK_START.md)** for quick fixes
+2. **Second**: Check **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** for detailed solutions
+3. **Third**: Review **[CONTRIBUTOR_GUIDE.md](CONTRIBUTOR_GUIDE.md)** for complete instructions
+4. **Fourth**: Check **[BUILD_STATUS.md](BUILD_STATUS.md)** for current status
+5. **Finally**: Create an issue in the repository
 
 ---
 
