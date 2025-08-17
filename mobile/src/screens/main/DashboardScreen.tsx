@@ -9,12 +9,16 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme, ThemeColors } from '../../contexts/ThemeContext';
 import apiService from '../../services/api';
 import { DashboardSummary, SensorNode } from '../../types';
 
 const DashboardScreen: React.FC = () => {
+  const navigation = useNavigation();
   const { user } = useAuth();
+  const { colors } = useTheme();
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [sensorNodes, setSensorNodes] = useState<SensorNode[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,18 +52,37 @@ const DashboardScreen: React.FC = () => {
     loadDashboardData();
   }, []);
 
+  const handleQuickAction = (action: string) => {
+    switch (action) {
+      case 'addSensor':
+        navigation.navigate('Sensors' as never);
+        break;
+      case 'aiDiagnosis':
+        navigation.navigate('AI' as never);
+        break;
+      case 'viewAnalytics':
+        navigation.navigate('Sensors' as never);
+        break;
+      case 'settings':
+        navigation.navigate('Profile' as never);
+        break;
+      default:
+        break;
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'online':
-        return '#4CAF50';
+        return colors.success;
       case 'offline':
-        return '#f44336';
+        return colors.error;
       case 'maintenance':
-        return '#ff9800';
+        return colors.warning;
       case 'error':
-        return '#f44336';
+        return colors.error;
       default:
-        return '#9e9e9e';
+        return colors.textTertiary;
     }
   };
 
@@ -79,50 +102,58 @@ const DashboardScreen: React.FC = () => {
   };
 
   const renderSummaryCard = (title: string, value: number, icon: string, color: string) => (
-    <View style={styles.summaryCard}>
-      <View style={[styles.iconContainer, { backgroundColor: color }]}>
-        <Ionicons name={icon as any} size={24} color="white" />
+    <View style={[styles.summaryCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <View style={styles.summaryCardHeader}>
+        <Ionicons name={icon as any} size={24} color={color} />
+        <Text style={[styles.summaryCardTitle, { color: colors.textSecondary }]}>{title}</Text>
       </View>
-      <View style={styles.summaryContent}>
-        <Text style={styles.summaryValue}>{value}</Text>
-        <Text style={styles.summaryTitle}>{title}</Text>
-      </View>
+      <Text style={[styles.summaryCardValue, { color: colors.text }]}>{value}</Text>
     </View>
   );
 
+  const renderQuickAction = (icon: string, title: string, action: string, color: string) => (
+    <TouchableOpacity 
+      style={[styles.actionButton, { backgroundColor: color }]}
+      onPress={() => handleQuickAction(action)}
+    >
+      <Ionicons name={icon as any} size={24} color={colors.buttonPrimaryText} />
+      <Text style={[styles.actionButtonText, { color: colors.buttonPrimaryText }]}>{title}</Text>
+    </TouchableOpacity>
+  );
+
   const renderSensorCard = (sensor: SensorNode) => (
-    <TouchableOpacity key={sensor.id} style={styles.sensorCard}>
-      <View style={styles.sensorHeader}>
+    <TouchableOpacity
+      key={sensor.id}
+      style={[styles.sensorCard, { backgroundColor: colors.card, borderColor: colors.border }]}
+    >
+      <View style={styles.sensorCardHeader}>
         <View style={styles.sensorInfo}>
-          <Text style={styles.sensorName}>{sensor.name}</Text>
-          <Text style={styles.sensorId}>ID: {sensor.nodeId}</Text>
+          <Text style={[styles.sensorName, { color: colors.text }]}>{sensor.name}</Text>
+          <Text style={[styles.sensorLocation, { color: colors.textSecondary }]}>{sensor.location.address || `${sensor.location.coordinates[0]}, ${sensor.location.coordinates[1]}`}</Text>
         </View>
         <View style={styles.sensorStatus}>
-          <Ionicons
-            name={getStatusIcon(sensor.status) as any}
-            size={20}
-            color={getStatusColor(sensor.status)}
+          <Ionicons 
+            name={getStatusIcon(sensor.status) as any} 
+            size={20} 
+            color={getStatusColor(sensor.status)} 
           />
-          <Text style={[styles.statusText, { color: getStatusColor(sensor.status) }]}>
+          <Text style={[styles.sensorStatusText, { color: getStatusColor(sensor.status) }]}>
             {sensor.status}
           </Text>
         </View>
       </View>
-      
-      <View style={styles.sensorDetails}>
-        <View style={styles.sensorDetail}>
-          <Ionicons name="battery-outline" size={16} color="#666" />
-          <Text style={styles.detailText}>{sensor.batteryLevel}%</Text>
+      <View style={styles.sensorMetrics}>
+        <View style={styles.metric}>
+          <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Battery</Text>
+          <Text style={[styles.metricValue, { color: colors.text }]}>{sensor.batteryLevel}%</Text>
         </View>
-        <View style={styles.sensorDetail}>
-          <Ionicons name="cellular-outline" size={16} color="#666" />
-          <Text style={styles.detailText}>{sensor.signalStrength} dBm</Text>
+        <View style={styles.metric}>
+          <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Signal</Text>
+          <Text style={[styles.metricValue, { color: colors.text }]}>{sensor.signalStrength} dBm</Text>
         </View>
-        <View style={styles.sensorDetail}>
-          <Ionicons name="time-outline" size={16} color="#666" />
-          <Text style={styles.detailText}>
-            {new Date(sensor.lastSeen).toLocaleDateString()}
-          </Text>
+        <View style={styles.metric}>
+          <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Last Seen</Text>
+          <Text style={[styles.metricValue, { color: colors.text }]}>{new Date(sensor.lastSeen).toLocaleDateString()}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -130,26 +161,25 @@ const DashboardScreen: React.FC = () => {
 
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
-        <Ionicons name="leaf" size={50} color="#4CAF50" />
-        <Text style={styles.loadingText}>Loading dashboard...</Text>
+      <View style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
+        <Text style={[styles.loadingText, { color: colors.text }]}>Loading dashboard...</Text>
       </View>
     );
   }
 
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
       {/* Welcome Section */}
       <View style={styles.welcomeSection}>
-        <Text style={styles.welcomeText}>
+        <Text style={[styles.welcomeText, { color: colors.text }]}>
           Welcome back, {user?.profile.firstName}!
         </Text>
-        <Text style={styles.welcomeSubtext}>
+        <Text style={[styles.welcomeSubtext, { color: colors.textSecondary }]}>
           Here's what's happening with your farm today
         </Text>
       </View>
@@ -157,31 +187,31 @@ const DashboardScreen: React.FC = () => {
       {/* Summary Cards */}
       {summary && (
         <View style={styles.summarySection}>
-          <Text style={styles.sectionTitle}>Overview</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Overview</Text>
           <View style={styles.summaryGrid}>
             {renderSummaryCard(
               'Total Sensors',
               summary.summary.totalNodes,
               'analytics',
-              '#4CAF50'
+              colors.primary
             )}
             {renderSummaryCard(
               'Online Sensors',
               summary.summary.nodeStatusCounts.online,
               'checkmark-circle',
-              '#4CAF50'
+              colors.success
             )}
             {renderSummaryCard(
               'Recent Alerts',
               summary.summary.recentAlerts,
               'notifications',
-              '#ff9800'
+              colors.warning
             )}
             {renderSummaryCard(
               'Unread Alerts',
               summary.summary.unreadAlerts,
               'mail-unread',
-              '#f44336'
+              colors.error
             )}
           </View>
         </View>
@@ -189,73 +219,20 @@ const DashboardScreen: React.FC = () => {
 
       {/* Quick Actions */}
       <View style={styles.actionsSection}>
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
-        <View style={styles.actionsGrid}>
-          <TouchableOpacity style={styles.actionCard}>
-            <Ionicons name="add-circle" size={30} color="#4CAF50" />
-            <Text style={styles.actionText}>Add Sensor</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionCard}>
-            <Ionicons name="camera" size={30} color="#2196F3" />
-            <Text style={styles.actionText}>AI Diagnosis</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionCard}>
-            <Ionicons name="analytics" size={30} color="#9C27B0" />
-            <Text style={styles.actionText}>View Analytics</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionCard}>
-            <Ionicons name="settings" size={30} color="#FF9800" />
-            <Text style={styles.actionText}>Settings</Text>
-          </TouchableOpacity>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Quick Actions</Text>
+        <View style={styles.actionGrid}>
+          {renderQuickAction('add', 'Add Sensor', 'addSensor', colors.primary)}
+          {renderQuickAction('camera', 'AI Diagnosis', 'aiDiagnosis', colors.secondary)}
+          {renderQuickAction('analytics', 'View Analytics', 'viewAnalytics', colors.info)}
+          {renderQuickAction('settings', 'Settings', 'settings', colors.warning)}
         </View>
       </View>
 
-      {/* Sensor Status */}
+      {/* Recent Sensors */}
       <View style={styles.sensorsSection}>
-        <Text style={styles.sectionTitle}>Sensor Status</Text>
-        {sensorNodes.length > 0 ? (
-          sensorNodes.slice(0, 3).map(renderSensorCard)
-        ) : (
-          <View style={styles.emptyState}>
-            <Ionicons name="analytics-outline" size={50} color="#ccc" />
-            <Text style={styles.emptyText}>No sensors found</Text>
-            <Text style={styles.emptySubtext}>Add your first sensor to get started</Text>
-          </View>
-        )}
-        {sensorNodes.length > 3 && (
-          <TouchableOpacity style={styles.viewAllButton}>
-            <Text style={styles.viewAllText}>View All Sensors</Text>
-            <Ionicons name="chevron-forward" size={16} color="#4CAF50" />
-          </TouchableOpacity>
-        )}
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Recent Sensors</Text>
+        {sensorNodes.slice(0, 3).map(renderSensorCard)}
       </View>
-
-      {/* Latest Data */}
-      {summary?.latestData && summary.latestData.length > 0 && (
-        <View style={styles.latestDataSection}>
-          <Text style={styles.sectionTitle}>Latest Readings</Text>
-          {summary.latestData.slice(0, 2).map((data, index) => (
-            <View key={index} style={styles.dataCard}>
-              <View style={styles.dataHeader}>
-                <Text style={styles.dataNodeName}>{data.node.name}</Text>
-                <Text style={styles.dataTime}>
-                  {new Date(data.timestamp).toLocaleTimeString()}
-                </Text>
-              </View>
-              <View style={styles.dataReadings}>
-                {Object.entries(data.readings).slice(0, 3).map(([key, reading]) => (
-                  <View key={key} style={styles.readingItem}>
-                    <Text style={styles.readingLabel}>{key}</Text>
-                    <Text style={styles.readingValue}>
-                      {reading.value} {reading.unit}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-          ))}
-        </View>
-      )}
     </ScrollView>
   );
 };
@@ -263,43 +240,34 @@ const DashboardScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
   },
   loadingText: {
-    marginTop: 10,
     fontSize: 16,
-    color: '#666',
   },
   welcomeSection: {
     padding: 20,
-    backgroundColor: 'white',
-    marginBottom: 10,
+    paddingBottom: 10,
   },
   welcomeText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 5,
+    marginBottom: 4,
   },
   welcomeSubtext: {
     fontSize: 16,
-    color: '#666',
   },
   summarySection: {
     padding: 20,
-    backgroundColor: 'white',
-    marginBottom: 10,
+    paddingTop: 10,
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
     marginBottom: 15,
   },
   summaryGrid: {
@@ -309,71 +277,58 @@ const styles = StyleSheet.create({
   },
   summaryCard: {
     width: '48%',
-    backgroundColor: '#f8f9fa',
-    borderRadius: 12,
     padding: 15,
+    borderRadius: 12,
     marginBottom: 10,
+    borderWidth: 1,
+  },
+  summaryCardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 8,
   },
-  iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
+  summaryCardTitle: {
+    fontSize: 12,
+    marginLeft: 8,
+    fontWeight: '500',
   },
-  summaryContent: {
-    flex: 1,
-  },
-  summaryValue: {
+  summaryCardValue: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
-  },
-  summaryTitle: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 2,
   },
   actionsSection: {
     padding: 20,
-    backgroundColor: 'white',
-    marginBottom: 10,
+    paddingTop: 10,
   },
-  actionsGrid: {
+  actionGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
-  actionCard: {
+  actionButton: {
     width: '48%',
-    backgroundColor: '#f8f9fa',
+    padding: 15,
     borderRadius: 12,
-    padding: 20,
     marginBottom: 10,
+    borderWidth: 1,
     alignItems: 'center',
   },
-  actionText: {
+  actionButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
     marginTop: 8,
-    textAlign: 'center',
   },
   sensorsSection: {
     padding: 20,
-    backgroundColor: 'white',
-    marginBottom: 10,
+    paddingTop: 10,
   },
   sensorCard: {
-    backgroundColor: '#f8f9fa',
-    borderRadius: 12,
     padding: 15,
+    borderRadius: 12,
     marginBottom: 10,
+    borderWidth: 1,
   },
-  sensorHeader: {
+  sensorCardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -384,109 +339,36 @@ const styles = StyleSheet.create({
   },
   sensorName: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: '600',
+    marginBottom: 2,
   },
-  sensorId: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 2,
+  sensorLocation: {
+    fontSize: 14,
   },
   sensorStatus: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  statusText: {
+  sensorStatusText: {
     fontSize: 12,
     fontWeight: '600',
-    marginLeft: 5,
+    marginLeft: 4,
+    textTransform: 'uppercase',
   },
-  sensorDetails: {
+  sensorMetrics: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  sensorDetail: {
-    flexDirection: 'row',
+  metric: {
     alignItems: 'center',
   },
-  detailText: {
+  metricLabel: {
     fontSize: 12,
-    color: '#666',
-    marginLeft: 5,
+    marginBottom: 2,
   },
-  emptyState: {
-    alignItems: 'center',
-    padding: 40,
-  },
-  emptyText: {
+  metricValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#666',
-    marginTop: 10,
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: '#999',
-    marginTop: 5,
-    textAlign: 'center',
-  },
-  viewAllButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 15,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 8,
-  },
-  viewAllText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#4CAF50',
-    marginRight: 5,
-  },
-  latestDataSection: {
-    padding: 20,
-    backgroundColor: 'white',
-    marginBottom: 20,
-  },
-  dataCard: {
-    backgroundColor: '#f8f9fa',
-    borderRadius: 12,
-    padding: 15,
-    marginBottom: 10,
-  },
-  dataHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  dataNodeName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  dataTime: {
-    fontSize: 12,
-    color: '#666',
-  },
-  dataReadings: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  readingItem: {
-    alignItems: 'center',
-  },
-  readingLabel: {
-    fontSize: 12,
-    color: '#666',
-    textTransform: 'capitalize',
-  },
-  readingValue: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
-    marginTop: 2,
   },
 });
 

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useLanguage, SUPPORTED_LANGUAGES, LanguageOption } from '../contexts/LanguageContext';
+import { useTheme, ThemeColors } from '../contexts/ThemeContext';
 
 interface LanguageSelectionModalProps {
   visible: boolean;
@@ -18,6 +19,7 @@ interface LanguageSelectionModalProps {
 
 const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = ({ visible, onClose }) => {
   const { language, setLanguage } = useLanguage();
+  const { colors } = useTheme();
 
   const handleLanguageSelect = (selectedLanguage: LanguageOption) => {
     if (selectedLanguage.code === language) {
@@ -53,22 +55,34 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = ({ visible
     
     return (
       <TouchableOpacity
-        style={[styles.languageItem, isSelected && styles.selectedLanguageItem]}
+        style={[
+          styles.languageItem, 
+          { borderBottomColor: colors.divider },
+          isSelected && { backgroundColor: colors.primary + '10' }
+        ]}
         onPress={() => handleLanguageSelect(item)}
       >
         <View style={styles.languageInfo}>
           <Text style={styles.languageFlag}>{item.flag}</Text>
           <View style={styles.languageText}>
-            <Text style={[styles.languageName, isSelected && styles.selectedLanguageName]}>
+            <Text style={[
+              styles.languageName, 
+              { color: colors.text },
+              isSelected && { color: colors.primary, fontWeight: '600' }
+            ]}>
               {item.name}
             </Text>
-            <Text style={[styles.languageNative, isSelected && styles.selectedLanguageNative]}>
+            <Text style={[
+              styles.languageNative, 
+              { color: colors.textSecondary },
+              isSelected && { color: colors.primary }
+            ]}>
               {item.nativeName}
             </Text>
           </View>
         </View>
         {isSelected && (
-          <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
+          <Ionicons name="checkmark-circle" size={24} color={colors.primary} />
         )}
       </TouchableOpacity>
     );
@@ -81,12 +95,12 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = ({ visible
       transparent={true}
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={styles.modalContent}>
-          <View style={styles.header}>
-            <Text style={styles.title}>Select Language</Text>
+      <View style={[styles.overlay, { backgroundColor: colors.modalOverlay }]}>
+        <View style={[styles.modalContent, { backgroundColor: colors.modalBackground }]}>
+          <View style={[styles.header, { borderBottomColor: colors.divider }]}>
+            <Text style={[styles.title, { color: colors.text }]}>Select Language</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#666" />
+              <Ionicons name="close" size={24} color={colors.textSecondary} />
             </TouchableOpacity>
           </View>
 
@@ -98,8 +112,8 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = ({ visible
             style={styles.languageList}
           />
 
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>
+          <View style={[styles.footer, { borderTopColor: colors.divider }]}>
+            <Text style={[styles.footerText, { color: colors.textSecondary }]}>
               Language changes will be applied immediately. Some features may require a restart.
             </Text>
           </View>
@@ -112,12 +126,10 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = ({ visible
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: 'white',
     borderRadius: 12,
     width: '90%',
     maxWidth: 400,
@@ -129,12 +141,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
   },
   closeButton: {
     padding: 5,
@@ -148,10 +158,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  selectedLanguageItem: {
-    backgroundColor: '#f0f8ff',
   },
   languageInfo: {
     flexDirection: 'row',
@@ -168,28 +174,17 @@ const styles = StyleSheet.create({
   languageName: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333',
     marginBottom: 2,
   },
   languageNative: {
     fontSize: 14,
-    color: '#666',
-  },
-  selectedLanguageName: {
-    color: '#4CAF50',
-    fontWeight: '600',
-  },
-  selectedLanguageNative: {
-    color: '#4CAF50',
   },
   footer: {
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
   },
   footerText: {
     fontSize: 12,
-    color: '#666',
     textAlign: 'center',
     lineHeight: 16,
   },

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme, ThemeColors } from '../contexts/ThemeContext';
 
 interface ChangePasswordModalProps {
   visible: boolean;
@@ -19,6 +20,7 @@ interface ChangePasswordModalProps {
 
 const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ visible, onClose }) => {
   const { changePassword } = useAuth();
+  const { colors } = useTheme();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -90,25 +92,29 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ visible, onCl
       transparent={true}
       onRequestClose={handleClose}
     >
-      <View style={styles.overlay}>
-        <View style={styles.modalContent}>
+      <View style={[styles.overlay, { backgroundColor: colors.modalOverlay }]}>
+        <View style={[styles.modalContent, { backgroundColor: colors.modalBackground }]}>
           <View style={styles.header}>
-            <Text style={styles.title}>Change Password</Text>
+            <Text style={[styles.title, { color: colors.text }]}>Change Password</Text>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#666" />
+              <Ionicons name="close" size={24} color={colors.textSecondary} />
             </TouchableOpacity>
           </View>
 
           <View style={styles.form}>
             {/* Current Password */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Current Password</Text>
-              <View style={styles.passwordInput}>
+              <Text style={[styles.label, { color: colors.text }]}>Current Password</Text>
+              <View style={[styles.passwordInput, { 
+                backgroundColor: colors.inputBackground,
+                borderColor: colors.inputBorder 
+              }]}>
                 <TextInput
-                  style={styles.textInput}
+                  style={[styles.textInput, { color: colors.inputText }]}
                   value={currentPassword}
                   onChangeText={setCurrentPassword}
                   placeholder="Enter current password"
+                  placeholderTextColor={colors.inputPlaceholder}
                   secureTextEntry={!showCurrentPassword}
                   autoCapitalize="none"
                 />
@@ -119,7 +125,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ visible, onCl
                   <Ionicons
                     name={showCurrentPassword ? 'eye-off' : 'eye'}
                     size={20}
-                    color="#666"
+                    color={colors.textSecondary}
                   />
                 </TouchableOpacity>
               </View>
@@ -127,13 +133,17 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ visible, onCl
 
             {/* New Password */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>New Password</Text>
-              <View style={styles.passwordInput}>
+              <Text style={[styles.label, { color: colors.text }]}>New Password</Text>
+              <View style={[styles.passwordInput, { 
+                backgroundColor: colors.inputBackground,
+                borderColor: colors.inputBorder 
+              }]}>
                 <TextInput
-                  style={styles.textInput}
+                  style={[styles.textInput, { color: colors.inputText }]}
                   value={newPassword}
                   onChangeText={setNewPassword}
                   placeholder="Enter new password"
+                  placeholderTextColor={colors.inputPlaceholder}
                   secureTextEntry={!showNewPassword}
                   autoCapitalize="none"
                 />
@@ -144,7 +154,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ visible, onCl
                   <Ionicons
                     name={showNewPassword ? 'eye-off' : 'eye'}
                     size={20}
-                    color="#666"
+                    color={colors.textSecondary}
                   />
                 </TouchableOpacity>
               </View>
@@ -152,13 +162,17 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ visible, onCl
 
             {/* Confirm New Password */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Confirm New Password</Text>
-              <View style={styles.passwordInput}>
+              <Text style={[styles.label, { color: colors.text }]}>Confirm New Password</Text>
+              <View style={[styles.passwordInput, { 
+                backgroundColor: colors.inputBackground,
+                borderColor: colors.inputBorder 
+              }]}>
                 <TextInput
-                  style={styles.textInput}
+                  style={[styles.textInput, { color: colors.inputText }]}
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
                   placeholder="Confirm new password"
+                  placeholderTextColor={colors.inputPlaceholder}
                   secureTextEntry={!showConfirmPassword}
                   autoCapitalize="none"
                 />
@@ -169,38 +183,43 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ visible, onCl
                   <Ionicons
                     name={showConfirmPassword ? 'eye-off' : 'eye'}
                     size={20}
-                    color="#666"
+                    color={colors.textSecondary}
                   />
                 </TouchableOpacity>
               </View>
             </View>
 
             {/* Password Requirements */}
-            <View style={styles.requirements}>
-              <Text style={styles.requirementsTitle}>Password Requirements:</Text>
-              <Text style={styles.requirement}>• At least 6 characters long</Text>
-              <Text style={styles.requirement}>• Must be different from current password</Text>
+            <View style={[styles.requirements, { backgroundColor: colors.info + '10' }]}>
+              <Text style={[styles.requirementsTitle, { color: colors.text }]}>Password Requirements:</Text>
+              <Text style={[styles.requirement, { color: colors.textSecondary }]}>• At least 6 characters long</Text>
+              <Text style={[styles.requirement, { color: colors.textSecondary }]}>• Must be different from current password</Text>
             </View>
           </View>
 
           {/* Buttons */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              style={[styles.button, styles.cancelButton]}
+              style={[styles.button, styles.cancelButton, { 
+                backgroundColor: colors.buttonSecondary,
+                borderColor: colors.border 
+              }]}
               onPress={handleClose}
               disabled={isLoading}
             >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={[styles.cancelButtonText, { color: colors.buttonSecondaryText }]}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.button, styles.submitButton, isLoading && styles.disabledButton]}
+              style={[styles.button, styles.submitButton, { 
+                backgroundColor: isLoading ? colors.textTertiary : colors.buttonPrimary 
+              }]}
               onPress={handleSubmit}
               disabled={isLoading}
             >
               {isLoading ? (
-                <ActivityIndicator size="small" color="white" />
+                <ActivityIndicator size="small" color={colors.buttonPrimaryText} />
               ) : (
-                <Text style={styles.submitButtonText}>Change Password</Text>
+                <Text style={[styles.submitButtonText, { color: colors.buttonPrimaryText }]}>Change Password</Text>
               )}
             </TouchableOpacity>
           </View>
@@ -213,12 +232,10 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ visible, onCl
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: 'white',
     borderRadius: 12,
     padding: 20,
     width: '90%',
@@ -233,7 +250,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
   },
   closeButton: {
     padding: 5,
@@ -247,16 +263,13 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333',
     marginBottom: 8,
   },
   passwordInput: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ddd',
     borderRadius: 8,
-    backgroundColor: '#f9f9f9',
   },
   textInput: {
     flex: 1,
@@ -267,7 +280,6 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   requirements: {
-    backgroundColor: '#f0f8ff',
     padding: 12,
     borderRadius: 8,
     marginTop: 8,
@@ -275,12 +287,10 @@ const styles = StyleSheet.create({
   requirementsTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 4,
   },
   requirement: {
     fontSize: 12,
-    color: '#666',
     marginBottom: 2,
   },
   buttonContainer: {
@@ -296,25 +306,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cancelButton: {
-    backgroundColor: '#f5f5f5',
     borderWidth: 1,
-    borderColor: '#ddd',
   },
   submitButton: {
-    backgroundColor: '#4CAF50',
-  },
-  disabledButton: {
-    backgroundColor: '#ccc',
+    // backgroundColor will be set dynamically
   },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#666',
   },
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
   },
 });
 

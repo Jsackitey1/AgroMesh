@@ -3,7 +3,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 // Auth Screens
 import LoginScreen from '../screens/auth/LoginScreen';
@@ -32,7 +34,8 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 
 // Main Tab Navigator
 const MainTabNavigator: React.FC = () => {
-  const { user } = useAuth();
+  const { colors } = useTheme();
+  const { bottom } = useSafeAreaInsets();
 
   return (
     <Tab.Navigator
@@ -56,56 +59,67 @@ const MainTabNavigator: React.FC = () => {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#4CAF50',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: colors.tabBarActive,
+        tabBarInactiveTintColor: colors.tabBarInactive,
         tabBarStyle: {
-          backgroundColor: 'white',
+          backgroundColor: colors.tabBarBackground,
           borderTopWidth: 1,
-          borderTopColor: '#e0e0e0',
-          paddingBottom: 5,
+          borderTopColor: colors.border,
+          paddingBottom: Math.max(bottom, 10),
           paddingTop: 5,
-          height: 60,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '600',
+          height: 60 + Math.max(bottom, 10),
+          elevation: 0,
+          shadowOpacity: 0,
         },
         headerStyle: {
-          backgroundColor: '#4CAF50',
+          backgroundColor: colors.headerBackground,
         },
-        headerTintColor: 'white',
+        headerTintColor: colors.headerText,
         headerTitleStyle: {
-          fontWeight: 'bold',
+          color: colors.headerText,
         },
       })}
     >
       <Tab.Screen 
         name="Dashboard" 
         component={DashboardScreen}
-        options={{ title: 'Dashboard' }}
+        options={{ 
+          title: 'Dashboard',
+          tabBarLabel: 'Dashboard',
+        }}
       />
       <Tab.Screen 
         name="Sensors" 
         component={SensorsScreen}
-        options={{ title: 'My Sensors' }}
+        options={{ 
+          title: 'My Sensors',
+          tabBarLabel: 'Sensors',
+        }}
       />
       <Tab.Screen 
         name="Alerts" 
         component={AlertsScreen}
         options={{ 
           title: 'Alerts',
+          tabBarLabel: 'Alerts',
           tabBarBadge: undefined, // Will be set dynamically
         }}
       />
       <Tab.Screen 
         name="AI" 
         component={AIScreen}
-        options={{ title: 'AI Assistant' }}
+        options={{ 
+          title: 'AI Assistant',
+          tabBarLabel: 'AI',
+        }}
       />
       <Tab.Screen 
         name="Profile" 
         component={ProfileScreen}
-        options={{ title: 'Profile' }}
+        options={{ 
+          title: 'Profile',
+          tabBarLabel: 'Profile',
+        }}
       />
     </Tab.Navigator>
   );
@@ -114,13 +128,44 @@ const MainTabNavigator: React.FC = () => {
 // Root Stack Navigator
 const AppNavigator: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
+  const { colors } = useTheme();
 
   if (isLoading) {
     return <LoadingScreen />;
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      theme={{
+        dark: false, // We handle dark mode ourselves
+        colors: {
+          primary: colors.primary,
+          background: colors.background,
+          card: colors.card,
+          text: colors.text,
+          border: colors.border,
+          notification: colors.error,
+        },
+        fonts: {
+          regular: {
+            fontFamily: 'System',
+            fontWeight: '400',
+          },
+          medium: {
+            fontFamily: 'System',
+            fontWeight: '500',
+          },
+          bold: {
+            fontFamily: 'System',
+            fontWeight: '700',
+          },
+          heavy: {
+            fontFamily: 'System',
+            fontWeight: '900',
+          },
+        },
+      }}
+    >
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

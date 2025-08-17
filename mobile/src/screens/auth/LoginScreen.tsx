@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import { RootStackParamList } from '../../types';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
@@ -21,6 +22,7 @@ type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const { login, isLoading, error, clearError } = useAuth();
+  const { colors } = useTheme();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -85,27 +87,28 @@ const LoginScreen: React.FC = () => {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
-          <Ionicons name="leaf" size={80} color="#4CAF50" />
-          <Text style={styles.title}>AgroMesh</Text>
-          <Text style={styles.subtitle}>Smart Farming Solutions</Text>
+          <Ionicons name="leaf" size={80} color={colors.primary} />
+          <Text style={[styles.title, { color: colors.text }]}>AgroMesh</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Smart Farming Solutions</Text>
         </View>
 
-        <View style={styles.form}>
-          <Text style={styles.formTitle}>Welcome Back</Text>
+        <View style={[styles.form, { backgroundColor: colors.card, shadowColor: colors.text }]}>
+          <Text style={[styles.formTitle, { color: colors.text }]}>Welcome Back</Text>
           
           {/* Email Input */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
-            <View style={[styles.inputWrapper, emailError ? styles.inputError : null]}>
-              <Ionicons name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
+            <Text style={[styles.label, { color: colors.text }]}>Email</Text>
+            <View style={[styles.inputWrapper, { backgroundColor: colors.inputBackground, borderColor: emailError ? colors.error : colors.inputBorder }, emailError ? styles.inputError : null]}>
+              <Ionicons name="mail-outline" size={20} color={colors.textSecondary} style={styles.inputIcon} />
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: colors.inputText }]}
                 placeholder="Enter your email"
+                placeholderTextColor={colors.inputPlaceholder}
                 value={email}
                 onChangeText={(text) => {
                   setEmail(text);
@@ -117,17 +120,18 @@ const LoginScreen: React.FC = () => {
                 onBlur={() => validateEmail(email)}
               />
             </View>
-            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+            {emailError ? <Text style={[styles.errorText, { color: colors.error }]}>{emailError}</Text> : null}
           </View>
 
           {/* Password Input */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Password</Text>
-            <View style={[styles.inputWrapper, passwordError ? styles.inputError : null]}>
-              <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+            <Text style={[styles.label, { color: colors.text }]}>Password</Text>
+            <View style={[styles.inputWrapper, { backgroundColor: colors.inputBackground, borderColor: passwordError ? colors.error : colors.inputBorder }, passwordError ? styles.inputError : null]}>
+              <Ionicons name="lock-closed-outline" size={20} color={colors.textSecondary} style={styles.inputIcon} />
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: colors.inputText }]}
                 placeholder="Enter your password"
+                placeholderTextColor={colors.inputPlaceholder}
                 value={password}
                 onChangeText={(text) => {
                   setPassword(text);
@@ -145,36 +149,36 @@ const LoginScreen: React.FC = () => {
                 <Ionicons
                   name={showPassword ? 'eye-off-outline' : 'eye-outline'}
                   size={20}
-                  color="#666"
+                  color={colors.textSecondary}
                 />
               </TouchableOpacity>
             </View>
-            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+            {passwordError ? <Text style={[styles.errorText, { color: colors.error }]}>{passwordError}</Text> : null}
           </View>
 
           {/* Forgot Password */}
           <TouchableOpacity onPress={handleForgotPassword} style={styles.forgotPassword}>
-            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+            <Text style={[styles.forgotPasswordText, { color: colors.primary }]}>Forgot Password?</Text>
           </TouchableOpacity>
 
           {/* Login Button */}
           <TouchableOpacity
-            style={[styles.loginButton, isLoading ? styles.loginButtonDisabled : null]}
+            style={[styles.loginButton, { backgroundColor: colors.buttonPrimary }, isLoading ? styles.loginButtonDisabled : null]}
             onPress={handleLogin}
             disabled={isLoading}
           >
             {isLoading ? (
-              <Text style={styles.loginButtonText}>Logging in...</Text>
+              <Text style={[styles.loginButtonText, { color: colors.buttonPrimaryText }]}>Logging in...</Text>
             ) : (
-              <Text style={styles.loginButtonText}>Login</Text>
+              <Text style={[styles.loginButtonText, { color: colors.buttonPrimaryText }]}>Login</Text>
             )}
           </TouchableOpacity>
 
           {/* Register Link */}
           <View style={styles.registerContainer}>
-            <Text style={styles.registerText}>Don't have an account? </Text>
+            <Text style={[styles.registerText, { color: colors.textSecondary }]}>Don't have an account? </Text>
             <TouchableOpacity onPress={handleRegister}>
-              <Text style={styles.registerLink}>Sign Up</Text>
+              <Text style={[styles.registerLink, { color: colors.primary }]}>Sign Up</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -186,7 +190,6 @@ const LoginScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -200,19 +203,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#333',
     marginTop: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
     marginTop: 5,
   },
   form: {
-    backgroundColor: 'white',
     borderRadius: 12,
     padding: 24,
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -224,7 +223,6 @@ const styles = StyleSheet.create({
   formTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
     marginBottom: 24,
     textAlign: 'center',
   },
@@ -234,20 +232,17 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 8,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 12,
-    backgroundColor: '#f9f9f9',
   },
   inputError: {
-    borderColor: '#ff6b6b',
+    // Border color will be applied dynamically
   },
   inputIcon: {
     marginRight: 10,
@@ -256,13 +251,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 50,
     fontSize: 16,
-    color: '#333',
   },
   eyeIcon: {
     padding: 5,
   },
   errorText: {
-    color: '#ff6b6b',
     fontSize: 14,
     marginTop: 5,
   },
@@ -271,12 +264,10 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   forgotPasswordText: {
-    color: '#4CAF50',
     fontSize: 14,
     fontWeight: '600',
   },
   loginButton: {
-    backgroundColor: '#4CAF50',
     borderRadius: 8,
     height: 50,
     justifyContent: 'center',
@@ -284,10 +275,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   loginButtonDisabled: {
-    backgroundColor: '#ccc',
+    // Background color will be applied dynamically
   },
   loginButtonText: {
-    color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -297,11 +287,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   registerText: {
-    color: '#666',
     fontSize: 14,
   },
   registerLink: {
-    color: '#4CAF50',
     fontSize: 14,
     fontWeight: 'bold',
   },

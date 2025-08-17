@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
+import { useTheme, ThemeColors } from '../../contexts/ThemeContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 import ChangePasswordModal from '../../components/ChangePasswordModal';
 import LanguageSelectionModal from '../../components/LanguageSelectionModal';

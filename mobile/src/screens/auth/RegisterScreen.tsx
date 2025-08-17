@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import { RootStackParamList } from '../../types';
 
 type RegisterScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Register'>;
@@ -21,6 +22,7 @@ type RegisterScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Reg
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation<RegisterScreenNavigationProp>();
   const { register, isLoading, error, clearError } = useAuth();
+  const { colors } = useTheme();
 
   const [formData, setFormData] = useState({
     email: '',

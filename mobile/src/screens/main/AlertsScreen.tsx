@@ -1,15 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const AlertsScreen: React.FC = () => {
+  const { colors } = useTheme();
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
-        <Ionicons name="notifications" size={80} color="#4CAF50" />
-        <Text style={styles.title}>Alerts & Notifications</Text>
-        <Text style={styles.subtitle}>Coming Soon</Text>
-        <Text style={styles.description}>
+        <Ionicons name="notifications" size={80} color={colors.primary} />
+        <Text style={[styles.title, { color: colors.text }]}>Alerts & Notifications</Text>
+        <Text style={[styles.subtitle, { color: colors.primary }]}>Coming Soon</Text>
+        <Text style={[styles.description, { color: colors.textSecondary }]}>
           View and manage alerts, notifications, and system warnings.
         </Text>
       </View>
@@ -20,7 +23,6 @@ const AlertsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -31,18 +33,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
     marginTop: 20,
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 18,
-    color: '#4CAF50',
     marginBottom: 20,
   },
   description: {
     fontSize: 16,
-    color: '#666',
     textAlign: 'center',
     lineHeight: 24,
   },

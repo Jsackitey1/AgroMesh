@@ -2,128 +2,131 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useTheme } from '../../contexts/ThemeContext';
 import { RootStackParamList } from '../../types';
 
 type AIScreenNavigationProp = StackNavigationProp<RootStackParamList, 'AI'>;
 
 const AIScreen: React.FC<{ navigation: AIScreenNavigationProp }> = ({ navigation }) => {
+  const { colors } = useTheme();
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Ionicons name="bulb" size={60} color="#4CAF50" />
-          <Text style={styles.title}>AI Assistant</Text>
-          <Text style={styles.subtitle}>Smart Agricultural Intelligence</Text>
+          <Ionicons name="bulb" size={60} color={colors.primary} />
+          <Text style={[styles.title, { color: colors.text }]}>AI Assistant</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Smart Agricultural Intelligence</Text>
         </View>
 
         <View style={styles.featuresContainer}>
           <TouchableOpacity
-            style={styles.featureCard}
+            style={[styles.featureCard, { backgroundColor: colors.card, shadowColor: colors.text }]}
             onPress={() => navigation.navigate('VideoCapture')}
           >
-            <View style={styles.featureIcon}>
-              <Ionicons name="videocam" size={32} color="#2E7D32" />
+            <View style={[styles.featureIcon, { backgroundColor: colors.primaryLight }]}>
+              <Ionicons name="videocam" size={32} color={colors.primaryDark} />
             </View>
-            <Text style={styles.featureTitle}>Video Analysis</Text>
-            <Text style={styles.featureDescription}>
+            <Text style={[styles.featureTitle, { color: colors.text }]}>Video Analysis</Text>
+            <Text style={[styles.featureDescription, { color: colors.textSecondary }]}>
               Record or upload agricultural videos for AI-powered analysis and insights
             </Text>
-            <View style={styles.featureBadge}>
-              <Text style={styles.badgeText}>NEW</Text>
+            <View style={[styles.featureBadge, { backgroundColor: colors.primary }]}>
+              <Text style={[styles.badgeText, { color: colors.buttonPrimaryText }]}>NEW</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.featureCard}
+            style={[styles.featureCard, { backgroundColor: colors.card, shadowColor: colors.text }]}
             onPress={() => navigation.navigate('Videos')}
           >
-            <View style={styles.featureIcon}>
-              <Ionicons name="library" size={32} color="#2E7D32" />
+            <View style={[styles.featureIcon, { backgroundColor: colors.primaryLight }]}>
+              <Ionicons name="library" size={32} color={colors.primaryDark} />
             </View>
-            <Text style={styles.featureTitle}>Video Library</Text>
-            <Text style={styles.featureDescription}>
+            <Text style={[styles.featureTitle, { color: colors.text }]}>Video Library</Text>
+            <Text style={[styles.featureDescription, { color: colors.textSecondary }]}>
               View and manage your uploaded videos with AI analysis history
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.featureCard}
+            style={[styles.featureCard, { backgroundColor: colors.card, shadowColor: colors.text }]}
             onPress={() => navigation.navigate('LiveStream')}
           >
-            <View style={styles.featureIcon}>
-              <Ionicons name="radio" size={32} color="#2E7D32" />
+            <View style={[styles.featureIcon, { backgroundColor: colors.primaryLight }]}>
+              <Ionicons name="radio" size={32} color={colors.primaryDark} />
             </View>
-            <Text style={styles.featureTitle}>Live Stream Analysis</Text>
-            <Text style={styles.featureDescription}>
+            <Text style={[styles.featureTitle, { color: colors.text }]}>Live Stream Analysis</Text>
+            <Text style={[styles.featureDescription, { color: colors.textSecondary }]}>
               Stream live video for real-time AI analysis and expert consultation
             </Text>
-            <View style={styles.featureBadge}>
-              <Text style={styles.badgeText}>LIVE</Text>
+            <View style={[styles.featureBadge, { backgroundColor: colors.primary }]}>
+              <Text style={[styles.badgeText, { color: colors.buttonPrimaryText }]}>LIVE</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.featureCard}
+            style={[styles.featureCard, { backgroundColor: colors.card, shadowColor: colors.text }]}
             onPress={() => navigation.navigate('ImageDiagnosis')}
           >
-            <View style={styles.featureIcon}>
-              <Ionicons name="camera" size={32} color="#2E7D32" />
+            <View style={[styles.featureIcon, { backgroundColor: colors.primaryLight }]}>
+              <Ionicons name="camera" size={32} color={colors.primaryDark} />
             </View>
-            <Text style={styles.featureTitle}>Image Diagnosis</Text>
-            <Text style={styles.featureDescription}>
+            <Text style={[styles.featureTitle, { color: colors.text }]}>Image Diagnosis</Text>
+            <Text style={[styles.featureDescription, { color: colors.textSecondary }]}>
               Upload photos for plant disease detection and treatment recommendations
             </Text>
-            <View style={styles.featureBadge}>
-              <Text style={styles.badgeText}>NEW</Text>
+            <View style={[styles.featureBadge, { backgroundColor: colors.primary }]}>
+              <Text style={[styles.badgeText, { color: colors.buttonPrimaryText }]}>NEW</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.featureCard}
+            style={[styles.featureCard, { backgroundColor: colors.card, shadowColor: colors.text }]}
             onPress={() => navigation.navigate('AIChat')}
           >
-            <View style={styles.featureIcon}>
-              <Ionicons name="chatbubbles" size={32} color="#2E7D32" />
+            <View style={[styles.featureIcon, { backgroundColor: colors.primaryLight }]}>
+              <Ionicons name="chatbubbles" size={32} color={colors.primaryDark} />
             </View>
-            <Text style={styles.featureTitle}>AI Chat</Text>
-            <Text style={styles.featureDescription}>
+            <Text style={[styles.featureTitle, { color: colors.text }]}>AI Chat</Text>
+            <Text style={[styles.featureDescription, { color: colors.textSecondary }]}>
               Ask questions about farming practices, crop management, and more
             </Text>
-            <View style={styles.featureBadge}>
-              <Text style={styles.badgeText}>NEW</Text>
+            <View style={[styles.featureBadge, { backgroundColor: colors.primary }]}>
+              <Text style={[styles.badgeText, { color: colors.buttonPrimaryText }]}>NEW</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.featureCard}
+            style={[styles.featureCard, { backgroundColor: colors.card, shadowColor: colors.text }]}
             onPress={() => navigation.navigate('SmartRecommendations')}
           >
-            <View style={styles.featureIcon}>
-              <Ionicons name="bulb" size={32} color="#2E7D32" />
+            <View style={[styles.featureIcon, { backgroundColor: colors.primaryLight }]}>
+              <Ionicons name="bulb" size={32} color={colors.primaryDark} />
             </View>
-            <Text style={styles.featureTitle}>Smart Recommendations</Text>
-            <Text style={styles.featureDescription}>
+            <Text style={[styles.featureTitle, { color: colors.text }]}>Smart Recommendations</Text>
+            <Text style={[styles.featureDescription, { color: colors.textSecondary }]}>
               Get personalized farming advice based on your data and conditions
             </Text>
-            <View style={styles.featureBadge}>
-              <Text style={styles.badgeText}>NEW</Text>
+            <View style={[styles.featureBadge, { backgroundColor: colors.primary }]}>
+              <Text style={[styles.badgeText, { color: colors.buttonPrimaryText }]}>NEW</Text>
             </View>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.infoSection}>
-          <Text style={styles.infoTitle}>How it works</Text>
+        <View style={[styles.infoSection, { backgroundColor: colors.card }]}>
+          <Text style={[styles.infoTitle, { color: colors.text }]}>How it works</Text>
           <View style={styles.infoItem}>
-            <Ionicons name="ellipse" size={24} color="#4CAF50" />
-            <Text style={styles.infoText}>Record or upload your agricultural video</Text>
+            <Ionicons name="ellipse" size={24} color={colors.primary} />
+            <Text style={[styles.infoText, { color: colors.textSecondary }]}>Record or upload your agricultural video</Text>
           </View>
           <View style={styles.infoItem}>
-            <Ionicons name="ellipse" size={24} color="#4CAF50" />
-            <Text style={styles.infoText}>AI analyzes the content for insights</Text>
+            <Ionicons name="ellipse" size={24} color={colors.primary} />
+            <Text style={[styles.infoText, { color: colors.textSecondary }]}>AI analyzes the content for insights</Text>
           </View>
           <View style={styles.infoItem}>
-            <Ionicons name="ellipse" size={24} color="#4CAF50" />
-            <Text style={styles.infoText}>Get detailed analysis and recommendations</Text>
+            <Ionicons name="ellipse" size={24} color={colors.primary} />
+            <Text style={[styles.infoText, { color: colors.textSecondary }]}>Get detailed analysis and recommendations</Text>
           </View>
         </View>
       </ScrollView>
@@ -134,7 +137,6 @@ const AIScreen: React.FC<{ navigation: AIScreenNavigationProp }> = ({ navigation
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   scrollContent: {
     padding: 20,
@@ -146,24 +148,20 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
     marginTop: 15,
     marginBottom: 5,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
     textAlign: 'center',
   },
   featuresContainer: {
     marginBottom: 30,
   },
   featureCard: {
-    backgroundColor: 'white',
     borderRadius: 12,
     padding: 20,
     marginBottom: 15,
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -174,7 +172,6 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#f0f8f0',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 15,
@@ -182,25 +179,21 @@ const styles = StyleSheet.create({
   featureTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 8,
   },
   featureDescription: {
     fontSize: 14,
-    color: '#666',
     lineHeight: 20,
   },
   featureBadge: {
     position: 'absolute',
     top: 15,
     right: 15,
-    backgroundColor: '#4CAF50',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },
   badgeText: {
-    color: 'white',
     fontSize: 10,
     fontWeight: '600',
   },
@@ -208,18 +201,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 15,
     right: 15,
-    backgroundColor: '#ccc',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },
   comingSoonText: {
-    color: '#666',
     fontSize: 10,
     fontWeight: '600',
   },
   infoSection: {
-    backgroundColor: 'white',
     borderRadius: 12,
     padding: 20,
     marginBottom: 20,
@@ -227,7 +217,6 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 15,
     textAlign: 'center',
   },
@@ -238,7 +227,6 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 14,
-    color: '#666',
     marginLeft: 10,
     flex: 1,
   },
