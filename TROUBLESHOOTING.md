@@ -298,6 +298,79 @@
 
 ---
 
+### **10. "Profile features not working"**
+
+**Symptoms:**
+- Dark mode toggle doesn't work
+- Language selection doesn't change
+- Password change fails
+- Settings not saved
+
+**Causes:**
+- Missing context providers
+- AsyncStorage issues
+- API endpoint problems
+- Component not properly connected
+
+**Solutions:**
+1. **Check context providers:**
+   ```javascript
+   // Ensure App.tsx has all providers:
+   <AuthProvider>
+     <ThemeProvider>
+       <LanguageProvider>
+         <AppNavigator />
+       </LanguageProvider>
+     </ThemeProvider>
+   </AuthProvider>
+   ```
+
+2. **Test profile features:**
+   ```javascript
+   // In your app, run:
+   import { testProfileFeatures } from '../utils/testProfileFeatures';
+   const result = await testProfileFeatures();
+   console.log(result.summary);
+   ```
+
+3. **Clear and reset preferences:**
+   ```javascript
+   import { clearProfilePreferences } from '../utils/testProfileFeatures';
+   await clearProfilePreferences();
+   ```
+
+4. **Check AsyncStorage:**
+   ```javascript
+   import AsyncStorage from '@react-native-async-storage/async-storage';
+   
+   // Check if AsyncStorage is working
+   try {
+     await AsyncStorage.setItem('test', 'value');
+     const value = await AsyncStorage.getItem('test');
+     console.log('AsyncStorage working:', value === 'value');
+   } catch (error) {
+     console.error('AsyncStorage error:', error);
+   }
+   ```
+
+5. **Verify API endpoints:**
+   ```bash
+   # Test change password endpoint
+   curl -X POST http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api/auth/change-password \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer YOUR_TOKEN" \
+     -d '{"currentPassword":"old","newPassword":"new"}'
+   ```
+
+**Recent Profile Features Implemented:**
+- ✅ **Dark Mode** - Theme context with AsyncStorage persistence
+- ✅ **Language Selection** - Multi-language support with 5 languages
+- ✅ **Change Password** - Secure password change with validation
+- ✅ **Notification Preferences** - Toggle with AsyncStorage persistence
+- ✅ **Support Features** - Help, contact, terms, and privacy modals
+
+---
+
 ### **8. "Build fails" (Production builds)**
 
 **Symptoms:**

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,11 +10,77 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useLanguage } from '../../contexts/LanguageContext';
+import ChangePasswordModal from '../../components/ChangePasswordModal';
+import LanguageSelectionModal from '../../components/LanguageSelectionModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen: React.FC = () => {
   const { user, logout } = useAuth();
+  const { isDarkMode, toggleTheme, colors } = useTheme();
+  const { currentLanguage } = useLanguage();
+  
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [darkModeEnabled, setDarkModeEnabled] = useState(false);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+
+  // Load notification preference from AsyncStorage
+  useEffect(() => {
+    loadNotificationPreference();
+  }, []);
+
+  const loadNotificationPreference = async () => {
+    try {
+      const savedPreference = await AsyncStorage.getItem('notificationsEnabled');
+      if (savedPreference !== null) {
+        setNotificationsEnabled(JSON.parse(savedPreference));
+      }
+    } catch (error) {
+      console.error('Error loading notification preference:', error);
+    }
+  };
+
+  const handleNotificationToggle = async (value: boolean) => {
+    try {
+      await AsyncStorage.setItem('notificationsEnabled', JSON.stringify(value));
+      setNotificationsEnabled(value);
+      
+      if (value) {
+        Alert.alert(
+          'Notifications Enabled',
+          'You will now receive push notifications for important updates.',
+          [{ text: 'OK' }]
+        );
+      } else {
+        Alert.alert(
+          'Notifications Disabled',
+          'You will no longer receive push notifications. You can re-enable them anytime.',
+          [{ text: 'OK' }]
+        );
+      }
+    } catch (error) {
+      console.error('Error saving notification preference:', error);
+      Alert.alert('Error', 'Failed to save notification preference');
+    }
+  };
+
+  const handleDarkModeToggle = () => {
+    toggleTheme();
+    Alert.alert(
+      'Theme Changed',
+      `Switched to ${isDarkMode ? 'light' : 'dark'} mode.`,
+      [{ text: 'OK' }]
+    );
+  };
+
+  const handleLanguagePress = () => {
+    setShowLanguageModal(true);
+  };
+
+  const handleChangePasswordPress = () => {
+    setShowChangePasswordModal(true);
+  };
 
   const handleLogout = () => {
     Alert.alert(
@@ -36,139 +102,213 @@ const ProfileScreen: React.FC = () => {
     );
   };
 
+  const handleSupportPress = (type: string) => {
+    switch (type) {
+      case 'help':
+        Alert.alert(
+          'Help & FAQ',
+          'For help and frequently asked questions, please visit our website or contact support.',
+          [
+            { text: 'Visit Website', onPress: () => console.log('Open website') },
+            { text: 'Contact Support', onPress: () => console.log('Contact support') },
+            { text: 'Cancel', style: 'cancel' }
+          ]
+        );
+        break;
+      case 'contact':
+        Alert.alert(
+          'Contact Support',
+          'How would you like to contact support?',
+          [
+            { text: 'Email', onPress: () => console.log('Open email') },
+            { text: 'Phone', onPress: () => console.log('Open phone') },
+            { text: 'Chat', onPress: () => console.log('Open chat') },
+            { text: 'Cancel', style: 'cancel' }
+          ]
+        );
+        break;
+      case 'terms':
+        Alert.alert(
+          'Terms of Service',
+          'Terms of Service content would be displayed here.',
+          [{ text: 'OK' }]
+        );
+        break;
+      case 'privacy':
+        Alert.alert(
+          'Privacy Policy',
+          'Privacy Policy content would be displayed here.',
+          [{ text: 'OK' }]
+        );
+        break;
+    }
+  };
+
   const renderProfileSection = () => (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Profile Information</Text>
+    <View style={[styles.section, { backgroundColor: colors.card }]}>
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>Profile Information</Text>
       <View style={styles.profileCard}>
-        <View style={styles.avatarContainer}>
-          <Ionicons name="person" size={40} color="#4CAF50" />
+        <View style={[styles.avatarContainer, { backgroundColor: colors.divider }]}>
+          <Ionicons name="person" size={40} color={colors.primary} />
         </View>
         <View style={styles.profileInfo}>
-          <Text style={styles.userName}>
+          <Text style={[styles.userName, { color: colors.text }]}>
             {user?.profile.firstName} {user?.profile.lastName}
           </Text>
-          <Text style={styles.userEmail}>{user?.email}</Text>
-          <Text style={styles.userRole}>{user?.role}</Text>
+          <Text style={[styles.userEmail, { color: colors.textSecondary }]}>{user?.email}</Text>
+          <Text style={[styles.userRole, { color: colors.primary }]}>{user?.role}</Text>
         </View>
       </View>
     </View>
   );
 
   const renderSettingsSection = () => (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Settings</Text>
+    <View style={[styles.section, { backgroundColor: colors.card }]}>
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>Settings</Text>
       
-      <View style={styles.settingItem}>
+      <View style={[styles.settingItem, { borderBottomColor: colors.divider }]}>
         <View style={styles.settingInfo}>
-          <Ionicons name="notifications" size={20} color="#666" />
-          <Text style={styles.settingText}>Push Notifications</Text>
+          <Ionicons name="notifications" size={20} color={colors.textSecondary} />
+          <Text style={[styles.settingText, { color: colors.text }]}>Push Notifications</Text>
         </View>
         <Switch
           value={notificationsEnabled}
-          onValueChange={setNotificationsEnabled}
-          trackColor={{ false: '#767577', true: '#4CAF50' }}
-          thumbColor={notificationsEnabled ? '#fff' : '#f4f3f4'}
+          onValueChange={handleNotificationToggle}
+          trackColor={{ false: colors.switchTrack, true: colors.switchTrackActive }}
+          thumbColor={notificationsEnabled ? colors.switchThumbActive : colors.switchThumb}
         />
       </View>
 
-      <View style={styles.settingItem}>
+      <View style={[styles.settingItem, { borderBottomColor: colors.divider }]}>
         <View style={styles.settingInfo}>
-          <Ionicons name="moon" size={20} color="#666" />
-          <Text style={styles.settingText}>Dark Mode</Text>
+          <Ionicons name="moon" size={20} color={colors.textSecondary} />
+          <Text style={[styles.settingText, { color: colors.text }]}>Dark Mode</Text>
         </View>
         <Switch
-          value={darkModeEnabled}
-          onValueChange={setDarkModeEnabled}
-          trackColor={{ false: '#767577', true: '#4CAF50' }}
-          thumbColor={darkModeEnabled ? '#fff' : '#f4f3f4'}
+          value={isDarkMode}
+          onValueChange={handleDarkModeToggle}
+          trackColor={{ false: colors.switchTrack, true: colors.switchTrackActive }}
+          thumbColor={isDarkMode ? colors.switchThumbActive : colors.switchThumb}
         />
       </View>
 
-      <TouchableOpacity style={styles.settingItem}>
+      <TouchableOpacity style={[styles.settingItem, { borderBottomColor: colors.divider }]} onPress={handleLanguagePress}>
         <View style={styles.settingInfo}>
-          <Ionicons name="language" size={20} color="#666" />
-          <Text style={styles.settingText}>Language</Text>
+          <Ionicons name="language" size={20} color={colors.textSecondary} />
+          <Text style={[styles.settingText, { color: colors.text }]}>Language</Text>
         </View>
         <View style={styles.settingValue}>
-          <Text style={styles.settingValueText}>English</Text>
-          <Ionicons name="chevron-forward" size={16} color="#666" />
+          <Text style={[styles.settingValueText, { color: colors.textSecondary }]}>{currentLanguage.name}</Text>
+          <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.settingItem}>
+      <TouchableOpacity style={[styles.settingItem, { borderBottomColor: colors.divider }]} onPress={handleChangePasswordPress}>
         <View style={styles.settingInfo}>
-          <Ionicons name="lock-closed" size={20} color="#666" />
-          <Text style={styles.settingText}>Change Password</Text>
+          <Ionicons name="lock-closed" size={20} color={colors.textSecondary} />
+          <Text style={[styles.settingText, { color: colors.text }]}>Change Password</Text>
         </View>
-        <Ionicons name="chevron-forward" size={16} color="#666" />
+        <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
       </TouchableOpacity>
     </View>
   );
 
   const renderSupportSection = () => (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Support</Text>
+    <View style={[styles.section, { backgroundColor: colors.card }]}>
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>Support</Text>
       
-      <TouchableOpacity style={styles.settingItem}>
+      <TouchableOpacity 
+        style={[styles.settingItem, { borderBottomColor: colors.divider }]}
+        onPress={() => handleSupportPress('help')}
+      >
         <View style={styles.settingInfo}>
-          <Ionicons name="help-circle" size={20} color="#666" />
-          <Text style={styles.settingText}>Help & FAQ</Text>
+          <Ionicons name="help-circle" size={20} color={colors.textSecondary} />
+          <Text style={[styles.settingText, { color: colors.text }]}>Help & FAQ</Text>
         </View>
-        <Ionicons name="chevron-forward" size={16} color="#666" />
+        <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.settingItem}>
+      <TouchableOpacity 
+        style={[styles.settingItem, { borderBottomColor: colors.divider }]}
+        onPress={() => handleSupportPress('contact')}
+      >
         <View style={styles.settingInfo}>
-          <Ionicons name="mail" size={20} color="#666" />
-          <Text style={styles.settingText}>Contact Support</Text>
+          <Ionicons name="mail" size={20} color={colors.textSecondary} />
+          <Text style={[styles.settingText, { color: colors.text }]}>Contact Support</Text>
         </View>
-        <Ionicons name="chevron-forward" size={16} color="#666" />
+        <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.settingItem}>
+      <TouchableOpacity 
+        style={[styles.settingItem, { borderBottomColor: colors.divider }]}
+        onPress={() => handleSupportPress('terms')}
+      >
         <View style={styles.settingInfo}>
-          <Ionicons name="document-text" size={20} color="#666" />
-          <Text style={styles.settingText}>Terms of Service</Text>
+          <Ionicons name="document-text" size={20} color={colors.textSecondary} />
+          <Text style={[styles.settingText, { color: colors.text }]}>Terms of Service</Text>
         </View>
-        <Ionicons name="chevron-forward" size={16} color="#666" />
+        <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.settingItem}>
+      <TouchableOpacity 
+        style={[styles.settingItem, { borderBottomColor: colors.divider }]}
+        onPress={() => handleSupportPress('privacy')}
+      >
         <View style={styles.settingInfo}>
-          <Ionicons name="shield-checkmark" size={20} color="#666" />
-          <Text style={styles.settingText}>Privacy Policy</Text>
+          <Ionicons name="shield-checkmark" size={20} color={colors.textSecondary} />
+          <Text style={[styles.settingText, { color: colors.text }]}>Privacy Policy</Text>
         </View>
-        <Ionicons name="chevron-forward" size={16} color="#666" />
+        <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
       </TouchableOpacity>
     </View>
   );
 
   const renderLogoutSection = () => (
-    <View style={styles.section}>
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Ionicons name="log-out" size={20} color="#f44336" />
-        <Text style={styles.logoutText}>Logout</Text>
+    <View style={[styles.section, { backgroundColor: colors.card }]}>
+      <TouchableOpacity 
+        style={[
+          styles.logoutButton, 
+          { 
+            backgroundColor: colors.error + '10',
+            borderColor: colors.error 
+          }
+        ]} 
+        onPress={handleLogout}
+      >
+        <Ionicons name="log-out" size={20} color={colors.error} />
+        <Text style={[styles.logoutText, { color: colors.error }]}>Logout</Text>
       </TouchableOpacity>
     </View>
   );
 
   return (
-    <ScrollView style={styles.container}>
-      {renderProfileSection()}
-      {renderSettingsSection()}
-      {renderSupportSection()}
-      {renderLogoutSection()}
-    </ScrollView>
+    <>
+      <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+        {renderProfileSection()}
+        {renderSettingsSection()}
+        {renderSupportSection()}
+        {renderLogoutSection()}
+      </ScrollView>
+
+      {/* Modals */}
+      <ChangePasswordModal
+        visible={showChangePasswordModal}
+        onClose={() => setShowChangePasswordModal(false)}
+      />
+      
+      <LanguageSelectionModal
+        visible={showLanguageModal}
+        onClose={() => setShowLanguageModal(false)}
+      />
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   section: {
-    backgroundColor: 'white',
     marginBottom: 10,
     paddingHorizontal: 20,
     paddingVertical: 15,
@@ -176,7 +316,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
     marginBottom: 15,
   },
   profileCard: {
@@ -187,7 +326,6 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#f0f0f0',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 15,
@@ -198,17 +336,14 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
     marginBottom: 2,
   },
   userEmail: {
     fontSize: 14,
-    color: '#666',
     marginBottom: 2,
   },
   userRole: {
     fontSize: 12,
-    color: '#4CAF50',
     fontWeight: '600',
   },
   settingItem: {
@@ -217,7 +352,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
   },
   settingInfo: {
     flexDirection: 'row',
@@ -226,7 +360,6 @@ const styles = StyleSheet.create({
   },
   settingText: {
     fontSize: 16,
-    color: '#333',
     marginLeft: 12,
   },
   settingValue: {
@@ -235,7 +368,6 @@ const styles = StyleSheet.create({
   },
   settingValueText: {
     fontSize: 14,
-    color: '#666',
     marginRight: 5,
   },
   logoutButton: {
@@ -243,15 +375,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 15,
-    backgroundColor: '#fff5f5',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#f44336',
   },
   logoutText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#f44336',
     marginLeft: 8,
   },
 });
