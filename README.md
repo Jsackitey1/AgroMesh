@@ -1,143 +1,65 @@
 
-https://agro-mesh.vercel.app/
+# AgroMesh
 
-# 🌾 AgroMesh - Smart Agricultural Monitoring System
+A comprehensive IoT-based agricultural monitoring platform that combines sensor data, AI analysis, and real-time alerts to optimize farming operations.
 
-A comprehensive IoT-based agricultural monitoring system with mobile app, backend API, and hardware components.
+## Quick Start
 
-## 🚀 Quick Start
+For detailed setup instructions, development guides, and documentation, please visit our **[Documentation Hub](docs/README.md)**.
 
-### 👥 **For Contributors (Most People)**
-Want to improve UI/UX, add features, or fix bugs? Start here:
+### Prerequisites
+- Node.js 18+ and npm
+- MongoDB (local or Atlas)
+- Git
+
+### Quick Installation
 ```bash
-git clone <repository-url>
-cd AgroMesh
-./setup-frontend.sh
-```
-**Setup time**: 2-3 minutes | **No API keys needed**
-
-### 🔧 **For Backend Developers**
-Working on API changes, new endpoints, or backend features?
-```bash
-git clone <repository-url>
-cd AgroMesh
+git clone https://github.com/your-org/agromesh.git
+cd agromesh
+chmod +x setup.sh
 ./setup.sh
-# Choose option 2 for full-stack setup
 ```
-**Setup time**: 5-10 minutes | **Requires API keys**
 
----
-
-## 📚 Documentation
-
-| Document | Purpose | For |
-|----------|---------|-----|
-| **[QUICK_START.md](QUICK_START.md)** | **Quick setup guide with common fixes** | **All contributors** |
-| **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** | **Common issues and solutions** | **All contributors** |
-| **[CONTRIBUTOR_GUIDE.md](CONTRIBUTOR_GUIDE.md)** | Complete setup and development guide | All contributors |
-| **[BUILD_STATUS.md](BUILD_STATUS.md)** | Current project status and what's working | Everyone |
-| **[SECURITY.md](SECURITY.md)** | Security best practices and checklist | Backend developers |
-| **[FEATURE_PLANS.md](FEATURE_PLANS.md)** | Future feature implementation plans | Developers |
-
----
-
-## 🎯 What You Can Do
-
-### Frontend Contributors
-- ✅ **UI/UX improvements** - Better designs, animations, layouts
-- ✅ **New features** - Additional screens, navigation, user interactions
-- ✅ **Bug fixes** - Frontend-related issues
-- ✅ **Performance optimization** - React Native optimizations
-- ✅ **Accessibility** - Better accessibility features
-- ✅ **Localization** - Multi-language support
-
-### Backend Contributors
-- ✅ **API development** - New endpoints and features
-- ✅ **Database changes** - Schema updates and optimizations
-- ✅ **AI integration** - Enhanced Gemini AI features
-- ✅ **Deployment** - AWS Elastic Beanstalk management
-- ✅ **Security** - Authentication and authorization improvements
-
----
-
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 AgroMesh/
+├── backend/                 # Node.js/Express API server
+├── dashboard/              # React dashboard
 ├── mobile/                 # React Native mobile app
-│   ├── src/screens/       # App screens
-│   ├── src/services/      # API and WebSocket services
-│   └── .env              # Environment variables
-├── backend/               # Node.js backend API
-│   ├── src/routes/        # API routes
-│   ├── src/models/        # MongoDB models
-│   └── .env              # Environment variables
-├── hardware/              # Arduino sensor code
-├── firmware/              # IoT device firmware
-└── docs/                  # Additional documentation
+├── firmware/               # Arduino sensor firmware
+├── hardware/               # Hardware schematics and guides
+├── ml_models/              # Machine learning models
+└── docs/                   # Documentation hub
 ```
 
----
+## Features
 
-## 🔑 Required Services
+- **Real-time Sensor Monitoring**: Track soil moisture, temperature, humidity, pH, and more
+- **AI-Powered Analysis**: Get intelligent recommendations using Google Gemini
+- **Mobile App**: React Native app for on-the-go monitoring
+- **Dashboard**: Web-based dashboard for detailed analytics
+- **Alert System**: Real-time notifications for critical conditions
+- **Secure API**: JWT authentication with comprehensive security
 
-### For Frontend Contributors
-**Nothing needed!** Use the deployed backend on AWS.
+## Documentation
 
-### For Backend Contributors
-- **MongoDB Atlas** - Database (free tier available)
-- **Google Gemini API** - AI features (generous free tier)
-- **AWS Account** - Backend hosting (free tier for 12 months)
+- **[Complete Documentation](docs/README.md)** - Setup, development, and deployment guides
+- **[API Reference](docs/api-reference.md)** - Backend API documentation
+- **[Architecture Guide](docs/architecture.md)** - System architecture overview
+- **[Troubleshooting](docs/troubleshooting.md)** - Common issues and solutions
 
----
+## Contributing
 
-## 🧪 Testing
+Please read our [Contributing Guidelines](docs/README.md#contributing) before submitting pull requests.
 
-### Frontend Testing
-```bash
-cd mobile && npm start
-# Scan QR code with Expo Go app
-# Test all features against deployed backend
-```
+## License
 
-### Backend Testing
-```bash
-cd backend && npm start
-curl http://localhost:5001/api/health
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
+## Support
 
-## 🚨 Common Issues
-
-- **"Cannot connect to backend"** → Check if AWS backend is running
-- **"Authentication failed"** → Backend issue, contact maintainer
-- **"MongoDB connection failed"** → Check MONGODB_URI format (backend only)
-- **"Node.js version incompatible"** → Install Node.js v18+ (see TROUBLESHOOTING.md)
-- **"QR code doesn't work"** → Try tunnel mode: `npx expo start --tunnel`
-
----
-
-## 📞 Support
-
-1. **First**: Check **[QUICK_START.md](QUICK_START.md)** for quick fixes
-2. **Second**: Check **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** for detailed solutions
-3. **Third**: Review **[CONTRIBUTOR_GUIDE.md](CONTRIBUTOR_GUIDE.md)** for complete instructions
-4. **Fourth**: Check **[BUILD_STATUS.md](BUILD_STATUS.md)** for current status
-5. **Finally**: Create an issue in the repository
-
----
-
-## 🎉 Current Status
-
-- ✅ **Mobile App**: Production build completed
-- ✅ **Backend**: Deployed and running on AWS
-- ✅ **Database**: MongoDB Atlas connected
-- ✅ **AI Features**: All working (image analysis, video analysis, chat)
-- ✅ **Authentication**: Fixed and working
-- ✅ **WebSocket**: Real-time updates working
-
----
-
-**Happy coding! 🌾✨**
+- **Documentation**: [docs/README.md](docs/README.md)
+- **Issues**: [GitHub Issues](https://github.com/your-org/agromesh/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/your-org/agromesh/discussions)
 

@@ -1,21 +1,16 @@
 import React from 'react';
-import { ThemeProvider, CssBaseline } from '@mui/material';
-import { BrowserRouter as Router } from 'react-router-dom';
 import Layout from './components/Layout';
-import AppRoutes from './routes';
-import theme from './theme';
+import ThemeProvider from './providers/ThemeProvider';
+import RouteProvider from './providers/RouteProvider';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
-        <Layout>
-          <AppRoutes />
-        </Layout>
-      </Router>
+    <ThemeProvider>
+      <RouteProvider>
+        <Layout />
+      </RouteProvider>
     </ThemeProvider>
   );
 }
 
-export default App; 
+export default App;

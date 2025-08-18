@@ -1,0 +1,413 @@
+openapi: 3.0.0
+info:
+  title: AgroMesh Backend API
+  version: 1.0.0
+  description: |
+    API documentation for AgroMesh IoT agricultural monitoring platform.
+
+    ## Authentication
+    Most endpoints require JWT authentication. Include the token in the Authorization header:
+    ```
+    Authorization: Bearer <your-jwt-token>
+    ```
+
+    ## Real-time Updates
+    Use Socket.IO for real-time sensor data and alerts:
+    - Connect to: `ws://your-domain/socket.io/`
+    - Authenticate with JWT token
+    - Subscribe to sensor data: `subscribe_sensor`
+    - Subscribe to alerts: `subscribe_alerts`
+
+servers:
+  - url: http://localhost:5001/api
+    description: Local development server
+  - url: https://api.agromesh.com/api
+    description: Production server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+              msg:
+                type: string
+        statusCode:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          type: string
+          enum: [user, admin]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    SensorNode:
+      type: object
+      properties:
+        _id:
+          type: string
+        nodeId:
+          type: string
+          description: Unique sensor node identifier
+        name:
+          type: string
+          description: Human-readable name
+        owner:
+          type: string
+          description: User ID of the owner
+        location:
+          type: object
+          properties:
+            type:
+              type: string
+              default: Point
+            coordinates:
+              type: array
+              items:
+                type: number
+              minItems: 2
+              maxItems: 2
+              description: [longitude, latitude]
+            address:
+              type: string
+        status:
+          type: string
+          enum: [online, offline, maintenance, error]
+        lastSeen:
+          type: string
+          format: date-time
+        batteryLevel:
+          type: number
+          minimum: 0
+          maximum: 100
+        signalStrength:
+          type: number
+          minimum: -120
+          maximum: 0
+        configuration:
+          type: object
+          properties:
+            cropType:
+              type: string
+            soilType:
+              type: string
+              enum: [sandy, clay, loamy, silty, unknown]
+            irrigationType:
+              type: string
+              enum: [drip, sprinkler, flood, manual, none]
+            sensors:
+              type: object
+              properties:
+                soilMoisture:
+                  type: boolean
+                temperature:
+                  type: boolean
+                humidity:
+                  type: boolean
+                ph:
+                  type: boolean
+                nutrients:
+                  type: boolean
+                light:
+                  type: boolean
+            thresholds:
+              type: object
+              properties:
+                soilMoisture:
+                  type: object
+                  properties:
+                    min:
+                      type: number
+                    max:
+                      type: number
+                temperature:
+                  type: object
+                  properties:
+                    min:
+                      type: number
+                    max:
+                      type: number
+                ph:
+                  type: object
+                  properties:
+                    min:
+                      type: number
+                    max:
+                      type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    SensorData:
+      type: object
+      properties:
+        _id:
+          type: string
+        nodeId:
+          type: string
+        soilMoisture:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Soil moisture percentage
+        temperature:
+          type: number
+          minimum: -50
+          maximum: 100
+          description: Temperature in Celsius
+        humidity:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Humidity percentage
+        ph:
+          type: number
+          minimum: 0
+          maximum: 14
+          description: pH value
+        light:
+          type: number
+          minimum: 0
+          description: Light intensity in lux
+        batteryLevel:
+          type: number
+          minimum: 0
+          maximum: 100
+        signalStrength:
+          type: number
+          minimum: -120
+          maximum: 0
+          description: Signal strength in dBm
+        timestamp:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+
+    Alert:
+      type: object
+      properties:
+        _id:
+          type: string
+        nodeId:
+          type: string
+        type:
+          type: string
+          enum: [threshold, system, maintenance, battery, signal]
+        severity:
+          type: string
+          enum: [low, medium, high, critical]
+        title:
+          type: string
+        message:
+          type: string
+        sensorType:
+          type: string
+          enum: [soilMoisture, temperature, humidity, ph, light, battery, signal]
+        value:
+          type: number
+        threshold:
+          type: object
+          properties:
+            min:
+              type: number
+            max:
+              type: number
+        acknowledged:
+          type: boolean
+        acknowledgedBy:
+          type: string
+        acknowledgedAt:
+          type: string
+          format: date-time
+        resolved:
+          type: boolean
+        resolvedBy:
+          type: string
+        resolvedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Video:
+      type: object
+      properties:
+        _id:
+          type: string
+        filename:
+          type: string
+        originalName:
+          type: string
+        mimetype:
+          type: string
+        size:
+          type: integer
+        path:
+          type: string
+        uploadedBy:
+          type: string
+        analysisStatus:
+          type: string
+          enum: [pending, processing, completed, failed]
+        analysisResults:
+          type: object
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+  parameters:
+    nodeIdParam:
+      name: nodeId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Sensor node ID
+      example: "sensor_001"
+
+    limitParam:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 50
+      description: Number of items to return
+
+    pageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: Page number for pagination
+
+    statusParam:
+      name: status
+      in: query
+      schema:
+        type: string
+        enum: [online, offline, maintenance, error]
+      description: Filter by sensor status
+
+    startDateParam:
+      name: startDate
+      in: query
+      schema:
+        type: string
+        format: date-time
+      description: Start date for data range
+
+    endDateParam:
+      name: endDate
+      in: query
+      schema:
+        type: string
+        format: date-time
+      description: End date for data range
+
+  responses:
+    UnauthorizedError:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: "Authentication required"
+            statusCode: 401
+
+    ValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: "Validation error"
+            errors:
+              - path: "email"
+                msg: "Invalid email format"
+            statusCode: 400
+
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: "Resource not found"
+            statusCode: 404
+
+    ServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: "Internal server error"
+            statusCode: 500
+
+tags:
+  - name: Authentication
+    description: User authentication and authorization
+  - name: Sensors
+    description: Sensor node management and data
+  - name: Alerts
+    description: Alert management and notifications
+  - name: Dashboard
+    description: Dashboard data and statistics
+  - name: AI
+    description: AI-powered analysis and recommendations
+  - name: Videos
+    description: Video upload and analysis
