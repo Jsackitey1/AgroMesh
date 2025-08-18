@@ -255,10 +255,6 @@ npm test              # Run React Native tests
 - Discussions: General questions and ideas
 - Wiki: Community-contributed guides
 
-### Contact
-- Email: support@agromesh.com
-- Discord: [AgroMesh Community](https://discord.gg/agromesh)
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
