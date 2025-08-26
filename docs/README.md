@@ -243,7 +243,7 @@ npm test              # Run React Native tests
 - Frontend component tests
 - End-to-end tests for critical flows
 
-## 📞 Support
+
 
 ### Documentation
 - [API Reference](api-reference.md)
@@ -252,12 +252,7 @@ npm test              # Run React Native tests
 
 ### Community
 - GitHub Issues: Bug reports and feature requests
-- Discussions: General questions and ideas
-- Wiki: Community-contributed guides
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
