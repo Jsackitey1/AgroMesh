@@ -61,5 +61,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Documentation**: [docs/README.md](docs/README.md)
 - **Issues**: [GitHub Issues](https://github.com/Jsackitey1/AgroMesh/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Jsackitey1/AgroMesh/discussions)
 
