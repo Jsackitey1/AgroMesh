@@ -53,10 +53,6 @@ AgroMesh/
 
 Please read our [Contributing Guidelines](docs/README.md#contributing) before submitting pull requests.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Support
 
 - **Documentation**: [docs/README.md](docs/README.md)
