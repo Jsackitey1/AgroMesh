@@ -244,12 +244,6 @@ npm test              # Run React Native tests
 - End-to-end tests for critical flows
 
 
-
-### Documentation
-- [API Reference](api-reference.md)
-- [Architecture Guide](architecture.md)
-- [Troubleshooting](troubleshooting.md)
-
 ### Community
 - GitHub Issues: Bug reports and feature requests
 

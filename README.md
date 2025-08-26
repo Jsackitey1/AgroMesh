@@ -45,9 +45,7 @@ AgroMesh/
 ## Documentation
 
 - **[Complete Documentation](docs/README.md)** - Setup, development, and deployment guides
-- **[API Reference](docs/api-reference.md)** - Backend API documentation
-- **[Architecture Guide](docs/architecture.md)** - System architecture overview
-- **[Troubleshooting](docs/troubleshooting.md)** - Common issues and solutions
+- **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues and solutions
 
 ## Contributing
 
