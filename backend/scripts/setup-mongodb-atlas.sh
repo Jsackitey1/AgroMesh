@@ -1,8 +1,3 @@
-#!/bin/bash
-
-# MongoDB Atlas Setup Script for AgroMesh Backend
-# This script helps you set up MongoDB Atlas for production deployment
-
 echo "🗄️  MongoDB Atlas Setup for AgroMesh"
 echo "===================================="
 

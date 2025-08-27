@@ -1,8 +1,3 @@
-#!/bin/bash
-
-# MongoDB Atlas Configuration Script for AWS
-# This script helps you configure MongoDB Atlas in your AWS environment
-
 echo "🗄️  MongoDB Atlas Configuration for AWS"
 echo "======================================="
 

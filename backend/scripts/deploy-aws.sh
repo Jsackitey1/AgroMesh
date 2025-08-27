@@ -1,8 +1,3 @@
-#!/bin/bash
-
-# AgroMesh Backend AWS Deployment Script
-# This script deploys the backend to AWS Elastic Beanstalk
-
 set -e
 
 echo "🌾 AgroMesh Backend AWS Deployment"
@@ -58,7 +53,7 @@ mkdir -p uploads/videos
 if [ ! -f ".elasticbeanstalk/config.yml" ]; then
     echo -e "${YELLOW}🚀 Initializing Elastic Beanstalk application...${NC}"
     eb init
-    
+
     echo -e "${YELLOW}📝 Please configure your EB application:${NC}"
     echo "1. Choose your region"
     echo "2. Create new application: agromesh-backend"
@@ -67,7 +62,7 @@ if [ ! -f ".elasticbeanstalk/config.yml" ]; then
     echo "5. Environment name: agromesh-backend-prod"
     echo "6. Domain name: agromesh-backend-[your-unique-id]"
     echo "7. Choose 'Single instance' for cost optimization"
-    
+
     read -p "Press Enter after configuring EB application..."
 fi
 
@@ -90,13 +85,13 @@ if [ -n "$APP_URL" ]; then
     echo -e "${GREEN}🌐 Your application is available at: https://$APP_URL${NC}"
     echo -e "${GREEN}🔌 API endpoint: https://$APP_URL/api${NC}"
     echo -e "${GREEN}📊 Health check: https://$APP_URL/api/health${NC}"
-    
+
     # Update mobile app configuration
     echo ""
     echo -e "${YELLOW}📱 Update your mobile app .env file with:${NC}"
     echo "EXPO_PUBLIC_API_BASE_URL=https://$APP_URL/api"
     echo "EXPO_PUBLIC_SOCKET_URL=https://$APP_URL"
-    
+
 else
     echo -e "${RED}❌ Failed to get application URL${NC}"
     echo "Check the deployment status with: eb status"

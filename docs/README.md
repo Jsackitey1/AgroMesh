@@ -247,7 +247,6 @@ npm test              # Run React Native tests
 ### Community
 - GitHub Issues: Bug reports and feature requests
 
-
 ## 🙏 Acknowledgments
 
 - Google Gemini for AI capabilities
