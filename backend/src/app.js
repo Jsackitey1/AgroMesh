@@ -72,6 +72,25 @@ app.use(`${config.api.prefix}/dashboard`, dashboardRoutes);
 app.use(`${config.api.prefix}/ai`, aiRoutes);
 app.use(`${config.api.prefix}/videos`, videoRoutes);
 
+// Root health check endpoint (for AWS ELB)
+app.get('/', (req, res) => {
+  logger.info('Root health check requested', {
+    requestId: req.headers['x-request-id'],
+    userAgent: req.get('User-Agent'),
+    ip: req.ip,
+  });
+
+  res.json({
+    status: 'ok',
+    message: 'AgroMesh Backend API is running',
+    timestamp: new Date().toISOString(),
+    version: config.api.version,
+    environment: config.server.nodeEnv,
+    apiUrl: `${config.api.baseUrl}${config.api.prefix}`,
+    docsUrl: `${config.api.baseUrl}${config.api.prefix}/docs`,
+  });
+});
+
 // Health check endpoint
 app.get(`${config.api.prefix}/health`, (req, res) => {
   logger.info('Health check requested', {
@@ -80,7 +99,7 @@ app.get(`${config.api.prefix}/health`, (req, res) => {
     ip: req.ip,
   });
 
-  res.json({ 
+  res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
     version: config.api.version,

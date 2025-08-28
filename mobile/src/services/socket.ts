@@ -9,18 +9,20 @@ class SocketService {
   private reconnectAttempts: number = 0;
   private maxReconnectAttempts: number = 5;
   private reconnectDelay: number = 1000;
+  private authToken: string | null = null;
 
   // Event listeners
   private listeners: Map<string, Function[]> = new Map();
 
   constructor() {
+    // Don't auto-connect, wait for authentication
     this.initializeSocket();
   }
 
   private initializeSocket(): void {
     try {
       console.log('Initializing socket connection to:', SOCKET_URL);
-      
+
       this.socket = io(SOCKET_URL, {
         transports: ['websocket', 'polling'],
         timeout: 20000,
@@ -28,7 +30,7 @@ class SocketService {
         reconnectionAttempts: this.maxReconnectAttempts,
         reconnectionDelay: this.reconnectDelay,
         forceNew: true,
-        autoConnect: true,
+        autoConnect: false, // Don't auto-connect, wait for auth
         // Add CORS handling for deployed backend
         withCredentials: false,
       });
@@ -37,6 +39,25 @@ class SocketService {
     } catch (error) {
       console.error('Socket initialization error:', error);
     }
+  }
+
+  // Set authentication token and connect
+  public setAuthToken(token: string): void {
+    console.log('Setting socket auth token');
+    this.authToken = token;
+    this.connect();
+  }
+
+  // Clear authentication token and disconnect
+  public clearAuthToken(): void {
+    console.log('Clearing socket auth token');
+    this.authToken = null;
+    this.disconnect();
+  }
+
+  // Connect with token (for manual connection)
+  public connectWithToken(token: string): void {
+    this.setAuthToken(token);
   }
 
   private setupEventListeners(): void {
@@ -107,8 +128,17 @@ class SocketService {
 
   // Public methods
   public connect(): void {
-    if (this.socket && !this.isConnected) {
+    if (this.socket && !this.isConnected && this.authToken) {
+      console.log('Connecting socket with auth token');
+      // Set auth token in socket auth
+      this.socket.auth = { token: this.authToken };
       this.socket.connect();
+    } else if (!this.authToken) {
+      console.warn('Cannot connect socket: No authentication token provided');
+    } else if (!this.socket) {
+      console.warn('Cannot connect socket: Socket not initialized');
+    } else if (this.isConnected) {
+      console.log('Socket already connected');
     }
   }
 
@@ -187,4 +217,4 @@ class SocketService {
 
 // Create singleton instance
 export const socketService = new SocketService();
-export default socketService; 
+export default socketService;

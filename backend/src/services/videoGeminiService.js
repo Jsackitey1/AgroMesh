@@ -1,7 +1,7 @@
 const { GoogleGenAI } = require('@google/genai');
 const fs = require('fs').promises;
 const path = require('path');
-const logger = require('../utils/logger');
+const { logger } = require('../utils/logger');
 
 // Initialize Gemini AI with the provided API key
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -35,16 +35,16 @@ async function analyzeVideo(videoPath, prompt, options = {}) {
   }
 
   const startTime = Date.now();
-  
+
   try {
     // Read video file
     const videoData = await fs.readFile(videoPath);
     const videoBuffer = Buffer.from(videoData);
-    
+
     // Get file extension for MIME type
     const ext = path.extname(videoPath).toLowerCase();
     const mimeType = getMimeType(ext);
-    
+
     if (!mimeType) {
       throw new Error(`Unsupported video format: ${ext}`);
     }
@@ -52,7 +52,7 @@ async function analyzeVideo(videoPath, prompt, options = {}) {
     // Create the content parts
     const parts = [
       {
-        text: `You are an expert agricultural AI assistant. Analyze this video and provide insights about farming, crops, pests, or any agricultural concerns. 
+        text: `You are an expert agricultural AI assistant. Analyze this video and provide insights about farming, crops, pests, or any agricultural concerns.
 
 User Question: ${prompt}
 
@@ -85,7 +85,7 @@ Be specific and actionable in your response.`
     });
 
     const text = result.candidates[0].content.parts[0].text;
-    
+
     const processingTime = Date.now() - startTime;
 
     // Extract usage statistics if available
@@ -114,7 +114,7 @@ Be specific and actionable in your response.`
   } catch (error) {
     const processingTime = Date.now() - startTime;
     logger.error('Video analysis failed:', error);
-    
+
     return {
       success: false,
       error: error.message,
@@ -201,7 +201,7 @@ function getMimeType(ext) {
     '.wmv': 'video/x-ms-wmv',
     '.m4v': 'video/x-m4v'
   };
-  
+
   return mimeTypes[ext] || null;
 }
 
@@ -213,21 +213,21 @@ function getMimeType(ext) {
  */
 function calculateConfidence(response, processingTime) {
   let confidence = 0.5; // Base confidence
-  
+
   // Factor in response length (longer responses tend to be more detailed)
   const responseLength = response.length;
   if (responseLength > 500) confidence += 0.2;
   else if (responseLength > 200) confidence += 0.1;
-  
+
   // Factor in processing time (faster responses might be more confident)
   if (processingTime < 5000) confidence += 0.1;
   else if (processingTime > 30000) confidence -= 0.1;
-  
+
   // Factor in response quality indicators
   if (response.includes('recommend') || response.includes('suggest')) confidence += 0.1;
   if (response.includes('observe') || response.includes('see')) confidence += 0.1;
   if (response.includes('issue') || response.includes('problem')) confidence += 0.1;
-  
+
   // Ensure confidence is between 0 and 1
   return Math.max(0, Math.min(1, confidence));
 }
@@ -249,7 +249,7 @@ async function testGeminiConnection() {
       model: "models/gemini-1.5-flash",
       contents: [{ text: "Hello, this is a test message." }]
     });
-    
+
     return {
       success: true,
       message: 'Gemini API connection successful',
@@ -270,4 +270,4 @@ module.exports = {
   diagnoseAgriculturalIssues,
   testGeminiConnection,
   isAvailable: () => !!genAI
-}; 
+};

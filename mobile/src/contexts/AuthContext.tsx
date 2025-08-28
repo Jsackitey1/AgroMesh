@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 import { User, AuthState, LoginForm, RegisterForm, ProfileUpdateForm } from '../types';
 import apiService from '../services/api';
+import socketService from '../services/socket';
 
 // Action types
 type AuthAction =
@@ -69,6 +70,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const user = await apiService.getUser();
 
         if (token && user) {
+          // Set socket authentication token for existing session
+          socketService.setAuthToken(token);
           dispatch({ type: 'SET_TOKEN', payload: token });
           dispatch({ type: 'SET_USER', payload: user });
         } else {
@@ -94,6 +97,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (response.token && response.user) {
         await apiService.setAuthToken(response.token);
         await apiService.setUser(response.user);
+
+        // Set socket authentication token
+        socketService.setAuthToken(response.token);
 
         dispatch({ type: 'SET_TOKEN', payload: response.token });
         dispatch({ type: 'SET_USER', payload: response.user });
@@ -121,6 +127,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         await apiService.setAuthToken(response.token);
         await apiService.setUser(response.user);
 
+        // Set socket authentication token
+        socketService.setAuthToken(response.token);
+
         dispatch({ type: 'SET_TOKEN', payload: response.token });
         dispatch({ type: 'SET_USER', payload: response.user });
         return true;
@@ -130,7 +139,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error: any) {
       console.error('Registration error:', error.response?.data);
-      
+
       if (error.response?.data?.errors) {
         // Handle validation errors
         const validationErrors = error.response.data.errors;
@@ -148,9 +157,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = async (): Promise<void> => {
     try {
       await apiService.clearAuth();
+      // Clear socket authentication
+      socketService.clearAuthToken();
       dispatch({ type: 'LOGOUT' });
     } catch (error) {
       console.error('Logout error:', error);
+      // Clear socket authentication even if API call fails
+      socketService.clearAuthToken();
       dispatch({ type: 'LOGOUT' });
     }
   };
@@ -195,7 +208,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error: any) {
       let errorMessage = 'Password change failed';
-      
+
       if (error.response?.status === 401) {
         errorMessage = 'Current password is incorrect';
       } else if (error.response?.status === 400) {
@@ -214,7 +227,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       } else if (error.message) {
         errorMessage = error.message;
       }
-      
+
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
       return false;
     }
@@ -249,4 +262,4 @@ export const useAuth = (): AuthContextType => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}; 
+};

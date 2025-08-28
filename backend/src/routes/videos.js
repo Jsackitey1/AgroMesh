@@ -7,7 +7,7 @@ const authenticateJWT = require('../middlewares/auth');
 const Video = require('../models/Video');
 const VideoAnalysis = require('../models/VideoAnalysis');
 const videoGeminiService = require('../services/videoGeminiService');
-const logger = require('../utils/logger');
+const { logger } = require('../utils/logger');
 
 const router = express.Router();
 
@@ -31,7 +31,7 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, cb) => {
   const allowedTypes = (process.env.ALLOWED_VIDEO_TYPES || 'mp4,avi,mov,webm').split(',');
   const fileExt = path.extname(file.originalname).toLowerCase().substring(1);
-  
+
   if (allowedTypes.includes(fileExt)) {
     cb(null, true);
   } else {
@@ -131,9 +131,9 @@ router.post('/upload', authenticateJWT, upload.single('video'), [
     // Check validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ 
-        message: 'Validation failed', 
-        errors: errors.array() 
+      return res.status(400).json({
+        message: 'Validation failed',
+        errors: errors.array()
       });
     }
 
@@ -171,9 +171,9 @@ router.post('/upload', authenticateJWT, upload.single('video'), [
 
   } catch (error) {
     logger.error('Video upload failed:', error);
-    res.status(500).json({ 
-      message: 'Failed to upload video', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Failed to upload video',
+      error: error.message
     });
   }
 });
@@ -238,9 +238,9 @@ router.get('/', authenticateJWT, async (req, res) => {
 
   } catch (error) {
     logger.error('Failed to fetch videos:', error);
-    res.status(500).json({ 
-      message: 'Failed to fetch videos', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Failed to fetch videos',
+      error: error.message
     });
   }
 });
@@ -269,9 +269,9 @@ router.get('/', authenticateJWT, async (req, res) => {
  */
 router.get('/:id', authenticateJWT, async (req, res) => {
   try {
-    const video = await Video.findOne({ 
-      _id: req.params.id, 
-      userId: req.user.id 
+    const video = await Video.findOne({
+      _id: req.params.id,
+      userId: req.user.id
     }).populate('userId', 'firstName lastName email');
 
     if (!video) {
@@ -284,9 +284,9 @@ router.get('/:id', authenticateJWT, async (req, res) => {
 
   } catch (error) {
     logger.error('Failed to fetch video:', error);
-    res.status(500).json({ 
-      message: 'Failed to fetch video', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Failed to fetch video',
+      error: error.message
     });
   }
 });
@@ -334,15 +334,15 @@ router.post('/:id/analyze', authenticateJWT, [
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ 
-        message: 'Validation failed', 
-        errors: errors.array() 
+      return res.status(400).json({
+        message: 'Validation failed',
+        errors: errors.array()
       });
     }
 
-    const video = await Video.findOne({ 
-      _id: req.params.id, 
-      userId: req.user.id 
+    const video = await Video.findOne({
+      _id: req.params.id,
+      userId: req.user.id
     });
 
     if (!video) {
@@ -390,7 +390,7 @@ router.post('/:id/analyze', authenticateJWT, [
     analysis.tokensUsed = result.tokensUsed || { input: 0, output: 0 };
     analysis.confidence = result.confidence || 0;
     analysis.model = result.model || 'gemini-2.0-flash';
-    
+
     if (!result.success) {
       analysis.error = {
         message: result.error,
@@ -422,9 +422,9 @@ router.post('/:id/analyze', authenticateJWT, [
 
   } catch (error) {
     logger.error('Video analysis failed:', error);
-    res.status(500).json({ 
-      message: 'Failed to analyze video', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Failed to analyze video',
+      error: error.message
     });
   }
 });
@@ -463,9 +463,9 @@ router.post('/:id/analyze', authenticateJWT, [
  */
 router.get('/:id/history', authenticateJWT, async (req, res) => {
   try {
-    const video = await Video.findOne({ 
-      _id: req.params.id, 
-      userId: req.user.id 
+    const video = await Video.findOne({
+      _id: req.params.id,
+      userId: req.user.id
     });
 
     if (!video) {
@@ -481,9 +481,9 @@ router.get('/:id/history', authenticateJWT, async (req, res) => {
 
   } catch (error) {
     logger.error('Failed to fetch analysis history:', error);
-    res.status(500).json({ 
-      message: 'Failed to fetch analysis history', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Failed to fetch analysis history',
+      error: error.message
     });
   }
 });
@@ -512,9 +512,9 @@ router.get('/:id/history', authenticateJWT, async (req, res) => {
  */
 router.delete('/:id', authenticateJWT, async (req, res) => {
   try {
-    const video = await Video.findOne({ 
-      _id: req.params.id, 
-      userId: req.user.id 
+    const video = await Video.findOne({
+      _id: req.params.id,
+      userId: req.user.id
     });
 
     if (!video) {
@@ -544,11 +544,11 @@ router.delete('/:id', authenticateJWT, async (req, res) => {
 
   } catch (error) {
     logger.error('Failed to delete video:', error);
-    res.status(500).json({ 
-      message: 'Failed to delete video', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Failed to delete video',
+      error: error.message
     });
   }
 });
 
-module.exports = router; 
+module.exports = router;
