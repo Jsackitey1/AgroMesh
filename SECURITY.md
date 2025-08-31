@@ -107,7 +107,7 @@ EXPO_PUBLIC_SOCKET_URL=http://192.168.1.92:5001
 ### **Examples of Bad Practices:**
 ```javascript
 // ❌ DON'T DO THIS
-const API_KEY = "AsregasreshtSujRIERxd41oN2gAnXvzKxM60I-ITY";
+const API_KEY = "someAPIkey";
 const JWT_SECRET = "changeme";
 
 // ✅ DO THIS INSTEAD

@@ -18,7 +18,7 @@ async function getSuggestionFromSensorData(sensorData) {
   if (!genAI) {
     return { message: 'AI service not available. Please configure GEMINI_API_KEY.' };
   }
-  
+
   try {
     const prompt = `Given the following data: ${JSON.stringify(sensorData)}, what should the farmer do next?`;
     const result = await genAI.models.generateContent({
@@ -35,15 +35,15 @@ async function getSuggestionFromSensorData(sensorData) {
 // Image-based plant diagnosis
 async function diagnoseImage(imageBuffer, filename, options = {}) {
   if (!genAI) {
-    return { 
+    return {
       success: false,
-      message: 'AI service not available. Please configure GEMINI_API_KEY.' 
+      message: 'AI service not available. Please configure GEMINI_API_KEY.'
     };
   }
-  
+
   try {
     const base64Image = imageBuffer.toString('base64');
-    
+
     const prompt = `You are an expert agricultural AI assistant specializing in plant health diagnosis. Analyze this image and provide a comprehensive assessment.
 
 Please provide your analysis in the following structured format:
@@ -86,9 +86,9 @@ Be specific, actionable, and provide evidence-based recommendations. If the imag
         maxOutputTokens: 2048,
       }
     });
-    
+
     const text = result.candidates[0].content.parts[0].text;
-    
+
     // Extract usage statistics if available
     const usageMetadata = result.usageMetadata;
     const tokensUsed = {
@@ -106,7 +106,7 @@ Be specific, actionable, and provide evidence-based recommendations. If the imag
     };
   } catch (error) {
     console.error('Gemini AI error:', error);
-    return { 
+    return {
       success: false,
       message: 'AI service temporarily unavailable.',
       error: error.message
@@ -117,15 +117,15 @@ Be specific, actionable, and provide evidence-based recommendations. If the imag
 // Video-based plant diagnosis
 async function diagnoseVideo(videoBuffer, filename) {
   if (!genAI) {
-    return { 
+    return {
       success: false,
-      message: 'AI service not available. Please configure GEMINI_API_KEY.' 
+      message: 'AI service not available. Please configure GEMINI_API_KEY.'
     };
   }
-  
+
   try {
     const base64Video = videoBuffer.toString('base64');
-    
+
     const prompt = `You are an expert agricultural AI assistant specializing in plant health diagnosis from video footage. Analyze this video and provide a comprehensive assessment.
 
 Please provide your analysis in the following structured format:
@@ -174,9 +174,9 @@ Be specific, actionable, and provide evidence-based recommendations. If the vide
         maxOutputTokens: 2048,
       }
     });
-    
+
     const text = result.candidates[0].content.parts[0].text;
-    
+
     // Extract usage statistics if available
     const usageMetadata = result.usageMetadata;
     const tokensUsed = {
@@ -194,7 +194,7 @@ Be specific, actionable, and provide evidence-based recommendations. If the vide
     };
   } catch (error) {
     console.error('Gemini AI error:', error);
-    return { 
+    return {
       success: false,
       message: 'AI service temporarily unavailable.',
       error: error.message
@@ -204,18 +204,18 @@ Be specific, actionable, and provide evidence-based recommendations. If the vide
 
 async function askQuestion(question, context = {}) {
   if (!genAI) {
-    return { 
+    return {
       success: false,
-      message: 'AI service not available. Please configure GEMINI_API_KEY.' 
+      message: 'AI service not available. Please configure GEMINI_API_KEY.'
     };
   }
-  
+
   try {
     // Build context-aware prompt
     const contextInfo = context.location ? `Location: ${context.location}. ` : '';
     const seasonInfo = context.season ? `Current season: ${context.season}. ` : '';
     const cropInfo = context.crop ? `Crop type: ${context.crop}. ` : '';
-    
+
     const enhancedPrompt = `You are an expert agricultural AI assistant with deep knowledge of farming practices, crop management, pest control, soil health, and sustainable agriculture.
 
 ${contextInfo}${seasonInfo}${cropInfo}
@@ -254,9 +254,10 @@ Be specific, practical, and provide evidence-based advice. If the question requi
         topP: 1,
         maxOutputTokens: 2048,
       }
+
     });
     const text = result.candidates[0].content.parts[0].text;
-    
+
     // Extract usage statistics if available
     const usageMetadata = result.usageMetadata;
     const tokensUsed = {
@@ -274,7 +275,7 @@ Be specific, practical, and provide evidence-based advice. If the question requi
     };
   } catch (error) {
     console.error('Gemini AI error:', error);
-    return { 
+    return {
       success: false,
       message: 'AI service temporarily unavailable.',
       error: error.message
@@ -285,12 +286,12 @@ Be specific, practical, and provide evidence-based advice. If the question requi
 // Smart recommendations based on multiple data sources
 async function getSmartRecommendations(data = {}) {
   if (!genAI) {
-    return { 
+    return {
       success: false,
-      message: 'AI service not available. Please configure GEMINI_API_KEY.' 
+      message: 'AI service not available. Please configure GEMINI_API_KEY.'
     };
   }
-  
+
   try {
     const {
       sensorData = {},
@@ -358,7 +359,7 @@ Provide specific, actionable advice tailored to the farmer's situation. Include 
       }
     });
     const text = result.candidates[0].content.parts[0].text;
-    
+
     // Extract usage statistics if available
     const usageMetadata = result.usageMetadata;
     const tokensUsed = {
@@ -376,7 +377,7 @@ Provide specific, actionable advice tailored to the farmer's situation. Include 
     };
   } catch (error) {
     console.error('Gemini AI error:', error);
-    return { 
+    return {
       success: false,
       message: 'AI service temporarily unavailable.',
       error: error.message
