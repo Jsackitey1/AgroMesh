@@ -116,9 +116,12 @@ A comprehensive React Native mobile application for the AgroMesh precision agric
 - Node.js (v18 or higher) - **Updated requirement**
 - npm or yarn
 - Expo CLI
-- Expo Go app (for testing)
-- iOS Simulator *(optional - for iOS development)*
-- Android Studio *(optional - for Android development)*
+- Android Studio *(for Android development)* / Xcode with iOS Simulator *(for iOS development)*
+- Custom development client or native build (Expo Go is unsupported)
+
+> ⚠️ **Expo Go Unsupported**  
+> This project uses native modules like `react-native-webrtc` that aren't included in Expo Go.  
+> Build a custom dev client or run a full native build instead.
 
 ---
 
@@ -145,13 +148,15 @@ LIVEKIT_API_SECRET=your-livekit-api-secret
 
 ### **3. Start Development Server**
 ```bash
-npx expo start
+npx expo start --dev-client
 ```
 
-### **4. Test on Device**
-- Install **Expo Go** app on your phone
-- Scan the QR code from terminal
-- Navigate to **AI Assistant** for all features
+### **4. Run on Device**
+- Build and install a custom dev client:
+```bash
+npx expo run:android   # or npx expo run:ios
+```
+- With the dev server running, open the app from the dev client and test features
 
 ---
 
@@ -256,11 +261,11 @@ Test all AI features:
 ### **Manual Testing**
 ```bash
 # Start development server
-npx expo start
+npx expo start --dev-client
 
 # Test on device
-# 1. Install Expo Go app
-# 2. Scan QR code
+# 1. Build dev client: npx expo run:android (or npx expo run:ios)
+# 2. Launch the app from the dev client
 # 3. Test all features:
 #    - Authentication
 #    - Dashboard
@@ -387,7 +392,7 @@ curl -X POST http://localhost:5001/api/ai/ask-question \
 - [ ] Dependencies installed
 - [ ] Environment configured
 - [ ] Expo CLI installed
-- [ ] Expo Go app ready
+- [ ] Custom dev client built
 
 ### **✅ Authentication**
 - [ ] Registration working
@@ -414,12 +419,12 @@ curl -X POST http://localhost:5001/api/ai/ask-question \
 ### **Getting Help**
 - 📧 **Email**: sackiteyjoseph@gmail.com
 - 🌐 **Website**: https://agro-mesh.vercel.app/
-- 📱 **Mobile App**: Available via Expo Go
+- 📱 **Mobile App**: Run via custom dev client or native build
 
 ### **Useful Commands**
 ```bash
 # Start development
-npx expo start
+npx expo start --dev-client
 
 # Clear cache
 npx expo start --clear
