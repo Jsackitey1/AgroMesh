@@ -249,6 +249,21 @@ Test all AI features:
 3. Get smart recommendations
 4. Upload and analyze videos
 
+### **5. Run on Emulator/Device**
+```bash
+# Generate native projects (if you have custom native code)
+npx expo prebuild
+
+# Build and install the development client
+npm run android    # Android emulator or device
+npm run ios        # iOS simulator or device
+# or
+eas build --profile development
+
+# Start with the Expo development client
+expo start --dev-client
+```
+
 ---
 
 ## 🧪 **Testing**
@@ -360,6 +375,18 @@ curl -X POST http://localhost:5001/api/ai/ask-question \
 
 # Test on physical device
 # Some features require real device testing
+```
+
+#### **5. Emulator/Device Issues**
+```bash
+# Verify emulator or device is connected
+adb devices
+
+# Forward Metro port if app can't connect
+adb reverse tcp:8081 tcp:8081
+
+# Restart Expo with a clean cache
+npx expo start --clear
 ```
 
 ### **Error Solutions**
