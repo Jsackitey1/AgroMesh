@@ -153,6 +153,46 @@ npx expo start
 - Scan the QR code from terminal
 - Navigate to **AI Assistant** for all features
 
+## 🌐 Web & Expo Go Support
+
+### 🚀 Launch the Web Build
+```bash
+cd mobile
+npm install
+npm run web   # or npx expo start --web
+```
+
+### 🚫 Web Limitations
+Because the project depends on native-only modules, some features don't work in browsers:
+
+| Module / Feature | Impact on Web |
+| --- | --- |
+| `expo-camera`, `expo-image-picker`, `expo-media-library` | Image/video capture, gallery access, and saving media are unavailable or limited |
+| `expo-file-system`, `expo-secure-store`, `expo-sharing` | File system access, secure token storage, and sharing dialogs are unavailable |
+| `expo-notifications` | Push/local notifications are not supported |
+| `react-native-maps`, `react-native-webrtc`, `livekit-client` | Map rendering and WebRTC-based streaming require native support |
+
+### 🛠 Conditional Fallbacks
+Wrap native imports with platform checks or provide mock modules to allow partial use in Expo Go and web:
+
+```tsx
+import { Platform } from 'react-native';
+
+let ImagePicker: typeof import('expo-image-picker');
+if (Platform.OS !== 'web') {
+  ImagePicker = require('expo-image-picker');
+} else {
+  ImagePicker = {
+    requestMediaLibraryPermissionsAsync: async () => ({ status: 'granted' }),
+    launchImageLibraryAsync: async () => ({ canceled: true, assets: [] }),
+    requestCameraPermissionsAsync: async () => ({ status: 'denied' }),
+    launchCameraAsync: async () => ({ canceled: true, assets: [] }),
+  };
+}
+```
+
+Apply similar guards for other modules and display a message when a feature is unavailable.
+
 ---
 
 ## 📱 **App Screens & Features**
