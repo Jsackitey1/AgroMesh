@@ -88,7 +88,7 @@ const validateEnv = () => {
   if (error) {
     const errorMessage = 'Environment validation failed:\n' +
       error.details.map(detail => `  - ${detail.path.join('.')}: ${detail.message}`).join('\n');
-    
+
     console.error('❌ Environment validation failed:');
     console.error(errorMessage);
     process.exit(1);

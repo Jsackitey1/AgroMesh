@@ -89,9 +89,9 @@ const config = {
     version: '1.0.0',
     description: 'API documentation for AgroMesh AI endpoints',
     servers: [
-      { 
-        url: resolveBaseUrl(env.SWAGGER_SERVER_URL, env.PORT), 
-        description: env.NODE_ENV === 'production' ? 'Production server' : 'Local server' 
+      {
+        url: resolveBaseUrl(env.SWAGGER_SERVER_URL, env.PORT),
+        description: env.NODE_ENV === 'production' ? 'Production server' : 'Local server'
       },
     ],
     apis: ['./src/routes/*.js'],

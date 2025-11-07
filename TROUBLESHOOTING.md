@@ -70,7 +70,7 @@
    # Using nvm (recommended)
    nvm install 18.19.0
    nvm use 18.19.0
-   
+
    # Or download from https://nodejs.org/
    ```
 
@@ -263,7 +263,7 @@
    ```bash
    # Test backend health
    curl http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api/health
-   
+
    # Test video endpoint (will return 401 if not authenticated, which is expected)
    curl http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api/videos
    ```
@@ -346,7 +346,7 @@
 4. **Check AsyncStorage:**
    ```javascript
    import AsyncStorage from '@react-native-async-storage/async-storage';
-   
+
    // Check if AsyncStorage is working
    try {
      await AsyncStorage.setItem('test', 'value');

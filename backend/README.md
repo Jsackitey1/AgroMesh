@@ -177,7 +177,7 @@ A comprehensive Node.js/Express backend for the AgroMesh precision agriculture p
    ```bash
    # Copy environment template
    cp env.example .env
-   
+
    # Edit with your actual API keys
    nano .env
    ```
@@ -186,13 +186,13 @@ A comprehensive Node.js/Express backend for the AgroMesh precision agriculture p
    ```bash
    # Database
    MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/agromesh
-   
+
    # Authentication
    JWT_SECRET=your-super-secret-jwt-key-change-in-production
-   
+
    # AI Integration (optional for local development)
    GEMINI_API_KEY=
-   
+
    # Server
    PORT=5001
    NODE_ENV=development
@@ -202,7 +202,7 @@ A comprehensive Node.js/Express backend for the AgroMesh precision agriculture p
    ```bash
    # Development with auto-restart (recommended locally)
    npm run dev
-   
+
    # Production
    npm start
    ```
@@ -476,4 +476,4 @@ Once setup is complete, you should have:
 - ✅ All AI features functional
 - ✅ Ready for mobile app integration
 
-**Happy coding!** 🚀✨ 
+**Happy coding!** 🚀✨
