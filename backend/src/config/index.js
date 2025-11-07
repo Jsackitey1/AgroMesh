@@ -4,6 +4,25 @@ const { validateEnv } = require('./validation');
 // Validate environment variables first
 const env = validateEnv();
 
+const parseOrigins = (originsString) => {
+  if (!originsString) {
+    return [];
+  }
+
+  return originsString
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+};
+
+const resolveBaseUrl = (providedUrl, port) => {
+  if (providedUrl && providedUrl.trim().length > 0) {
+    return providedUrl;
+  }
+
+  return `http://localhost:${port}`;
+};
+
 // Environment configuration
 const config = {
   // Server configuration
@@ -33,7 +52,7 @@ const config = {
 
   // CORS configuration
   cors: {
-    origins: env.CORS_ORIGINS.split(',').map(origin => origin.trim()),
+    origins: parseOrigins(env.CORS_ORIGINS),
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
@@ -42,7 +61,7 @@ const config = {
   // Socket.IO configuration
   socket: {
     cors: {
-      origin: env.SOCKET_CORS_ORIGIN.split(',').map(origin => origin.trim()),
+      origin: parseOrigins(env.SOCKET_CORS_ORIGIN),
       credentials: true,
     },
     auth: {
@@ -53,7 +72,7 @@ const config = {
 
   // API configuration
   api: {
-    baseUrl: env.API_BASE_URL,
+    baseUrl: resolveBaseUrl(env.API_BASE_URL, env.PORT),
     version: '1.0.0',
     prefix: '/api',
   },
@@ -65,7 +84,7 @@ const config = {
     description: 'API documentation for AgroMesh AI endpoints',
     servers: [
       { 
-        url: env.SWAGGER_SERVER_URL, 
+        url: resolveBaseUrl(env.SWAGGER_SERVER_URL, env.PORT), 
         description: env.NODE_ENV === 'production' ? 'Production server' : 'Local server' 
       },
     ],

@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 import {
   User,
   SensorNode,
@@ -16,7 +17,17 @@ import {
   ProfileUpdateForm,
 } from '../types';
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || 'http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api';
+const getDefaultBaseUrl = (): string => {
+  if (Platform.OS === 'android') {
+    // Android emulators expose host services via 10.0.2.2, physical devices should rely on EXPO_PUBLIC_API_BASE_URL
+    return 'http://10.0.2.2:5001/api';
+  }
+
+  // iOS simulator and web fall back to localhost
+  return 'http://localhost:5001/api';
+};
+
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || getDefaultBaseUrl();
 
 class ApiService {
   private api: AxiosInstance;

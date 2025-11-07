@@ -1,7 +1,16 @@
 import { io, Socket } from 'socket.io-client';
+import { Platform } from 'react-native';
 import { SocketEvents } from '../types';
 
-const SOCKET_URL = process.env.EXPO_PUBLIC_SOCKET_URL || 'http://192.168.1.92:5001';
+const getDefaultSocketUrl = (): string => {
+  if (Platform.OS === 'android') {
+    return 'http://10.0.2.2:5001';
+  }
+
+  return 'http://localhost:5001';
+};
+
+const SOCKET_URL = process.env.EXPO_PUBLIC_SOCKET_URL || getDefaultSocketUrl();
 
 class SocketService {
   private socket: Socket | null = null;
