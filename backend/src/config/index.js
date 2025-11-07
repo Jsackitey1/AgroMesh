@@ -52,7 +52,10 @@ const config = {
 
   // CORS configuration
   cors: {
-    origins: parseOrigins(env.CORS_ORIGINS),
+    origin: (() => {
+      const origins = parseOrigins(env.CORS_ORIGINS);
+      return origins.length > 0 ? origins : true;
+    })(),
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
@@ -61,7 +64,10 @@ const config = {
   // Socket.IO configuration
   socket: {
     cors: {
-      origin: parseOrigins(env.SOCKET_CORS_ORIGIN),
+      origin: (() => {
+        const origins = parseOrigins(env.SOCKET_CORS_ORIGIN);
+        return origins.length > 0 ? origins : true;
+      })(),
       credentials: true,
     },
     auth: {

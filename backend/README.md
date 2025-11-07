@@ -120,7 +120,43 @@ A comprehensive Node.js/Express backend for the AgroMesh precision agriculture p
 - Node.js (v18 or higher) - **Updated requirement**
 - MongoDB (v4.4 or higher)
 - npm or yarn
-- Google Gemini AI API key
+- Google Gemini AI API key (optional for local development)
+
+---
+
+## 🏡 Local Backend Setup (No Cloud Dependencies)
+
+1. **Install dependencies**
+   ```bash
+   cd AgroMesh/backend
+   npm install
+   ```
+
+2. **Create a local environment file**
+   ```bash
+   cp env.example .env
+   ```
+   - Keep `MONGODB_URI` at `mongodb://localhost:27017/agromesh` unless you are using a remote cluster
+   - Leave `GEMINI_API_KEY` blank to run without AI features (endpoints will return "service unavailable")
+   - Update `CORS_ORIGINS`/`SOCKET_CORS_ORIGIN` if your frontend/mobile app runs on different ports or devices
+
+3. **Start MongoDB locally** (macOS example)
+   ```bash
+   brew services start mongodb-community@7.0
+   ```
+   Or run `mongod --config /usr/local/etc/mongod.conf` manually if you prefer.
+
+4. **Run the backend**
+   ```bash
+   npm run dev
+   ```
+
+5. **Verify the server**
+   ```bash
+   curl http://localhost:5001/api/health
+   ```
+
+> ℹ️  When the AWS-hosted backend is no longer available, point the web dashboard and mobile app to `http://localhost:5001` (or your host machine's LAN IP) using the updated configuration files in `dashboard/` and `mobile/`.
 
 ---
 
@@ -154,8 +190,8 @@ A comprehensive Node.js/Express backend for the AgroMesh precision agriculture p
    # Authentication
    JWT_SECRET=your-super-secret-jwt-key-change-in-production
    
-   # AI Integration
-   GEMINI_API_KEY=your-gemini-api-key-here
+   # AI Integration (optional for local development)
+   GEMINI_API_KEY=
    
    # Server
    PORT=5001
@@ -164,11 +200,11 @@ A comprehensive Node.js/Express backend for the AgroMesh precision agriculture p
 
 5. **Start the server**
    ```bash
+   # Development with auto-restart (recommended locally)
+   npm run dev
+   
    # Production
    npm start
-   
-   # Development with auto-restart
-   npm run dev
    ```
 
 ---
