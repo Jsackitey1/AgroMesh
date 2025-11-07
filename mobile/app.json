@@ -60,7 +60,8 @@
           "savePhotosPermission": "Allow AgroMesh to save analyzed images to your photo library.",
           "isAccessMediaLocationEnabled": true
         }
-      ]
+      ],
+      "expo-font"
     ],
     "extra": {
       "eas": {
