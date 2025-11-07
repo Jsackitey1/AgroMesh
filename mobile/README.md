@@ -137,13 +137,13 @@ npm install
 Create a `.env` file in the mobile directory:
 ```env
 # API Configuration
-API_BASE_URL=http://localhost:5001
-SOCKET_URL=http://localhost:5001
+EXPO_PUBLIC_API_BASE_URL=http://localhost:5001/api
+EXPO_PUBLIC_SOCKET_URL=http://localhost:5001
 
 # Optional: LiveKit Configuration (for future streaming)
-LIVEKIT_URL=your-livekit-url
-LIVEKIT_API_KEY=your-livekit-api-key
-LIVEKIT_API_SECRET=your-livekit-api-secret
+EXPO_PUBLIC_LIVEKIT_URL=your-livekit-url
+EXPO_PUBLIC_LIVEKIT_API_KEY=your-livekit-api-key
+EXPO_PUBLIC_LIVEKIT_API_SECRET=your-livekit-api-secret
 ```
 
 ### **3. Start Development Server**
@@ -274,10 +274,10 @@ npm start
 ```
 
 ### **2. API Configuration**
-Update API endpoints in `src/services/api.ts`:
-```typescript
-const API_BASE_URL = 'http://localhost:5001';
-const SOCKET_URL = 'http://localhost:5001';
+Ensure your environment variables point to the running backend:
+```env
+EXPO_PUBLIC_API_BASE_URL=http://localhost:5001/api
+EXPO_PUBLIC_SOCKET_URL=http://localhost:5001
 ```
 
 ### **3. Authentication Testing**
@@ -368,8 +368,8 @@ eas submit --platform all
 ### **Environment Configuration**
 ```bash
 # Production environment
-eas secret:create --scope project --name API_BASE_URL --value https://your-api.com
-eas secret:create --scope project --name SOCKET_URL --value https://your-api.com
+eas secret:create --scope project --name EXPO_PUBLIC_API_BASE_URL --value https://your-api.com/api
+eas secret:create --scope project --name EXPO_PUBLIC_SOCKET_URL --value https://your-api.com
 ```
 
 ---

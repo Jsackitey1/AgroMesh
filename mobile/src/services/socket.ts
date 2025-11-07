@@ -10,7 +10,10 @@ const getDefaultSocketUrl = (): string => {
   return 'http://localhost:5001';
 };
 
-const SOCKET_URL = process.env.EXPO_PUBLIC_SOCKET_URL || getDefaultSocketUrl();
+const SOCKET_URL =
+  process.env.EXPO_PUBLIC_SOCKET_URL ||
+  process.env.SOCKET_URL ||
+  getDefaultSocketUrl();
 
 class SocketService {
   private socket: Socket | null = null;

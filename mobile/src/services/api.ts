@@ -27,7 +27,10 @@ const getDefaultBaseUrl = (): string => {
   return 'http://localhost:5001/api';
 };
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || getDefaultBaseUrl();
+const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_BASE_URL ||
+  process.env.API_BASE_URL ||
+  getDefaultBaseUrl();
 
 class ApiService {
   private api: AxiosInstance;

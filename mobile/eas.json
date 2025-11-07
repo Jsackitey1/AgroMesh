@@ -7,8 +7,8 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "API_BASE_URL": "http://localhost:5001",
-        "SOCKET_URL": "http://localhost:5001"
+        "EXPO_PUBLIC_API_BASE_URL": "http://localhost:5001/api",
+        "EXPO_PUBLIC_SOCKET_URL": "http://localhost:5001"
       }
     },
     "preview": {
@@ -17,8 +17,8 @@
         "buildType": "apk"
       },
       "env": {
-        "API_BASE_URL": "https://your-staging-api.com",
-        "SOCKET_URL": "https://your-staging-api.com"
+        "EXPO_PUBLIC_API_BASE_URL": "https://your-staging-api.com/api",
+        "EXPO_PUBLIC_SOCKET_URL": "https://your-staging-api.com"
       }
     },
     "production": {
@@ -29,8 +29,8 @@
         "distribution": "store"
       },
       "env": {
-        "API_BASE_URL": "https://your-production-api.com",
-        "SOCKET_URL": "https://your-production-api.com"
+        "EXPO_PUBLIC_API_BASE_URL": "https://your-production-api.com/api",
+        "EXPO_PUBLIC_SOCKET_URL": "https://your-production-api.com"
       }
     }
   },
