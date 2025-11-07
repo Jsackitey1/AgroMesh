@@ -50,11 +50,14 @@ AgroMesh is a comprehensive IoT-based agricultural monitoring platform that comb
 ### Environment Configuration
 
 #### Required Variables
-- `MONGODB_URI` - MongoDB connection string
+- `MONGODB_URI` - MongoDB connection string (defaults to a local MongoDB instance)
 - `JWT_SECRET` - Secret key for JWT tokens (min 32 characters)
-- `GEMINI_API_KEY` - Google Gemini API key for AI features
-- `CORS_ORIGINS` - Comma-separated list of allowed origins
-- `SOCKET_CORS_ORIGIN` - Comma-separated list of Socket.IO origins
+- `CORS_ORIGINS` - Comma-separated list of allowed origins (defaults to common localhost ports)
+- `SOCKET_CORS_ORIGIN` - Comma-separated list of Socket.IO origins (defaults provided)
+
+#### Optional Variables
+- `GEMINI_API_KEY` - Google Gemini API key for AI features (leave empty to disable AI locally)
+- `EXPO_PUBLIC_API_BASE_URL` / `EXPO_PUBLIC_SOCKET_URL` - Override mobile app defaults when running on a physical device
 
 #### Security Notes
 - Never commit `.env` files to version control

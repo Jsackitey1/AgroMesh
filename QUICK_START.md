@@ -89,10 +89,13 @@ nvm use 18.19.0
 
 ### **Issue 2: "Cannot connect to backend"**
 ```bash
-# Test backend health
-curl http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api/health
+# Test backend health (local development)
+curl http://localhost:5001/api/health
 
-# If down, check BUILD_STATUS.md for updates
+# Testing from a mobile device on the same network
+curl http://<YOUR_LAN_IP>:5001/api/health
+
+# If you've deployed elsewhere, replace with your deployed URL
 ```
 
 ### **Issue 3: "Dependencies installation failed"**
@@ -143,7 +146,7 @@ ls -la mobile/.env
 ls -la backend/.env
 
 # Test backend
-curl http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api/health
+curl http://localhost:5001/api/health
 ```
 
 ### **Mobile App Debug:**

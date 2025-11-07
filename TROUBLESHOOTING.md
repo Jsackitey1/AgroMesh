@@ -18,7 +18,11 @@
 **Solutions:**
 1. **Check backend status:**
    ```bash
-   curl http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api/health
+   # Local development
+   curl http://localhost:5001/api/health
+
+   # From another device on the same network
+   curl http://<YOUR_LAN_IP>:5001/api/health
    ```
 
 2. **Verify your `.env` file:**
@@ -26,11 +30,11 @@
    cd mobile
    cat .env
    # Should contain:
-   # EXPO_PUBLIC_API_BASE_URL=http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com/api
-   # EXPO_PUBLIC_SOCKET_URL=http://agromesh-backend-prod.eba-kjq5gjc4.us-west-2.elasticbeanstalk.com
+   # EXPO_PUBLIC_API_BASE_URL=http://<YOUR_LAN_IP>:5001/api
+   # EXPO_PUBLIC_SOCKET_URL=http://<YOUR_LAN_IP>:5001
    ```
 
-3. **Check BUILD_STATUS.md** for current backend status
+3. **Check BUILD_STATUS.md** for current backend status (if you are using a shared deployment)
 
 4. **Try local backend setup** if deployed backend is down:
    ```bash
